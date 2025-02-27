@@ -84,11 +84,12 @@ public class Menu extends HttpServlet {
 
                 List<VistaLoginMenuDeta> elementosMenu = menuMap.get(cabecera.getCodiPagi());
                 for (VistaLoginMenuDeta elemento : elementosMenu) {
-                    resultado.append("<a id=\"asignarpermiso\" class=\"dropdown-item\" href=\"")
+                    resultado.append("<a href=\"#\" data-page=\""+elemento.getHtml()+"\" class=\"dropdown-item\" >"+elemento.getNombPagi()+"</a>");
+                    /*resultado.append("<a id=\"asignarpermiso\" class=\"dropdown-item\" href=\"")
                             .append(elemento.getHtml())
                             .append("\">")
                             .append(elemento.getNombPagi())
-                            .append("</a>");
+                            .append("</a>");*/
                 }
                 resultado.append("</div></li>");
             }

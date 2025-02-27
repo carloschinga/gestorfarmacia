@@ -84,7 +84,7 @@ public class MarcacionServlet extends HttpServlet {
                     Date fechaFin = calendar.getTime();  // Último momento del día
 
                     // Consulta para verificar si ya existe una marcación en el rango de fechas para esta persona
-                    String sql = "SELECT * FROM Marcacion m WHERE m.codiPers = ? "
+                    String sql = "SELECT * FROM asistencia_marcacion m WHERE m.codiPers = ? "
                             + "AND m.marcIngr IS NOT NULL "
                             + "AND m.marcSald IS NULL "
                             + "AND m.fechMarc BETWEEN ? AND ?";  // Usamos BETWEEN para filtrar el rango de fechas
