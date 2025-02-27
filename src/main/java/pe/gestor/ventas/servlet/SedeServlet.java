@@ -20,8 +20,8 @@ import org.json.JSONObject;
 import pe.gestor.ventas.dao.VentasSedeDAO;
 import pe.gestor.ventas.dto.VentasSede;
 
-@WebServlet(name = "VentasSedeServlet", urlPatterns = {"/ventassedeservlet/*"})
-public class VentasSedeServlet extends HttpServlet {
+@WebServlet(name = "VentasSedeServlet", urlPatterns = {"/sedeservlet/*"})
+public class SedeServlet extends HttpServlet {
 
     private static final String PERSISTENCE_UNIT_NAME = "gestorFarmacia";
     private static EntityManagerFactory emf;

@@ -5,7 +5,10 @@
     <class>pe.gestor.compras.dto.ComprasVentas</class>
     <class>pe.gestor.ventas.dto.VentasSede</class>
     <class>pe.gestor.login.dto.VistaLoginUsuarioRol</class>
-    <class>dto.Empresa</class>
+    <class>pe.gestor.login.dto.Empresa</class>
+    <class>pe.gestor.planilla.dto.PlanillaTipodoc</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaMarcacion</class>
+    <class>pe.gestor.asistencia.dto.VistaAsistenciaMarcacionpersona</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

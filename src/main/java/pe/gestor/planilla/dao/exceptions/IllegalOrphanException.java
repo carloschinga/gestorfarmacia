@@ -1,4 +1,4 @@
-package dao.exceptions;
+package pe.gestor.planilla.dao.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

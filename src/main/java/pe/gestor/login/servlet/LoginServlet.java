@@ -4,8 +4,8 @@
  */
 package pe.gestor.login.servlet;
 
-import dao.EmpresaDAO;
-import dto.Empresa;
+import pe.gestor.login.dao.EmpresaDAO;
+import pe.gestor.login.dto.Empresa;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -83,6 +83,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("codiEmpr", empresa.getCodiEmpr());
                 session.setAttribute("nrucEmpr", empresa.getNrucEmpr());
                 session.setAttribute("nombEmpr", empresa.getNombEmpr());
+                session.setAttribute("logueado", "si");
 
                 out.print("success");
             } else {
