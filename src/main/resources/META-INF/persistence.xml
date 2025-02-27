@@ -9,6 +9,10 @@
     <class>pe.gestor.planilla.dto.PlanillaTipodoc</class>
     <class>pe.gestor.asistencia.dto.AsistenciaMarcacion</class>
     <class>pe.gestor.asistencia.dto.VistaAsistenciaMarcacionpersona</class>
+    <class>pe.gestor.login.dto.LoginRolPagina</class>
+    <class>pe.gestor.login.dto.LoginPagina</class>
+    <class>pe.gestor.login.dto.LoginRol</class>
+    <class>pe.gestor.login.dto.VistaLoginMenuDeta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
