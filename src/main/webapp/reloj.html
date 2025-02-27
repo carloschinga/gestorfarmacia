@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Reloj Marcador de Asistencia</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #f8f9fa;
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            .container {
+                background: #ffffff;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                width: 100%;
+                max-width: 400px;
+                text-align: center;
+            }
+            h1 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+            label {
+                font-weight: bold;
+                margin-bottom: 5px;
+                display: block;
+                text-align: left;
+                color: #555;
+            }
+            input[type="text"], select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+            button {
+                width: 100%;
+                padding: 10px;
+                background: #007bff;
+                border: none;
+                color: #fff;
+                font-size: 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+            button:hover {
+                background: #0056b3;
+            }
+            #resultado {
+                margin-top: 15px;
+                font-weight: bold;
+                color: #333;
+            }
+            #reloj {
+                font-size: 24px;
+                margin-top: 20px;
+                font-family: monospace;
+                color:#2D8B59;
+            }
+            .btn-success {
+                background-color: #39B674;
+                border: none;
+                border-radius: 8px;
+                padding: 10px;
+                font-size: 16px;
+                width: 100%;
+                transition: 0.3s;
+            }
+
+            .btn-success:hover {
+                background-color: #2e8f5c;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script>
+
+            // Función para consultar al servlet y obtener los tipos de documento
+            function cargarTiposDoc() {
+                $.ajax({
+                    url: '/Planilla/tipodocumentoservlet', // URL de tu servlet
+                    type: 'GET',
+                    success: function (data) {
+                        // Llenar el combo con los nombres obtenidos
+                        let combo = $('#tipoDocCombo');
+                        combo.empty(); // Limpiar el combo antes de llenarlo
+
+                        data.forEach(function (nombre) {
+                            combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert('Error al cargar los nombres.');
+                    }
+
+                });
+
+            }
+
+
+            // Función para registrar asistencia
+            function registrarAsistencia() {
+                const tipoDocu = document.getElementById("tipoDocCombo").value;
+                const numeDocu = document.getElementById("numeDocu").value.trim();
+
+                if (!numeDocu) {
+                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento válido.";
+                    return;
+                }
+
+                if (!tipoDocu) {
+                    document.getElementById("resultado").innerText = "Por favor, selecciona un tipo de documento.";
+                    return;
+                }
+
+                const data = {numeDocu: numeDocu, codiTipoDoc: tipoDocu};
+                fetch('marcacion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                        .then(response => response.json())
+                        .then(result => {
+                            const mensaje = result.status === "success" ?
+                                    (result.marcacion === "entrada" ?
+                                            `Entrada registrada para ${result.nombre} a las ${result.hora}` :
+                                            `Salida registrada para ${result.nombre} a las ${result.hora}`) :
+                                    "Error: " + result.message;
+                            document.getElementById("resultado").innerText = mensaje;
+
+                            setTimeout(() => {
+                                document.getElementById("resultado").innerText = "";
+                            }, 5000);
+                        })
+                        .catch(error => {
+                            document.getElementById("resultado").innerText = "Error en la conexión";
+                            console.error('Error:', error);
+                        });
+            }
+
+            // Actualizar el reloj cada segundo
+            function actualizarRelojServidor() {
+                fetch('horaServidor')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById("reloj").innerText = data.hora;
+                        })
+                        .catch(error => {
+                            console.error("Error al obtener la hora del servidor:", error);
+                        });
+            }
+
+            setInterval(actualizarRelojServidor, 1000);
+            window.onload = () => {
+                cargarTiposDoc();  // Cargar los tipos de documento cuando se cargue la página
+                actualizarRelojServidor();
+            };
+
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Marcador de Asistencia</h1>
+            <div>
+                <label for="tipoDocCombo">Tipo de Documento:</label>
+                <select id="tipoDocCombo" name="tipoDocCombo">
+                    <option value="">Selecciona un tipo de documento</option>
+                    <!-- Las opciones se cargarán aquí desde el servidor -->
+                </select>
+            </div>
+            <div>
+                <label for="numeDocu">Número de Documento:</label>
+                <input type="text" id="numeDocu" name="numeDocu" placeholder="Ingresa tu número de documento">
+            </div>
+            <div>
+                <button class="btn btn-success" onclick="registrarAsistencia()">Marcar Asistencia</button>
+            </div>
+            <div id="resultado"></div>
+            <!-- Reloj digital que muestra la hora del servidor -->
+            <div id="reloj"></div>
+        </div>
+        <div class="container2">
+            <h1>Marcador de Asistencia</h1>
+            <div>
+                ¡Esta PC no esta habilitada para marcar asistencia!
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $(".container").hide();
+                $(".container2").hide();
+                if (!Cookies.get('habilitado')) {
+                    $(".container").hide();
+                    $(".container2").show();
+                } else {
+                    $(".container").show();
+                    $(".container2").hide();
+                }
+            }
+            );
+        </script>
+    </body>
+</html>

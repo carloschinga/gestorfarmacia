@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanillaPersona.findAll", query = "SELECT p FROM PlanillaPersona p"),
     @NamedQuery(name = "PlanillaPersona.findByCodiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPers = :codiPers"),
     @NamedQuery(name = "PlanillaPersona.findByCodiTipoDoc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoDoc = :codiTipoDoc"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu"),
+    @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu AND p.codiTipoDoc = :codiTipoDoc"),
     @NamedQuery(name = "PlanillaPersona.findByCodiPaisEmis", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPaisEmis = :codiPaisEmis"),
     @NamedQuery(name = "PlanillaPersona.findByAppaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.appaPers = :appaPers"),
     @NamedQuery(name = "PlanillaPersona.findByApmaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.apmaPers = :apmaPers"),
