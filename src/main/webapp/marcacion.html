@@ -322,12 +322,63 @@
                 return;
             }
 
-            let divToPrint = document.getElementById("personaMarcacionTable");
-            let newWin = window.open("");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
+            const {jsPDF} = window.jspdf;  // Importar jsPDF
+            const doc = new jsPDF();  // Crear una nueva instancia de jsPDF
+
+            // Obtener la fecha actual en formato "DD/MM/YYYY"
+            let today = new Date();
+            let dateString = today.toLocaleDateString('es-ES');  // Fecha en formato español (DD/MM/YYYY)
+
+            // Título del PDF centrado
+            doc.setFontSize(18);
+            const title = 'Marcaciones de Personal';
+            const pageWidth = doc.internal.pageSize.width;
+            const titleWidth = doc.getTextWidth(title);  // Obtener el ancho del texto
+            const xPosition = (pageWidth - titleWidth) / 2;  // Calcular la posición X para centrar el título
+            doc.text(title, xPosition, 20);  // Escribe el título centrado en el PDF
+
+            // Fecha actual alineada a la derecha con un margen adicional
+            doc.setFontSize(12);  // Reducir tamaño de la fuente para la fecha
+            const dateXPosition = pageWidth - doc.getTextWidth(dateString) - 20;  // Ajustamos la posición de la fecha a la derecha
+            doc.text('Fecha: ' + dateString, dateXPosition, 20);  // Escribe la fecha en la misma línea, alineada a la derecha
+
+            // Dejar un espacio de 10 unidades después del título y la fecha para evitar solapamientos
+            let yPosition = 30;
+
+            // Obtener los encabezados de la tabla
+            let tableData = [];
+            $('#personaMarcacionTable thead th').each(function (i, header) {
+                if (i < $('#personaMarcacionTable thead th').length - 1) {
+                    tableData.push($(header).text());
+                }
+            });
+
+            // Obtener los datos de las filas de la tabla
+            let tableRows = [];
+            $('#personaMarcacionTable tbody tr').each(function () {
+                let rowData = [];
+                $(this).find('td').each(function (i, cell) {
+                    if (i < $(this).parent().find('td').length - 1) {
+                        rowData.push($(cell).text());
+                    }
+                });
+                tableRows.push(rowData);
+            });
+
+            // Añadir la tabla al PDF
+            doc.autoTable({
+                head: [tableData], // Encabezado
+                body: tableRows, // Datos de las filas
+                startY: yPosition, // Iniciar la tabla después del espacio
+                theme: 'striped', // Estilo de la tabla (rayado)
+                headStyles: {fillColor: [22, 160, 133]}, // Color de fondo de los encabezados
+                margin: {top: yPosition + 10}, // Margen superior ajustado
+            });
+
+            // Guardar el PDF
+            doc.save('marcacion_persona.pdf');
         });
+
     });
 
 </script>

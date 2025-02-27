@@ -32,7 +32,7 @@ public class PersonaMarcacionServlet extends HttpServlet {
     private final EntityManagerFactory emf;
 
     public PersonaMarcacionServlet() {
-        this.emf = Persistence.createEntityManagerFactory("com.mycompany_Planilla_war_1.0-SNAPSHOTPU");
+        this.emf = Persistence.createEntityManagerFactory("gestorFarmacia");
         this.vistaPersonaMarcacionDAO = new VistaAsistenciaPersonaMarcacionDAO(emf);
     }
 
