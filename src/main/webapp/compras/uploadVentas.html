@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cargar Archivos de Pharma</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    </head>
+    <body class="bg-light">
+
+        <div class="container mt-5">
+            <h3 class="text-center text-primary mb-4">Cargar Archivos de Pharma</h3>
+
+            <div class="card shadow-lg">
+                  <div class="card-body p-4">
+                    <h4 class="mb-3 text-secondary">Cargar Ventas</h4>
+
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="sede" class="form-label">Seleccionar Sede:</label>
+                                <select id="sede" class="form-select">
+                                    <option value="">Seleccione una sede</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="file" class="form-label">Seleccionar archivo Excel:</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">📂 Subir Archivo</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-body p-4">
+                    <h4 class="mb-3 text-secondary">Cargar Stock</h4>
+
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="sede" class="form-label">Seleccionar Sede:</label>
+                                <select id="sede" class="form-select">
+                                    <option value="">Seleccione una sede</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="file" class="form-label">Seleccionar archivo Excel:</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">📂 Subir Archivo</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+           
+                 <div class="card-body p-4">
+                    <h4 class="mb-3 text-secondary">Cargar Proveedor</h4>
+
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="file" class="form-label">Seleccionar archivo Excel:</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">📂 Subir Archivo</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                function cargarSedes() {
+                    $.ajax({
+                        url: 'ventassedeservlet',
+                        type: 'GET',
+                        success: function (response) {
+                            var sedeSelect = $('#sede');
+                            sedeSelect.empty().append('<option value="">Seleccione una sede</option>');
+                            response.forEach(function (sede) {
+                                sedeSelect.append('<option value="' + sede.id + '">' + sede.nombre + '</option>');
+                            });
+                        }
+                    });
+                }
+
+                cargarSedes();
+
+                $('#uploadForm').on('submit', function (e) {
+                    e.preventDefault();
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: 'uploadExcel',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            alert("✅ Archivo subido con éxito.");
+                        },
+                        error: function () {
+                            alert("❌ Error al subir el archivo.");
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

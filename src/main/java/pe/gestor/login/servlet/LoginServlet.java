@@ -4,10 +4,9 @@
  */
 package pe.gestor.login.servlet;
 
-import pe.gestor.login.dao.EmpresaDAO;
-import pe.gestor.login.dao.VistaUsuarioRolDAO;
-import pe.gestor.login.dto.PlanillaEmpresa;
-import pe.gestor.login.dto.VistaUsuarioRol;
+import dao.EmpresaDAO;
+import dto.Empresa;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -19,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import pe.gestor.login.dao.VistaLoginUsuarioRolDAO;
+import pe.gestor.login.dto.VistaLoginUsuarioRol;
 
 /**
  *
@@ -27,59 +28,51 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/loginservlet"})
 public class LoginServlet extends HttpServlet {
 
-    private VistaUsuarioRolDAO vistaUsuarioRolDAO;
-    private final EmpresaDAO empresaDAO;
-    private final EntityManagerFactory emf;
+    private static final String PERSISTENCE_UNIT_NAME = "gestorFarmacia";
+    private static EntityManagerFactory emf;
+    VistaLoginUsuarioRolDAO vistaLoginUsuarioRolDAO = null;
+    EmpresaDAO empresaDAO = null;
 
-    public LoginServlet() {
-        EntityManagerFactory tempEmf = null;
-        VistaUsuarioRolDAO tempVistaUsuarioRolDAO = null;
-        EmpresaDAO tempEmpresaDAO = null;
+    @Override
+    public void init() throws ServletException {
+        super.init();
 
         try {
-            // Inicialización de las fábricas de entidades y los DAOs.
-            tempEmf = Persistence.createEntityManagerFactory("com.mycompany_GestorFarmacia_war_1.0-SNAPSHOTPU");
-            tempVistaUsuarioRolDAO = new VistaUsuarioRolDAO(tempEmf);
-            tempEmpresaDAO = new EmpresaDAO(tempEmf);
+            emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+            vistaLoginUsuarioRolDAO = new VistaLoginUsuarioRolDAO(emf);
+            empresaDAO = new EmpresaDAO(emf);
         } catch (Exception ex) {
             System.out.println("Error al inicializar DAOs: " + ex.getMessage());
         }
+    }
 
-        this.emf = tempEmf;
-        this.vistaUsuarioRolDAO = tempVistaUsuarioRolDAO;
-        this.empresaDAO = tempEmpresaDAO;
+    public LoginServlet() {
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Recuperamos los parámetros enviados en la solicitud
         String logiUsua = request.getParameter("logiUsua");
         String passUsua = request.getParameter("passUsua");
 
-        // Verificamos si los DAOs han sido correctamente inicializados
-        if (vistaUsuarioRolDAO == null || empresaDAO == null) {
+        if (vistaLoginUsuarioRolDAO == null || empresaDAO == null) {
             response.getWriter().print("Error de configuración del servidor");
             return;
         }
 
-        // Validamos el usuario con el login y la contraseña
-        VistaUsuarioRol usuario = vistaUsuarioRolDAO.validarUsuario(logiUsua, passUsua);
+        VistaLoginUsuarioRol usuario = vistaLoginUsuarioRolDAO.validarUsuario(logiUsua, passUsua);
 
-        // Configuramos la respuesta como tipo texto plano
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
 
-        // Si el usuario existe, procedemos con la lógica del login
         if (usuario != null) {
-            // Cargar la empresa activa (por defecto)
-            List<PlanillaEmpresa> listaEmpresa = empresaDAO.listaEmpresaActivas();
+            // Cargar la empresa por defecto
+            List<Empresa> listaEmpresa = empresaDAO.listaEmpresaActivas();
 
             if (listaEmpresa != null && !listaEmpresa.isEmpty()) {
-                // Obtenemos la primera empresa activa
-                PlanillaEmpresa empresa = listaEmpresa.get(0);
+                Empresa empresa = listaEmpresa.get(0);
 
-                // Creamos la sesión del usuario
                 HttpSession session = request.getSession();
                 session.setAttribute("codiUsua", usuario.getCodiUsua());
                 session.setAttribute("logiUsua", usuario.getLogiUsua());
@@ -91,14 +84,11 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("nrucEmpr", empresa.getNrucEmpr());
                 session.setAttribute("nombEmpr", empresa.getNombEmpr());
 
-                // Retornamos un mensaje de éxito
                 out.print("success");
             } else {
-                // Si no hay empresas activas
                 out.print("No hay empresas activas");
             }
         } else {
-            // Si el usuario no es válido
             out.print("error");
         }
     }
