@@ -43,13 +43,15 @@ public class Menu extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
+            /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(true);
-            String codi = session.getAttribute("codi").toString();
+            String codi = session.getAttribute("codiUsua").toString();
+
             VistaLoginMenuDetaDAO webMenuDetaDAO = new VistaLoginMenuDetaDAO(emf);
             List<VistaLoginMenuDeta> lista = webMenuDetaDAO.listarMenuXUsua(Integer.parseInt(codi));
 
@@ -57,13 +59,19 @@ public class Menu extends HttpServlet {
 
             List<VistaLoginMenuDeta> cabeceras = new ArrayList<>();
 
+            try{
             for (VistaLoginMenuDeta webMenuDeta : lista) {
-                if (webMenuDeta.getTipoMenu().equals("T")) { // Es una cabecera
+                if (webMenuDeta.getTipoMenu().equals('T')) { // Es una cabecera
                     cabeceras.add(webMenuDeta);
-                    menuMap.put(webMenuDeta.getCodiPagi(), new ArrayList<>());
-                } else if (webMenuDeta.getTipoMenu().equals("M")) { // Es un elemento de menú
+                    menuMap.put(webMenuDeta.getCodiPagi(), new ArrayList<VistaLoginMenuDeta>()); // Especificar el tipo aquí
+                } else if (webMenuDeta.getTipoMenu().equals('M')) { // Es un elemento de menú
                     menuMap.get(webMenuDeta.getCodmas()).add(webMenuDeta);
                 }
+            }
+            }
+            catch(Exception ex){
+                String m= ex.getMessage();
+                
             }
 
             StringBuilder resultado = new StringBuilder();
@@ -88,6 +96,6 @@ public class Menu extends HttpServlet {
             out.print(resultado.toString());
 
         }
-
     }
+
 }
