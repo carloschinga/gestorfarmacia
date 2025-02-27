@@ -13,6 +13,9 @@
     <class>pe.gestor.login.dto.LoginPagina</class>
     <class>pe.gestor.login.dto.LoginRol</class>
     <class>pe.gestor.login.dto.VistaLoginMenuDeta</class>
+    <class>pe.gestor.planilla.dto.PlanillaPersona</class>
+    <class>pe.gestor.planilla.dto.PlanillaPlantilla</class>
+    <class>pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
