@@ -1,0 +1,47 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="h4 mb-0 text-gray-800">Lista de Personas</h3>
+        </div>
+        <div class="card-body">
+            <table id="personaTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Nombre Completo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas de la tabla se llenarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+    // Inicializar la tabla con DataTables
+    var table = $('#personaTable').DataTable({
+        "ajax": {
+            "url": "personaservlet",  // URL al servlet que devuelve los datos en formato JSON
+            "type": "GET",
+            "dataSrc": function (json) {
+                // Aquí puedes hacer algo con los datos antes de pasarlos a DataTable
+                return json;  // Retorna el array de objetos para que DataTable lo use
+            }
+        },
+        "columns": [
+            { "data": "numeDocu" },  // Documento
+            { "data": "nombre_completo" }  // Nombre Completo
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pe.gestor.planilla.dao;
 
 import java.io.Serializable;
@@ -9,11 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import pe.gestor.planilla.dao.exceptions.NonexistentEntityException;
-import pe.gestor.planilla.dao.exceptions.PreexistingEntityException;
+import javax.persistence.TypedQuery;
 import pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle;
 
 /**
@@ -22,92 +14,32 @@ import pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle;
  */
 public class VistaPlanillaPersonaDetalleJpaController implements Serializable {
 
+    private EntityManagerFactory emf = null;
+
     public VistaPlanillaPersonaDetalleJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(VistaPlanillaPersonaDetalle vistaPlanillaPersonaDetalle) throws PreexistingEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(vistaPlanillaPersonaDetalle);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findVistaPlanillaPersonaDetalle(vistaPlanillaPersonaDetalle.getCodiPers()) != null) {
-                throw new PreexistingEntityException("VistaPlanillaPersonaDetalle " + vistaPlanillaPersonaDetalle + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void edit(VistaPlanillaPersonaDetalle vistaPlanillaPersonaDetalle) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            vistaPlanillaPersonaDetalle = em.merge(vistaPlanillaPersonaDetalle);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                int id = vistaPlanillaPersonaDetalle.getCodiPers();
-                if (findVistaPlanillaPersonaDetalle(id) == null) {
-                    throw new NonexistentEntityException("The vistaPlanillaPersonaDetalle with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public void destroy(int id) throws NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            VistaPlanillaPersonaDetalle vistaPlanillaPersonaDetalle;
-            try {
-                vistaPlanillaPersonaDetalle = em.getReference(VistaPlanillaPersonaDetalle.class, id);
-                vistaPlanillaPersonaDetalle.getCodiPers();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The vistaPlanillaPersonaDetalle with id " + id + " no longer exists.", enfe);
-            }
-            em.remove(vistaPlanillaPersonaDetalle);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
+    // Obtener todos los registros (opcional con paginación)
     public List<VistaPlanillaPersonaDetalle> findVistaPlanillaPersonaDetalleEntities() {
         return findVistaPlanillaPersonaDetalleEntities(true, -1, -1);
     }
 
+    // Obtener registros con paginación
     public List<VistaPlanillaPersonaDetalle> findVistaPlanillaPersonaDetalleEntities(int maxResults, int firstResult) {
         return findVistaPlanillaPersonaDetalleEntities(false, maxResults, firstResult);
     }
 
+    // Método privado para ejecutar la consulta de todas las personas (con paginación)
     private List<VistaPlanillaPersonaDetalle> findVistaPlanillaPersonaDetalleEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(VistaPlanillaPersonaDetalle.class));
-            Query q = em.createQuery(cq);
+            // Usando Criteria API para obtener todas las entidades de la clase VistaPlanillaPersonaDetalle
+            Query q = em.createQuery("SELECT v FROM VistaPlanillaPersonaDetalle v", VistaPlanillaPersonaDetalle.class);
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -118,26 +50,40 @@ public class VistaPlanillaPersonaDetalleJpaController implements Serializable {
         }
     }
 
-    public VistaPlanillaPersonaDetalle findVistaPlanillaPersonaDetalle(int id) {
+    // Buscar una persona por su ID (numeDocu) directamente usando el EntityManager
+    public VistaPlanillaPersonaDetalle findVistaPlanillaPersonaDetalle(String numeDocu) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(VistaPlanillaPersonaDetalle.class, id);
+            return em.find(VistaPlanillaPersonaDetalle.class, numeDocu);  // Usamos numeDocu que es un String
         } finally {
             em.close();
         }
     }
 
+    // Método para obtener el conteo de los registros
     public int getVistaPlanillaPersonaDetalleCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<VistaPlanillaPersonaDetalle> rt = cq.from(VistaPlanillaPersonaDetalle.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            // Consulta para contar todos los registros
+            Query q = em.createQuery("SELECT COUNT(v) FROM VistaPlanillaPersonaDetalle v");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
         }
     }
-    
+
+    // Método corregido para buscar por numeDocu usando EntityManager
+    public VistaPlanillaPersonaDetalle findVistaPlanillaPersonaDetalleByNumeDocu(String numeDocu) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<VistaPlanillaPersonaDetalle> query = em.createQuery(
+                "SELECT v FROM VistaPlanillaPersonaDetalle v WHERE v.numeDocu = :numeDocu", VistaPlanillaPersonaDetalle.class);
+            query.setParameter("numeDocu", numeDocu);
+            return query.getSingleResult();  // Devuelve el único resultado encontrado
+        } catch (Exception e) {
+            return null;  // Si no encuentra el resultado, retorna null
+        } finally {
+            em.close();
+        }
+    }
 }
