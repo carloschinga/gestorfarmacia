@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pe.gestor.compras.dao;
+package pe.gestor.ventas.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,16 +12,16 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import pe.gestor.compras.dao.exceptions.NonexistentEntityException;
-import pe.gestor.compras.dto.ComprasVentas;
+import pe.gestor.ventas.dao.exceptions.NonexistentEntityException;
+import pe.gestor.ventas.dto.VentasPharma;
 
 /**
  *
  * @author USER
  */
-public class ComprasVentasJpaController implements Serializable {
+public class VentasPharmaJpaController implements Serializable {
 
-    public ComprasVentasJpaController(EntityManagerFactory emf) {
+    public VentasPharmaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -30,7 +30,7 @@ public class ComprasVentasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(ComprasVentas comprasVentas) {
+    public void create(VentasPharma comprasVentas) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -44,7 +44,7 @@ public class ComprasVentasJpaController implements Serializable {
         }
     }
 
-    public void edit(ComprasVentas comprasVentas) throws NonexistentEntityException, Exception {
+    public void edit(VentasPharma comprasVentas) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -72,9 +72,9 @@ public class ComprasVentasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            ComprasVentas comprasVentas;
+            VentasPharma comprasVentas;
             try {
-                comprasVentas = em.getReference(ComprasVentas.class, id);
+                comprasVentas = em.getReference(VentasPharma.class, id);
                 comprasVentas.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The comprasVentas with id " + id + " no longer exists.", enfe);
@@ -88,19 +88,19 @@ public class ComprasVentasJpaController implements Serializable {
         }
     }
 
-    public List<ComprasVentas> findComprasVentasEntities() {
+    public List<VentasPharma> findComprasVentasEntities() {
         return findComprasVentasEntities(true, -1, -1);
     }
 
-    public List<ComprasVentas> findComprasVentasEntities(int maxResults, int firstResult) {
+    public List<VentasPharma> findComprasVentasEntities(int maxResults, int firstResult) {
         return findComprasVentasEntities(false, maxResults, firstResult);
     }
 
-    private List<ComprasVentas> findComprasVentasEntities(boolean all, int maxResults, int firstResult) {
+    private List<VentasPharma> findComprasVentasEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(ComprasVentas.class));
+            cq.select(cq.from(VentasPharma.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -112,10 +112,10 @@ public class ComprasVentasJpaController implements Serializable {
         }
     }
 
-    public ComprasVentas findComprasVentas(Integer id) {
+    public VentasPharma findComprasVentas(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(ComprasVentas.class, id);
+            return em.find(VentasPharma.class, id);
         } finally {
             em.close();
         }
@@ -125,7 +125,7 @@ public class ComprasVentasJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ComprasVentas> rt = cq.from(ComprasVentas.class);
+            Root<VentasPharma> rt = cq.from(VentasPharma.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

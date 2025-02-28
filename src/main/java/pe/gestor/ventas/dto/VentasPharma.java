@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pe.gestor.compras.dto;
+package pe.gestor.ventas.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,31 +27,31 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author USER
  */
 @Entity
-@Table(name = "compras_ventas")
+@Table(name = "ventas_pharma")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ComprasVentas.findAll", query = "SELECT c FROM ComprasVentas c"),
-    @NamedQuery(name = "ComprasVentas.findById", query = "SELECT c FROM ComprasVentas c WHERE c.id = :id"),
-    @NamedQuery(name = "ComprasVentas.findBySede", query = "SELECT c FROM ComprasVentas c WHERE c.sede = :sede"),
-    @NamedQuery(name = "ComprasVentas.findByFechaVenta", query = "SELECT c FROM ComprasVentas c WHERE c.fechaVenta = :fechaVenta"),
-    @NamedQuery(name = "ComprasVentas.findByUsuario", query = "SELECT c FROM ComprasVentas c WHERE c.usuario = :usuario"),
-    @NamedQuery(name = "ComprasVentas.findByLaboratorio", query = "SELECT c FROM ComprasVentas c WHERE c.laboratorio = :laboratorio"),
-    @NamedQuery(name = "ComprasVentas.findByCodigo", query = "SELECT c FROM ComprasVentas c WHERE c.codigo = :codigo"),
-    @NamedQuery(name = "ComprasVentas.findByProducto", query = "SELECT c FROM ComprasVentas c WHERE c.producto = :producto"),
-    @NamedQuery(name = "ComprasVentas.findByDocVenta", query = "SELECT c FROM ComprasVentas c WHERE c.docVenta = :docVenta"),
-    @NamedQuery(name = "ComprasVentas.findByComprobante", query = "SELECT c FROM ComprasVentas c WHERE c.comprobante = :comprobante"),
-    @NamedQuery(name = "ComprasVentas.findByPago", query = "SELECT c FROM ComprasVentas c WHERE c.pago = :pago"),
-    @NamedQuery(name = "ComprasVentas.findByEstado", query = "SELECT c FROM ComprasVentas c WHERE c.estado = :estado"),
-    @NamedQuery(name = "ComprasVentas.findByCantidadVendida", query = "SELECT c FROM ComprasVentas c WHERE c.cantidadVendida = :cantidadVendida"),
-    @NamedQuery(name = "ComprasVentas.findByCostoUnitario", query = "SELECT c FROM ComprasVentas c WHERE c.costoUnitario = :costoUnitario"),
-    @NamedQuery(name = "ComprasVentas.findByTotalCosto", query = "SELECT c FROM ComprasVentas c WHERE c.totalCosto = :totalCosto"),
-    @NamedQuery(name = "ComprasVentas.findByPrecioVenta", query = "SELECT c FROM ComprasVentas c WHERE c.precioVenta = :precioVenta"),
-    @NamedQuery(name = "ComprasVentas.findByDescuento", query = "SELECT c FROM ComprasVentas c WHERE c.descuento = :descuento"),
-    @NamedQuery(name = "ComprasVentas.findByTotalVenta", query = "SELECT c FROM ComprasVentas c WHERE c.totalVenta = :totalVenta"),
-    @NamedQuery(name = "ComprasVentas.findByGanancia", query = "SELECT c FROM ComprasVentas c WHERE c.ganancia = :ganancia"),
-    @NamedQuery(name = "ComprasVentas.findByPorcentajeGanancia", query = "SELECT c FROM ComprasVentas c WHERE c.porcentajeGanancia = :porcentajeGanancia"),
-    @NamedQuery(name = "ComprasVentas.findByStockActual", query = "SELECT c FROM ComprasVentas c WHERE c.stockActual = :stockActual")})
-public class ComprasVentas implements Serializable {
+    @NamedQuery(name = "VentasPharma.findAll", query = "SELECT v FROM VentasPharma v"),
+    @NamedQuery(name = "VentasPharma.findById", query = "SELECT v FROM VentasPharma v WHERE v.id = :id"),
+    @NamedQuery(name = "VentasPharma.findBySede", query = "SELECT v FROM VentasPharma v WHERE v.sede = :sede"),
+    @NamedQuery(name = "VentasPharma.findByFechaVenta", query = "SELECT v FROM VentasPharma v WHERE v.fechaVenta = :fechaVenta"),
+    @NamedQuery(name = "VentasPharma.findByUsuario", query = "SELECT v FROM VentasPharma v WHERE v.usuario = :usuario"),
+    @NamedQuery(name = "VentasPharma.findByLaboratorio", query = "SELECT v FROM VentasPharma v WHERE v.laboratorio = :laboratorio"),
+    @NamedQuery(name = "VentasPharma.findByCodigo", query = "SELECT v FROM VentasPharma v WHERE v.codigo = :codigo"),
+    @NamedQuery(name = "VentasPharma.findByProducto", query = "SELECT v FROM VentasPharma v WHERE v.producto = :producto"),
+    @NamedQuery(name = "VentasPharma.findByDocVenta", query = "SELECT v FROM VentasPharma v WHERE v.docVenta = :docVenta"),
+    @NamedQuery(name = "VentasPharma.findByComprobante", query = "SELECT v FROM VentasPharma v WHERE v.comprobante = :comprobante"),
+    @NamedQuery(name = "VentasPharma.findByPago", query = "SELECT v FROM VentasPharma v WHERE v.pago = :pago"),
+    @NamedQuery(name = "VentasPharma.findByEstado", query = "SELECT v FROM VentasPharma v WHERE v.estado = :estado"),
+    @NamedQuery(name = "VentasPharma.findByCantidadVendida", query = "SELECT v FROM VentasPharma v WHERE v.cantidadVendida = :cantidadVendida"),
+    @NamedQuery(name = "VentasPharma.findByCostoUnitario", query = "SELECT v FROM VentasPharma v WHERE v.costoUnitario = :costoUnitario"),
+    @NamedQuery(name = "VentasPharma.findByTotalCosto", query = "SELECT v FROM VentasPharma v WHERE v.totalCosto = :totalCosto"),
+    @NamedQuery(name = "VentasPharma.findByPrecioVenta", query = "SELECT v FROM VentasPharma v WHERE v.precioVenta = :precioVenta"),
+    @NamedQuery(name = "VentasPharma.findByDescuento", query = "SELECT v FROM VentasPharma v WHERE v.descuento = :descuento"),
+    @NamedQuery(name = "VentasPharma.findByTotalVenta", query = "SELECT v FROM VentasPharma v WHERE v.totalVenta = :totalVenta"),
+    @NamedQuery(name = "VentasPharma.findByGanancia", query = "SELECT v FROM VentasPharma v WHERE v.ganancia = :ganancia"),
+    @NamedQuery(name = "VentasPharma.findByPorcentajeGanancia", query = "SELECT v FROM VentasPharma v WHERE v.porcentajeGanancia = :porcentajeGanancia"),
+    @NamedQuery(name = "VentasPharma.findByStockActual", query = "SELECT v FROM VentasPharma v WHERE v.stockActual = :stockActual")})
+public class VentasPharma implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -120,14 +120,14 @@ public class ComprasVentas implements Serializable {
     @Column(name = "stock_actual")
     private Integer stockActual;
 
-    public ComprasVentas() {
+    public VentasPharma() {
     }
 
-    public ComprasVentas(Integer id) {
+    public VentasPharma(Integer id) {
         this.id = id;
     }
 
-    public ComprasVentas(Integer id, int sede, Date fechaVenta, String usuario, String codigo, String producto, int cantidadVendida) {
+    public VentasPharma(Integer id, int sede, Date fechaVenta, String usuario, String codigo, String producto, int cantidadVendida) {
         this.id = id;
         this.sede = sede;
         this.fechaVenta = fechaVenta;
@@ -307,10 +307,10 @@ public class ComprasVentas implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ComprasVentas)) {
+        if (!(object instanceof VentasPharma)) {
             return false;
         }
-        ComprasVentas other = (ComprasVentas) object;
+        VentasPharma other = (VentasPharma) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -319,7 +319,7 @@ public class ComprasVentas implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.gestor.compras.dto.ComprasVentas[ id=" + id + " ]";
+        return "pe.gestor.ventas.dto.VentasPharma[ id=" + id + " ]";
     }
     
 }
