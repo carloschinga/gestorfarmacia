@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package servlet;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
-/**
- *
- * @author USER
- */
 @WebServlet(name = "HoraServidorServlet", urlPatterns = {"/horaServidor"})
 public class HoraServidorServlet extends HttpServlet {
 
@@ -27,13 +19,16 @@ public class HoraServidorServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
-        // Formatear la fecha/hora del servidor (por ejemplo, HH:mm:ss)
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        // Formatear la fecha y hora del servidor en formato ISO 8601
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String horaActual = sdf.format(new Date());
 
+        // Crear la respuesta JSON
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put("hora", horaActual);
 
+        // Escribir la respuesta JSON al cliente
         try (PrintWriter out = response.getWriter()) {
             out.print(jsonResponse.toString());
         }

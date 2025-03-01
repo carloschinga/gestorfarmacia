@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -95,6 +96,8 @@ public class MarcacionServlet extends HttpServlet {
 
                     List<AsistenciaMarcacion> marcaciones = query.getResultList();
 
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", new Locale("es", "PE")); // Formato deseado para fecha y hora en español
+
                     if (!marcaciones.isEmpty()) {
                         // Si ya existe una marcación de entrada para este día, registramos la hora de salida
                         AsistenciaMarcacion marcacionExistente = marcaciones.get(0);
@@ -109,7 +112,7 @@ public class MarcacionServlet extends HttpServlet {
                             jsonResponse.put("message", "Hora de salida registrada");
                             jsonResponse.put("codiMarc", marcacionExistente.getCodiMarc());
                             jsonResponse.put("nombre", persona.getNombPers());
-                            jsonResponse.put("hora", marcacionExistente.getMarcSald().toString());  // Hora de salida
+                            jsonResponse.put("hora", sdf.format(marcacionExistente.getMarcSald()));  // Hora de salida formateada en español
                             jsonResponse.put("marcacion", "salida");  // Enviar "salida"
                         } else {
                             jsonResponse.put("status", "error");
@@ -130,7 +133,7 @@ public class MarcacionServlet extends HttpServlet {
                         jsonResponse.put("message", "Entrada registrada");
                         jsonResponse.put("codiMarc", nuevaMarcacion.getCodiMarc());
                         jsonResponse.put("nombre", persona.getNombPers());
-                        jsonResponse.put("hora", nuevaMarcacion.getMarcIngr().toString());  // Hora de entrada
+                        jsonResponse.put("hora", sdf.format(nuevaMarcacion.getMarcIngr()));  // Hora de entrada formateada en español
                         jsonResponse.put("marcacion", "entrada");  // Enviar "entrada"
                     }
                 } else {

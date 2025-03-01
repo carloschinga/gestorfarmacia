@@ -81,6 +81,45 @@
             .btn-success:hover {
                 background-color: #2e8f5c;
             }
+            .btn-info {
+                background-color: #1D3C6A; /* Azul similar al del botón */
+                border: none;
+                border-radius: 4px;
+                padding: 10px;
+                font-size: 16px;
+                width: 100%;
+                transition: 0.3s;
+            }
+
+            .btn-info:hover {
+                background-color: #0e2b48; /* Azul más oscuro para el hover */
+            }
+            /* Contenedor para los botones "Marcar Asistencia" y "Ver Asistencias" */
+            .button-group {
+                display: flex;
+                justify-content: space-between; /* Distribuye los botones a los extremos */
+                margin-top: 20px;
+            }
+
+            /* Estilo de los botones */
+            .button-group .btn {
+                width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .button-group .btn:hover {
+                opacity: 0.9; /* Efecto hover para los botones */
+            }
+            /* Estilo de los botones */
+            .button-group .btn {
+                width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
+                padding: 10px;
+                font-size: 16px;
+                border-radius: 8px; /* Aplica el border-radius a ambos botones */
+            }
+
+
         </style>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -108,23 +147,26 @@
 
             }
 
-
             // Función para registrar asistencia
             function registrarAsistencia() {
                 const tipoDocu = document.getElementById("tipoDocCombo").value;
                 const numeDocu = document.getElementById("numeDocu").value.trim();
 
-                if (!numeDocu) {
-                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento válido.";
-                    return;
-                }
+                // Validar que ambos campos estén completos
+                if (!numeDocu || !tipoDocu) {
+                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento y selecciona el tipo de documento.";
 
-                if (!tipoDocu) {
-                    document.getElementById("resultado").innerText = "Por favor, selecciona un tipo de documento.";
+                    // Limpiar el mensaje después de 3 segundos
+                    setTimeout(() => {
+                        document.getElementById("resultado").innerText = "";
+                    }, 3000); // El mensaje desaparecerá después de 3 segundos
+
                     return;
                 }
 
                 const data = {numeDocu: numeDocu, codiTipoDoc: tipoDocu};
+
+                // Realizar la solicitud POST usando fetch
                 fetch('marcacion', {
                     method: 'POST',
                     headers: {
@@ -136,14 +178,19 @@
                         .then(result => {
                             const mensaje = result.status === "success" ?
                                     (result.marcacion === "entrada" ?
-                                            `Entrada registrada para ${result.nombre} a las ${result.hora}` :
-                                            `Salida registrada para ${result.nombre} a las ${result.hora}`) :
+                                            `${result.nombre} ha registrado su entrada el día ${result.hora}` :
+                                            `${result.nombre} ha registrado su salida el día ${result.hora}`) :
                                     "Error: " + result.message;
+
                             document.getElementById("resultado").innerText = mensaje;
 
+                            // Limpiar el mensaje después de 3 segundos
                             setTimeout(() => {
                                 document.getElementById("resultado").innerText = "";
-                            }, 5000);
+                            }, 3000); // El mensaje desaparecerá después de 3 segundos
+
+                            // Limpiar el número de documento
+                            document.getElementById("numeDocu").value = "";
                         })
                         .catch(error => {
                             document.getElementById("resultado").innerText = "Error en la conexión";
@@ -151,18 +198,128 @@
                         });
             }
 
+// Función para ver asistencias
+            function verAsistencias() {
+                const numeDocu = document.getElementById("numeDocu").value.trim();
+                const tipoDocu = document.getElementById("tipoDocCombo").value.trim();
+
+                if (!numeDocu || !tipoDocu) {
+                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento y selecciona el tipo de documento.";
+
+                    // Limpiar el mensaje después de 3 segundos
+                    setTimeout(() => {
+                        document.getElementById("resultado").innerText = "";
+                    }, 3000); // El mensaje desaparecerá después de 3 segundos
+
+                    return;
+                }
+
+                const url = `verAsistencias?numeDocu=${encodeURIComponent(numeDocu)}&codiTipoDoc=${encodeURIComponent(tipoDocu)}`;
+
+                fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                const asistencias = data.asistencias;
+                                let resultadoHTML = "<h3>Asistencias de Hoy</h3>";
+
+                                if (asistencias.length > 0) {
+                                    resultadoHTML += `
+                        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Entrada</th>
+                                    <th>Salida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                                    asistencias.forEach(asistencia => {
+                                        resultadoHTML += `
+                            <tr>
+                                <td>${asistencia.fecha}</td>
+                                <td>${asistencia.entrada}</td>
+                                <td>${asistencia.salida}</td>
+                            </tr>
+                        `;
+                                    });
+
+                                    resultadoHTML += "</tbody></table>";
+                                } else {
+                                    resultadoHTML += "<p>No se encontraron asistencias para hoy.</p>";
+                                }
+
+                                document.getElementById("resultado").innerHTML = resultadoHTML;
+
+                                // Limpiar el resultado después de 3 segundos
+                                setTimeout(() => {
+                                    document.getElementById("resultado").innerHTML = "";
+                                }, 3000); // El resultado desaparecerá después de 3 segundos
+
+                                // Limpiar el número de documento
+                                document.getElementById("numeDocu").value = "";
+                            } else {
+                                document.getElementById("resultado").innerText = data.message || "Error desconocido al obtener las asistencias.";
+                            }
+                        })
+                        .catch(error => {
+                            document.getElementById("resultado").innerText = "Error al realizar la solicitud: " + error.message;
+                        });
+            }
+
+// Función para formatear la fecha (dd/MM/yyyy)
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                if (isNaN(date))
+                    return "Fecha inválida";
+                return date.toLocaleDateString('es-PE'); // Formato dd/MM/yyyy
+            }
+
+// Función para formatear la hora (HH:mm:ss)
+            function formatTime(dateString) {
+                const date = new Date(dateString);
+                if (isNaN(date))
+                    return "Hora inválida";
+                return date.toLocaleTimeString('es-PE', {hour12: false}); // Formato HH:mm:ss
+            }
+
+
             // Actualizar el reloj cada segundo
+            // Función para obtener la hora del servidor
             function actualizarRelojServidor() {
                 fetch('horaServidor')
                         .then(response => response.json())
                         .then(data => {
-                            document.getElementById("reloj").innerText = data.hora;
+                            const fechaUTC = new Date(data.hora);  // Convertir la cadena ISO 8601 (en UTC) a un objeto Date
+
+                            if (isNaN(fechaUTC)) {
+                                console.error("Fecha inválida:", data.hora);
+                                return;
+                            }
+
+                            // Convertir la hora UTC a la hora local del navegador
+                            const fechaLocal = new Date(fechaUTC.toLocaleString("en-US", {timeZoneName: "short"}));
+
+                            // Formatear la fecha (día, mes, año)
+                            const opcionesFecha = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+                            const fechaFormateada = fechaLocal.toLocaleDateString('es-PE', opcionesFecha);
+                            const fechaFormateadaConMayuscula = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+
+                            // Formatear la hora en formato de 24 horas
+                            const opcionesHora = {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false};
+                            const horaFormateada = fechaLocal.toLocaleTimeString('es-PE', opcionesHora);  // Formato de hora en 24h
+
+                            // Mostrar la fecha y la hora en el div #reloj
+                            document.getElementById("reloj").innerText = `${fechaFormateadaConMayuscula} - ${horaFormateada}`;
                         })
                         .catch(error => {
                             console.error("Error al obtener la hora del servidor:", error);
                         });
             }
 
+// Actualizar la hora del servidor cada segundo
             setInterval(actualizarRelojServidor, 1000);
             window.onload = () => {
                 cargarTiposDoc();  // Cargar los tipos de documento cuando se cargue la página
@@ -173,6 +330,7 @@
     </head>
     <body>
         <div class="container">
+            <div id="reloj"></div>
             <h1>Marcador de Asistencia</h1>
             <div>
                 <label for="tipoDocCombo">Tipo de Documento:</label>
@@ -185,12 +343,13 @@
                 <label for="numeDocu">Número de Documento:</label>
                 <input type="text" id="numeDocu" name="numeDocu" placeholder="Ingresa tu número de documento">
             </div>
-            <div>
+            <div class="button-group">
+                <button class="btn btn-info" onclick="verAsistencias()">Ver Asistencias</button>
                 <button class="btn btn-success" onclick="registrarAsistencia()">Marcar Asistencia</button>
             </div>
             <div id="resultado"></div>
             <!-- Reloj digital que muestra la hora del servidor -->
-            <div id="reloj"></div>
+
         </div>
         <div class="container2">
             <h1>Marcador de Asistencia</h1>
