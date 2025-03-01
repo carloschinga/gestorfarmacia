@@ -31,7 +31,7 @@ public class TipoDocumentoServlet extends HttpServlet {
     private final EntityManagerFactory emf;
 
     public TipoDocumentoServlet() {
-        this.emf = Persistence.createEntityManagerFactory("com.mycompany_Planilla_war_1.0-SNAPSHOTPU");
+        this.emf = Persistence.createEntityManagerFactory("gestorFarmacia");
         this.tipoDocDAO = new PlanillaTipoDocDAO(emf);
     }
     @Override

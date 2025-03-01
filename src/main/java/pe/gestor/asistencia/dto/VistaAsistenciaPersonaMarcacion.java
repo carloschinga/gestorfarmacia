@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByFechMarc", query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.fechMarc = :fechMarc"),
     @NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByCodiHoraDeta", query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.codiHoraDeta = :codiHoraDeta"),
     @NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByMarcIngr", query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.marcIngr = :marcIngr"),
-    @NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByMarcSald", query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.marcSald = :marcSald")})
+    @NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByMarcSald", query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.marcSald = :marcSald"),
+@NamedQuery(name = "VistaAsistenciaPersonaMarcacion.findByFechaRange",
+            query = "SELECT v FROM VistaAsistenciaPersonaMarcacion v WHERE v.fechMarc BETWEEN :fechaInicio AND :fechaFin")})
 public class VistaAsistenciaPersonaMarcacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

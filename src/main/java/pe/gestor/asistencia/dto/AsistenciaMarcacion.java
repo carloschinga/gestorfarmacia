@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AsistenciaMarcacion.findByFechMarc", query = "SELECT a FROM AsistenciaMarcacion a WHERE a.fechMarc = :fechMarc"),
     @NamedQuery(name = "AsistenciaMarcacion.findByCodiHoraDeta", query = "SELECT a FROM AsistenciaMarcacion a WHERE a.codiHoraDeta = :codiHoraDeta"),
     @NamedQuery(name = "AsistenciaMarcacion.findByMarcIngr", query = "SELECT a FROM AsistenciaMarcacion a WHERE a.marcIngr = :marcIngr"),
-    @NamedQuery(name = "AsistenciaMarcacion.findByMarcSald", query = "SELECT a FROM AsistenciaMarcacion a WHERE a.marcSald = :marcSald")})
+    @NamedQuery(name = "AsistenciaMarcacion.findByMarcSald", query = "SELECT a FROM AsistenciaMarcacion a WHERE a.marcSald = :marcSald"),
+    
+})
 public class AsistenciaMarcacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -135,5 +137,5 @@ public class AsistenciaMarcacion implements Serializable {
     public String toString() {
         return "pe.gestor.planilla.dto.AsistenciaMarcacion[ codiMarc=" + codiMarc + " ]";
     }
-    
+
 }

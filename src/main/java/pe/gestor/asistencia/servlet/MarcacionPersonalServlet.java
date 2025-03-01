@@ -4,10 +4,10 @@
  */
 package pe.gestor.asistencia.servlet;
 
-
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -25,13 +25,13 @@ import pe.gestor.asistencia.dto.VistaAsistenciaPersonaMarcacion;
  *
  * @author USER
  */
-@WebServlet(name = "PersonaMarcacionServlet", urlPatterns = {"/personamarcacionservlet"})
-public class PersonaMarcacionServlet extends HttpServlet {
+@WebServlet(name = "MarcacionPersonalServlet", urlPatterns = {"/marcacionpersonalservlet"})
+public class MarcacionPersonalServlet extends HttpServlet {
 
-   private final VistaAsistenciaPersonaMarcacionDAO vistaPersonaMarcacionDAO;
+    private final VistaAsistenciaPersonaMarcacionDAO vistaPersonaMarcacionDAO;
     private final EntityManagerFactory emf;
 
-    public PersonaMarcacionServlet() {
+    public MarcacionPersonalServlet() {
         this.emf = Persistence.createEntityManagerFactory("gestorFarmacia");
         this.vistaPersonaMarcacionDAO = new VistaAsistenciaPersonaMarcacionDAO(emf);
     }
@@ -42,18 +42,35 @@ public class PersonaMarcacionServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String pathInfo = request.getPathInfo();
+        String fechaInicioParam = request.getParameter("fechaInicio");
+        String fechaFinParam = request.getParameter("fechaFin");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        /*Date fechaInicio = null;
+        Date fechaFin = null;
+
+        try {
+            if (fechaInicioParam != null && fechaFinParam != null) {
+                fechaInicio = sdf.parse(fechaInicioParam);
+                fechaFin = sdf.parse(fechaFinParam);
+            }
+        } catch (ParseException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Formato de fecha inválido. Debe ser yyyy-MM-dd.\"}");
+            return;
+        }*/
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // Listar todos los registros de VistaPersonaMarcacion
-                List<VistaAsistenciaPersonaMarcacion> lista = vistaPersonaMarcacionDAO.findVistaAsistenciaPersonaMarcacionEntities();
+                // Listar todos los registros con posible filtro por fechas
+                List<VistaAsistenciaPersonaMarcacion> lista = vistaPersonaMarcacionDAO.findByFechaRange(fechaInicioParam, fechaFinParam);
                 JSONArray jsonArray = new JSONArray();
                 for (VistaAsistenciaPersonaMarcacion vpm : lista) {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("codiMarc", vpm.getCodiMarc());
                     jsonObject.put("codiPers", vpm.getCodiPers());
                     jsonObject.put("nombPers", vpm.getNombPers());
-                    jsonObject.put("fechMarc", vpm.getFechMarc() != null ? new SimpleDateFormat("yyyy-MM-dd").format(vpm.getFechMarc()) : JSONObject.NULL);
+                    jsonObject.put("fechMarc", vpm.getFechMarc() != null ? sdf.format(vpm.getFechMarc()) : JSONObject.NULL);
                     jsonObject.put("codiHoraDeta", vpm.getCodiHoraDeta());
                     jsonObject.put("marcIngr", vpm.getMarcIngr() != null ? new SimpleDateFormat("HH:mm:ss").format(vpm.getMarcIngr()) : JSONObject.NULL);
                     jsonObject.put("marcSald", vpm.getMarcSald() != null ? new SimpleDateFormat("HH:mm:ss").format(vpm.getMarcSald()) : JSONObject.NULL);
@@ -74,7 +91,7 @@ public class PersonaMarcacionServlet extends HttpServlet {
                 jsonObject.put("codiMarc", vpm.getCodiMarc());
                 jsonObject.put("codiPers", vpm.getCodiPers());
                 jsonObject.put("nombPers", vpm.getNombPers());
-                jsonObject.put("fechMarc", vpm.getFechMarc() != null ? new SimpleDateFormat("yyyy-MM-dd").format(vpm.getFechMarc()) : JSONObject.NULL);
+                jsonObject.put("fechMarc", vpm.getFechMarc() != null ? sdf.format(vpm.getFechMarc()) : JSONObject.NULL);
                 jsonObject.put("codiHoraDeta", vpm.getCodiHoraDeta());
                 jsonObject.put("marcIngr", vpm.getMarcIngr() != null ? new SimpleDateFormat("HH:mm:ss").format(vpm.getMarcIngr()) : JSONObject.NULL);
                 jsonObject.put("marcSald", vpm.getMarcSald() != null ? new SimpleDateFormat("HH:mm:ss").format(vpm.getMarcSald()) : JSONObject.NULL);
@@ -89,5 +106,4 @@ public class PersonaMarcacionServlet extends HttpServlet {
             response.getWriter().write("{\"error\":\"Error al procesar la solicitud: " + e.getMessage() + "\"}");
         }
     }
-
 }

@@ -1,13 +1,9 @@
-
-
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
-            <h3 class="h4 mb-0 text-gray-800">Marcaciones del Personal</h3>
+            <h5 class="h5 mb-0 text-gray-800">Marcaciones del Personal</h5>
         </div>
         <div class="card-body">
-
-
             <nav class="navbar navbar-light bg-white p-2">  
                 <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
                     <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
@@ -15,15 +11,17 @@
                     <div class="btn-group ms-auto">
                         <div class="d-flex align-items-center">
                             <!-- Campo de Fecha de Inicio -->
-                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" style="max-width: 200px; margin-right: 10px;">
+                            <span class="mx-2 fw-bold">A:</span>
+                            <input type="date" class="form-control form-control-sm" id="fechaInicio" name="fechaInicio">
                             <!-- Campo de Fecha de Fin -->
-                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" style="max-width: 200px;">
+                            <span class="mx-2 fw-bold">DE:</span>
+                            <input type="date" class="form-control form-control-sm" id="fechaFin" name="fechaFin" >
                         </div>
-                        <button class="btn btn-primary" id="btnPDF">
+                        <button class="btn btn-primary btn-sm" id="btnPDF">
                             <i class="fas fa-fw fa-print"></i>
                             <span>Imprimir</span>
                         </button>
-                        <button class="btn btn-primary" id="btnExportar">
+                        <button class="btn btn-primary btn-sm" id="btnExportar">
                             <i class="fas fa-fw fa-file-excel"></i>
                             <span>Exportar</span>
                         </button>
@@ -36,13 +34,12 @@
             <table id="personaMarcacionTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Código Marc</th>
-                        <th>Código Persona</th>
-                        <th>Nombre Persona</th>
-                        <th>Fecha Marcación</th>
-                        <th>Código Hora Detalle</th>
-                        <th>Hora Ingreso</th>
-                        <th>Hora Salida</th>
+                        <th>CÓDIGO </th>
+                        <th>NOMBRE </th>
+                        <th>FECHA </th>
+
+                        <th>INGRESÓ</th>
+                        <th>SALIÓ</th>
                         <!--<th>Acciones</th>-->
                     </tr>
                 </thead>
@@ -103,117 +100,52 @@
 </div>
 
 <!-- Script para inicializar DataTable y manejar acciones -->
+
 <script>
     $(document).ready(function () {
         let marcacionTable;
-        let today = new Date().toISOString().split('T')[0];
+        const today = moment().format('YYYY-MM-DD');
 
-        $('#fechaInicio').val(today);
-        $('#fechaFin').val(today);
+        // Inicializa los campos de fecha con el valor de hoy
+        $('#fechaInicio, #fechaFin').val(today);
 
-        initMarcacionTable();
-
-        // Inicializar DataTable para VistaPersonaMarcacion
+        // Función para inicializar DataTable con AJAX dinámico
         function initMarcacionTable() {
             marcacionTable = $('#personaMarcacionTable').DataTable({
                 ajax: {
-                    url: 'personamarcacionservlet',
+                    url: 'marcacionpersonalservlet',
                     type: 'GET',
+                    data: function (d) {
+                        d.fechaInicio = $('#fechaInicio').val();
+                        d.fechaFin = $('#fechaFin').val();
+                    },
                     dataSrc: ''
                 },
                 columns: [
-                    {data: 'codiMarc'},
                     {data: 'codiPers'},
                     {data: 'nombPers'},
-                    {
-                        data: 'fechMarc',
-                        render: function (data) {
-                            return data ? data : '';
-                        }
-                    },
-                    {
-                        data: 'codiHoraDeta',
-                        render: function (data) {
-                            return (data !== undefined && data !== null) ? data : '';
-                        }
-                    },
-                    {
-                        data: 'marcIngr',
-                        render: function (data) {
-                            return (data !== undefined && data !== null) ? data : '';
-                        }
-                    },
-                    {
-                        data: 'marcSald',
-                        render: function (data) {
-                            return (data !== undefined && data !== null) ? data : '';
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function (data, type, row) {
-                            return `
-                        
-                    `;
-                        }
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: 4, // Índice de la columna que deseas ocultar
-                        visible: false // Ocultar la columna
-                    }
+                    {data: 'fechMarc', render: data => data || ''},
+                    {data: 'marcIngr', render: data => data || ''},
+                    {data: 'marcSald', render: data => data || ''}
                 ],
                 pageLength: 100,
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'
-                }
+                language: {url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'}
             });
         }
 
-        // Manejo de cambio en fecha inicio
-        // Cuando se cambia #fechaInicio
-        // Manejo de cambio en fecha inicio
+        // Llamar a la función para inicializar la tabla
+        initMarcacionTable();
+
+        // Manejo de cambios en el filtro de fechas
         $('#fechaInicio').change(function () {
-            let fechaInicio = $('#fechaInicio').val();
-            if (fechaInicio) {
-                // Establecer #fechaFin a la misma fecha que #fechaInicio
-                $('#fechaFin').val(fechaInicio);
-
-                // Obtener la fecha de #fechaInicio
-                let fechaInicioObj = new Date(fechaInicio);
-
-                // Establecer fecha máxima de #fechaFin a 31 días después de #fechaInicio
-                let fechaFinObj = new Date(fechaInicioObj);
-                fechaFinObj.setDate(fechaInicioObj.getDate() + 31);
-
-                // Convertir la fecha a formato yyyy-mm-dd
-                let fechaFin = fechaFinObj.toISOString().split('T')[0];
-
-                // Establecer la fecha máxima de #fechaFin
-                $('#fechaFin').attr('max', fechaFin);
-            }
+            let fechaInicio = $(this).val();
+            let maxFechaFin = moment(fechaInicio).add(31, 'days').format('YYYY-MM-DD');
+            $('#fechaFin').val(fechaInicio).attr('max', maxFechaFin);
+            marcacionTable.ajax.reload();
         });
 
-        // Cuando se cambia #fechaFin
         $('#fechaFin').change(function () {
-            let fechaInicio = $('#fechaInicio').val();
-            let fechaFin = $('#fechaFin').val();
-
-            if (fechaInicio && fechaFin) {
-                let fechaInicioObj = new Date(fechaInicio);
-                let fechaFinObj = new Date(fechaFin);
-
-                // Filtrar la columna de fechas
-                marcacionTable.column(3).search(function (data, row, column, node) {
-                    let fechaData = new Date(data);
-
-                    if (fechaData >= fechaInicioObj && fechaData <= fechaFinObj) {
-                        return true;
-                    }
-                    return false;
-                }).draw();
-            }
+            marcacionTable.ajax.reload();
         });
 
         // Función para verificar si hay datos visibles en la tabla
@@ -221,165 +153,40 @@
             return marcacionTable.rows({filter: 'applied'}).data().length > 0;
         }
 
-        // Manejo del formulario para Agregar/Editar Marcación
-        $('#personaMarcacionForm').submit(function (e) {
-            e.preventDefault();
-            const formData = $(this).serialize();
-            const id = $('#codiMarc').val();
-            const url = id ? `VistaPersonaMarcacionServlet/${id}` : 'VistaPersonaMarcacionServlet';
-            const method = id ? 'PUT' : 'POST';
-
-            $.ajax({
-                url: url,
-                type: method,
-                data: formData,
-                success: function () {
-                    $('#personaMarcacionModal').modal('hide');
-                    marcacionTable.ajax.reload();
-                },
-                error: function () {
-                    alert("Error al guardar el registro.");
-                }
-            });
-        });
-
-        // Editar registro
-        $('#personaMarcacionTable tbody').on('click', '.btnEdit', function () {
-            const id = $(this).data('id');
-            $.get(`VistaPersonaMarcacionServlet/${id}`, function (data) {
-                $('#codiMarc').val(data.codiMarc);
-                $('#codiPers').val(data.codiPers);
-                $('#nombPers').val(data.nombPers);
-                $('#fechMarc').val(data.fechMarc);
-                $('#codiHoraDeta').val(data.codiHoraDeta);
-                $('#marcIngr').val(data.marcIngr ? data.marcIngr.substring(0, 5) : '');
-                $('#marcSald').val(data.marcSald ? data.marcSald.substring(0, 5) : '');
-                $('#personaMarcacionModalLabel').text('Editar Marcación de Persona');
-                $('#personaMarcacionModal').modal('show');
-            }).fail(function () {
-                alert("Error al cargar el registro.");
-            });
-        });
-
-        // Eliminar registro
-        $('#personaMarcacionTable tbody').on('click', '.btnDelete', function () {
-            const id = $(this).data('id');
-            if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-                $.ajax({
-                    url: `VistaPersonaMarcacionServlet/${id}`,
-                    type: 'DELETE',
-                    success: function () {
-                        marcacionTable.ajax.reload();
-                    },
-                    error: function () {
-                        alert("Error al eliminar el registro.");
-                    }
-                });
-            }
-        });
-
-        // Agregar nuevo registro
-        $('#btnAddMarcacion').click(function () {
-            $('#personaMarcacionForm')[0].reset();
-            $('#codiMarc').val('');
-            $('#personaMarcacionModalLabel').text('Agregar Marcación de Persona');
-            $('#personaMarcacionModal').modal('show');
-        });
-
         // Exportar a Excel
         $('#btnExportar').click(function () {
-            if (!hasVisibleData()) {
-                alert("No hay datos disponibles para exportar en este rango de fechas.");
-                return;
-            }
+            if (!hasVisibleData())
+                return alert('No hay datos disponibles para exportar.');
 
-            let tableData = [];
-            let headers = [];
-            $('#personaMarcacionTable thead th').each(function (i, header) {
-                if (i < $('#personaMarcacionTable thead th').length - 1) {
-                    headers.push($(header).text());
-                }
+            let tableData = [$('#personaMarcacionTable thead th').map((_, th) => $(th).text()).get()];
+            $('#personaMarcacionTable tbody tr').each((_, tr) => {
+                tableData.push($(tr).find('td').map((_, td) => $(td).text()).get());
             });
-            tableData.push(headers);
-            $('#personaMarcacionTable tbody tr').each(function () {
-                let rowData = [];
-                $(this).find('td').each(function (i, cell) {
-                    if (i < $(this).parent().find('td').length - 1) {
-                        rowData.push($(cell).text());
-                    }
-                });
-                tableData.push(rowData);
-            });
+
             let ws = XLSX.utils.aoa_to_sheet(tableData);
             let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'MarcacionPersona');
             XLSX.writeFile(wb, 'marcacion_persona.xlsx');
         });
 
-        // Imprimir
+        // Exportar a PDF
+
+
         $('#btnPDF').click(function () {
-            if (!hasVisibleData()) {
-                alert("No hay datos disponibles para imprimir en este rango de fechas.");
-                return;
-            }
+            if (!hasVisibleData())
+                return alert('No hay datos disponibles para imprimir.');
 
-            const {jsPDF} = window.jspdf;  // Importar jsPDF
-            const doc = new jsPDF();  // Crear una nueva instancia de jsPDF
+            let doc = new jsPDF();
+            doc.setFontSize(18).text('Marcaciones de Personal', 15, 20);
+            doc.setFontSize(12).text(`Fecha: ${moment().format('DD/MM/YYYY')}`, 150, 20);
 
-            // Obtener la fecha actual en formato "DD/MM/YYYY"
-            let today = new Date();
-            let dateString = today.toLocaleDateString('es-ES');  // Fecha en formato español (DD/MM/YYYY)
+            let tableData = [$('#personaMarcacionTable thead th').map((_, th) => $(th).text()).get()];
+            let tableRows = $('#personaMarcacionTable tbody tr').map((_, tr) =>
+                $(tr).find('td').map((_, td) => $(td).text()).get()
+            ).get();
 
-            // Título del PDF centrado
-            doc.setFontSize(18);
-            const title = 'Marcaciones de Personal';
-            const pageWidth = doc.internal.pageSize.width;
-            const titleWidth = doc.getTextWidth(title);  // Obtener el ancho del texto
-            const xPosition = (pageWidth - titleWidth) / 2;  // Calcular la posición X para centrar el título
-            doc.text(title, xPosition, 20);  // Escribe el título centrado en el PDF
-
-            // Fecha actual alineada a la derecha con un margen adicional
-            doc.setFontSize(12);  // Reducir tamaño de la fuente para la fecha
-            const dateXPosition = pageWidth - doc.getTextWidth(dateString) - 20;  // Ajustamos la posición de la fecha a la derecha
-            doc.text('Fecha: ' + dateString, dateXPosition, 20);  // Escribe la fecha en la misma línea, alineada a la derecha
-
-            // Dejar un espacio de 10 unidades después del título y la fecha para evitar solapamientos
-            let yPosition = 30;
-
-            // Obtener los encabezados de la tabla
-            let tableData = [];
-            $('#personaMarcacionTable thead th').each(function (i, header) {
-                if (i < $('#personaMarcacionTable thead th').length - 1) {
-                    tableData.push($(header).text());
-                }
-            });
-
-            // Obtener los datos de las filas de la tabla
-            let tableRows = [];
-            $('#personaMarcacionTable tbody tr').each(function () {
-                let rowData = [];
-                $(this).find('td').each(function (i, cell) {
-                    if (i < $(this).parent().find('td').length - 1) {
-                        rowData.push($(cell).text());
-                    }
-                });
-                tableRows.push(rowData);
-            });
-
-            // Añadir la tabla al PDF
-            doc.autoTable({
-                head: [tableData], // Encabezado
-                body: tableRows, // Datos de las filas
-                startY: yPosition, // Iniciar la tabla después del espacio
-                theme: 'striped', // Estilo de la tabla (rayado)
-                headStyles: {fillColor: [22, 160, 133]}, // Color de fondo de los encabezados
-                margin: {top: yPosition + 10}, // Margen superior ajustado
-            });
-
-            // Guardar el PDF
+            doc.autoTable({head: [tableData], body: tableRows, startY: 30, theme: 'striped'});
             doc.save('marcacion_persona.pdf');
         });
-
     });
-
 </script>

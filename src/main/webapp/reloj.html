@@ -63,7 +63,7 @@
                 color: #333;
             }
             #reloj {
-                font-size: 24px;
+                font-size: 16px;
                 margin-top: 20px;
                 font-family: monospace;
                 color:#2D8B59;
@@ -121,216 +121,12 @@
 
 
         </style>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script>
 
-            // Función para consultar al servlet y obtener los tipos de documento
-            function cargarTiposDoc() {
-                $.ajax({
-                    url: '/Planilla/tipodocumentoservlet', // URL de tu servlet
-                    type: 'GET',
-                    success: function (data) {
-                        // Llenar el combo con los nombres obtenidos
-                        let combo = $('#tipoDocCombo');
-                        combo.empty(); // Limpiar el combo antes de llenarlo
-
-                        data.forEach(function (nombre) {
-                            combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
-                        });
-                    },
-                    error: function () {
-                        alert('Error al cargar los nombres.');
-                    }
-
-                });
-
-            }
-
-            // Función para registrar asistencia
-            function registrarAsistencia() {
-                const tipoDocu = document.getElementById("tipoDocCombo").value;
-                const numeDocu = document.getElementById("numeDocu").value.trim();
-
-                // Validar que ambos campos estén completos
-                if (!numeDocu || !tipoDocu) {
-                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento y selecciona el tipo de documento.";
-
-                    // Limpiar el mensaje después de 3 segundos
-                    setTimeout(() => {
-                        document.getElementById("resultado").innerText = "";
-                    }, 3000); // El mensaje desaparecerá después de 3 segundos
-
-                    return;
-                }
-
-                const data = {numeDocu: numeDocu, codiTipoDoc: tipoDocu};
-
-                // Realizar la solicitud POST usando fetch
-                fetch('marcacion', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                        .then(response => response.json())
-                        .then(result => {
-                            const mensaje = result.status === "success" ?
-                                    (result.marcacion === "entrada" ?
-                                            `${result.nombre} ha registrado su entrada el día ${result.hora}` :
-                                            `${result.nombre} ha registrado su salida el día ${result.hora}`) :
-                                    "Error: " + result.message;
-
-                            document.getElementById("resultado").innerText = mensaje;
-
-                            // Limpiar el mensaje después de 3 segundos
-                            setTimeout(() => {
-                                document.getElementById("resultado").innerText = "";
-                            }, 3000); // El mensaje desaparecerá después de 3 segundos
-
-                            // Limpiar el número de documento
-                            document.getElementById("numeDocu").value = "";
-                        })
-                        .catch(error => {
-                            document.getElementById("resultado").innerText = "Error en la conexión";
-                            console.error('Error:', error);
-                        });
-            }
-
-// Función para ver asistencias
-            function verAsistencias() {
-                const numeDocu = document.getElementById("numeDocu").value.trim();
-                const tipoDocu = document.getElementById("tipoDocCombo").value.trim();
-
-                if (!numeDocu || !tipoDocu) {
-                    document.getElementById("resultado").innerText = "Por favor, ingresa un número de documento y selecciona el tipo de documento.";
-
-                    // Limpiar el mensaje después de 3 segundos
-                    setTimeout(() => {
-                        document.getElementById("resultado").innerText = "";
-                    }, 3000); // El mensaje desaparecerá después de 3 segundos
-
-                    return;
-                }
-
-                const url = `verAsistencias?numeDocu=${encodeURIComponent(numeDocu)}&codiTipoDoc=${encodeURIComponent(tipoDocu)}`;
-
-                fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === "success") {
-                                const asistencias = data.asistencias;
-                                let resultadoHTML = "<h3>Asistencias de Hoy</h3>";
-
-                                if (asistencias.length > 0) {
-                                    resultadoHTML += `
-                        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Entrada</th>
-                                    <th>Salida</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
-
-                                    asistencias.forEach(asistencia => {
-                                        resultadoHTML += `
-                            <tr>
-                                <td>${asistencia.fecha}</td>
-                                <td>${asistencia.entrada}</td>
-                                <td>${asistencia.salida}</td>
-                            </tr>
-                        `;
-                                    });
-
-                                    resultadoHTML += "</tbody></table>";
-                                } else {
-                                    resultadoHTML += "<p>No se encontraron asistencias para hoy.</p>";
-                                }
-
-                                document.getElementById("resultado").innerHTML = resultadoHTML;
-
-                                // Limpiar el resultado después de 3 segundos
-                                setTimeout(() => {
-                                    document.getElementById("resultado").innerHTML = "";
-                                }, 3000); // El resultado desaparecerá después de 3 segundos
-
-                                // Limpiar el número de documento
-                                document.getElementById("numeDocu").value = "";
-                            } else {
-                                document.getElementById("resultado").innerText = data.message || "Error desconocido al obtener las asistencias.";
-                            }
-                        })
-                        .catch(error => {
-                            document.getElementById("resultado").innerText = "Error al realizar la solicitud: " + error.message;
-                        });
-            }
-
-// Función para formatear la fecha (dd/MM/yyyy)
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                if (isNaN(date))
-                    return "Fecha inválida";
-                return date.toLocaleDateString('es-PE'); // Formato dd/MM/yyyy
-            }
-
-// Función para formatear la hora (HH:mm:ss)
-            function formatTime(dateString) {
-                const date = new Date(dateString);
-                if (isNaN(date))
-                    return "Hora inválida";
-                return date.toLocaleTimeString('es-PE', {hour12: false}); // Formato HH:mm:ss
-            }
-
-
-            // Actualizar el reloj cada segundo
-            // Función para obtener la hora del servidor
-            function actualizarRelojServidor() {
-                fetch('horaServidor')
-                        .then(response => response.json())
-                        .then(data => {
-                            const fechaUTC = new Date(data.hora);  // Convertir la cadena ISO 8601 (en UTC) a un objeto Date
-
-                            if (isNaN(fechaUTC)) {
-                                console.error("Fecha inválida:", data.hora);
-                                return;
-                            }
-
-                            // Convertir la hora UTC a la hora local del navegador
-                            const fechaLocal = new Date(fechaUTC.toLocaleString("en-US", {timeZoneName: "short"}));
-
-                            // Formatear la fecha (día, mes, año)
-                            const opcionesFecha = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-                            const fechaFormateada = fechaLocal.toLocaleDateString('es-PE', opcionesFecha);
-                            const fechaFormateadaConMayuscula = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-
-                            // Formatear la hora en formato de 24 horas
-                            const opcionesHora = {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false};
-                            const horaFormateada = fechaLocal.toLocaleTimeString('es-PE', opcionesHora);  // Formato de hora en 24h
-
-                            // Mostrar la fecha y la hora en el div #reloj
-                            document.getElementById("reloj").innerText = `${fechaFormateadaConMayuscula} - ${horaFormateada}`;
-                        })
-                        .catch(error => {
-                            console.error("Error al obtener la hora del servidor:", error);
-                        });
-            }
-
-// Actualizar la hora del servidor cada segundo
-            setInterval(actualizarRelojServidor, 1000);
-            window.onload = () => {
-                cargarTiposDoc();  // Cargar los tipos de documento cuando se cargue la página
-                actualizarRelojServidor();
-            };
-
-        </script>
     </head>
     <body>
+
         <div class="container">
-            <div id="reloj"></div>
+            <small class="text-sm-center" id="reloj"></small>
             <h1>Marcador de Asistencia</h1>
             <div>
                 <label for="tipoDocCombo">Tipo de Documento:</label>
@@ -344,8 +140,8 @@
                 <input type="text" id="numeDocu" name="numeDocu" placeholder="Ingresa tu número de documento">
             </div>
             <div class="button-group">
-                <button class="btn btn-info" onclick="verAsistencias()">Ver Asistencias</button>
-                <button class="btn btn-success" onclick="registrarAsistencia()">Marcar Asistencia</button>
+                <button class="btn btn-info" onclick="verAsistencias()" id="verAsistenciasBtn">Ver Asistencias</button>
+                <button class="btn btn-success" onclick="registrarAsistencia()" id="registrarBtn">Marcar Asistencia</button>
             </div>
             <div id="resultado"></div>
             <!-- Reloj digital que muestra la hora del servidor -->
@@ -357,19 +153,137 @@
                 ¡Esta PC no esta habilitada para marcar asistencia!
             </div>
         </div>
-        <script>
-            $(document).ready(function () {
-                $(".container").hide();
-                $(".container2").hide();
-                if (!Cookies.get('habilitado')) {
-                    $(".container").hide();
-                    $(".container2").show();
-                } else {
-                    $(".container").show();
-                    $(".container2").hide();
-                }
-            }
-            );
-        </script>
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/es.min.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script>
+                    $(document).ready(function () {
+                        $(".container").hide();
+                        $(".container2").hide();
+                        if (!Cookies.get('habilitado')) {
+                            $(".container").hide();
+                            $(".container2").show();
+                        } else {
+                            $(".container").show();
+                            $(".container2").hide();
+                        }
+
+                        function cargarTiposDoc() {
+                            $.ajax({
+                                url: 'tipodocumentoservlet',
+                                type: 'GET',
+                                success: function (data) {
+                                    let combo = $('#tipoDocCombo');
+                                    combo.empty();
+                                    $.each(data, function (index, nombre) {
+                                        combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
+                                    });
+                                },
+                                error: function () {
+                                    alert('Error al cargar los nombres.');
+                                }
+                            });
+                        }
+
+                        function registrarAsistencia() {
+                            let tipoDocu = $('#tipoDocCombo').val();
+                            let numeDocu = $('#numeDocu').val().trim();
+                            if (!numeDocu || !tipoDocu) {
+                                $('#resultado').html('<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>');
+                                setTimeout(() => $('#resultado').text(''), 3000);
+                                return;
+                            }
+
+                            $.ajax({
+                                url: 'marcacion',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({numeDocu, codiTipoDoc: tipoDocu}),
+                                success: function (result) {
+                                    let mensaje = result.status === 'success' ?
+                                            (result.marcacion === 'entrada' ? `${result.nombre} ha registrado su entrada el día ${result.hora}` :
+                                                    `${result.nombre} ha registrado su salida el día ${result.hora}`) :
+                                            'Error: ' + result.message;
+                                    $('#resultado').text(mensaje);
+                                    setTimeout(() => $('#resultado').text(''), 3000);
+                                    $('#numeDocu').val('');
+                                },
+                                error: function () {
+                                    $('#resultado').text('Error en la conexión');
+                                }
+                            });
+                        }
+
+                        function verAsistencias() {
+                            let numeDocu = $('#numeDocu').val().trim();
+                            let tipoDocu = $('#tipoDocCombo').val().trim();
+                            if (!numeDocu || !tipoDocu) {
+                               $('#resultado').html('<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>');
+                                setTimeout(() => $('#resultado').text(''), 3000);
+                                return;
+                            }
+
+                            $.getJSON(`verAsistencias?numeDocu=${encodeURIComponent(numeDocu)}&codiTipoDoc=${encodeURIComponent(tipoDocu)}`, function (data) {
+                                if (data.status === 'success') {
+                                    let asistencias = data.asistencias;
+                                    let resultadoHTML = '<h3>Asistencias de Hoy</h3>';
+                                    if (asistencias.length > 0) {
+                                        resultadoHTML += `<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr><th>Fecha</th><th>Entrada</th><th>Salida</th></tr>
+                        </thead>
+                        <tbody>`;
+                                        $.each(asistencias, function (index, asistencia) {
+                                            resultadoHTML += `<tr><td>${asistencia.fecha}</td><td>${asistencia.entrada}</td><td>${asistencia.salida}</td></tr>`;
+                                        });
+                                        resultadoHTML += '</tbody></table>';
+                                    } else {
+                                        resultadoHTML += '<p>No se encontraron asistencias para hoy.</p>';
+                                    }
+
+                                    $('#resultado').html(resultadoHTML);
+                                    setTimeout(() => $('#resultado').html(''), 3000);
+                                    $('#numeDocu').val('');
+                                } else {
+                                    $('#resultado').text(data.message || 'Error desconocido al obtener las asistencias.');
+                                }
+                            }).fail(function () {
+                                $('#resultado').text('Error al realizar la solicitud.');
+                            });
+                        }
+
+                        function actualizarRelojServidor() {
+                            $.getJSON('horaServidor')
+                                    .done(data => {
+                                        if (!data.hora) {
+                                            console.error('Hora no proporcionada por el servidor.');
+                                            return;
+                                        }
+
+                                        let fechaUTC = moment.utc(data.hora);
+                                        if (!fechaUTC.isValid()) {
+                                            console.error('Fecha inválida:', data.hora);
+                                            return;
+                                        }
+
+                                        let fechaHoraFormateada = fechaUTC.local().format('dddd, DD/MM/YYYY - HH:mm:ss');
+                                        fechaHoraFormateada = fechaHoraFormateada.charAt(0).toUpperCase() + fechaHoraFormateada.slice(1);
+
+                                        $('#reloj').text(fechaHoraFormateada);
+                                    })
+                                    .fail(() => console.error('Error al obtener la hora del servidor.'));
+                        }
+
+
+                        setInterval(actualizarRelojServidor, 1000);
+                        cargarTiposDoc();
+                        actualizarRelojServidor();
+                        $('#registrarBtn').click(registrarAsistencia);
+                        $('#verAsistenciasBtn').click(verAsistencias);
+                    });
+
+
+    </script>
 </html>

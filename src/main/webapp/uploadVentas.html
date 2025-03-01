@@ -12,11 +12,14 @@
                     <select id="sede" class="form-select mb-3">
                         <option value="">Seleccione una sede</option>
                     </select>
-
+<br/>
+<br/>
                     <div class="mb-3">
                         <label for="fileVentas" class="form-label">Seleccionar archivo de Ventas:</label>
                         <input type="file" class="form-control" id="fileVentas" name="file" required>
-                    </div>
+                    </div><br/>
+                    
+                   
                     <button class="btn btn-primary w-100 upload-btn" id="btnUploadVentas" data-input="#fileVentas" data-url="uploadexcelventasservlet">
                         <i class="fas fa-fw fa-folder"></i> Subir Ventas
                     </button>
@@ -25,7 +28,8 @@
                         <label for="fileStock" class="form-label">Seleccionar archivo de Stock:</label>
                         <input type="file" class="form-control" id="fileStock" name="file" required>
                     </div>
-                    <button class="btn btn-primary w-100 upload-btn" id="btnUploadStock" data-input="#fileStock" data-url="uploadexcelstockservlet">
+                    <br/>
+                    <button class="btn btn-primary w-100 upload-btn" id="btnUploadStock" data-input="#fileStock" data-url="uploadstockservlet">
                         <i class="fas fa-fw fa-folder"></i> Subir Stock
                     </button>
                 </div>
@@ -37,6 +41,7 @@
                         <label for="fileProveedor" class="form-label">Seleccionar archivo de Proveedor:</label>
                         <input type="file" class="form-control" id="fileProveedor" name="file" required>
                     </div>
+                    <br/>
                     <button class="btn btn-primary w-100 upload-btn" id="btnUploadProveedor" data-input="#fileProveedor" data-url="uploadexcelproveedorservlet">
                         <i class="fas fa-fw fa-folder"></i> Subir Proveedor
                     </button>
@@ -109,9 +114,52 @@
                 }
             });
         }
+        function subirArchivoS(btn) {
+            var fileInput = $(btn.data("input"))[0].files[0];
+            var url = btn.data("url");
 
-        $(".upload-btn").on("click", function () {
+            if (!fileInput) {
+                alert("❌ Seleccione un archivo antes de subir.");
+                return;
+            }
+
+
+            var formData = new FormData();
+            formData.append("file", fileInput);
+
+            // Deshabilitar el botón y mostrar "Cargando..."
+            btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    const jsonObject = JSON.parse(response);
+                    if (jsonObject.resultado === "ok") {
+                        alert("✅ Archivo subido con éxito.");
+                    } else {
+                        alert("❌ Error al subir el archivo.");
+                    }
+                },
+                error: function () {
+                    alert("❌ Error al subir el archivo.");
+                },
+                complete: function () {
+                    // Restaurar botón al terminar
+                    btn.prop("disabled", false).html('<i class="fas fa-fw fa-folder"></i> Subir');
+                }
+            });
+        }
+
+        $("#btnUploadVentas").on("click", function () {
             subirArchivo($(this));
         });
+        $("#btnUploadStock").on("click", function () {
+            subirArchivoS($(this));
+        });
+
     });
 </script>

@@ -92,11 +92,17 @@ public class UploadExcelVentasServlet extends HttpServlet {
                     Date date = formatter.parse(dateString);
                     compra.setFechaVenta(date);
                     compra.setUsuario(row.getCell(1).getStringCellValue());
-                     try {
-                    compra.setLaboratorio(row.getCell(2).getStringCellValue());
-                     } catch (Exception ex) {
-                         compra.setLaboratorio("");
-                     }
+                    try {
+                        compra.setLaboratorio(row.getCell(2).getStringCellValue());
+                    } catch (java.lang.NullPointerException ex) {
+                        try {
+                            compra.setLaboratorio("");
+                        } catch (Exception exx) {
+                            importo = false;
+                            mensaje = exx.getMessage();
+                            break;
+                        }
+                    }
                     try {
                         compra.setCodigo(row.getCell(3).getStringCellValue());
                     } catch (Exception ex) {
@@ -140,11 +146,11 @@ public class UploadExcelVentasServlet extends HttpServlet {
                 em.getTransaction().commit();
                 response.getWriter().write("{\"resultado\":\"ok\",\"mensaje\":\"Archivo procesado y datos guardados correctamente.\"}");
             } else {
-                response.getWriter().write("{\"resultado\":\"error\",\"mensaje\":\"Error al al procesar el archivo: " + mensaje +" \"}");
+                response.getWriter().write("{\"resultado\":\"error\",\"mensaje\":\"Error al al procesar el archivo: " + mensaje + " \"}");
             }
 
         } catch (Exception e) {
-            response.getWriter().write("{\"resultado\":\"error\",\"mensaje\":\"Error al al procesar el archivo: " + e.getMessage() +" \"}");
+            response.getWriter().write("{\"resultado\":\"error\",\"mensaje\":\"Error al al procesar el archivo: " + e.getMessage() + " \"}");
         } finally {
             em.close();
 
