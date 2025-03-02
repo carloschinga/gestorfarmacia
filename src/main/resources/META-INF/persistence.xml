@@ -5,7 +5,6 @@
     <class>pe.gestor.compras.dto.ComprasVentas</class>
     <class>pe.gestor.ventas.dto.VentasSede</class>
     <class>pe.gestor.login.dto.VistaLoginUsuarioRol</class>
-    <class>pe.gestor.login.dto.Empresa</class>
     <class>pe.gestor.planilla.dto.PlanillaTipodoc</class>
     <class>pe.gestor.asistencia.dto.AsistenciaMarcacion</class>
     <class>pe.gestor.asistencia.dto.VistaAsistenciaMarcacionpersona</class>
@@ -13,16 +12,24 @@
     <class>pe.gestor.login.dto.LoginPagina</class>
     <class>pe.gestor.login.dto.LoginRol</class>
     <class>pe.gestor.login.dto.VistaLoginMenuDeta</class>
-    <class>pe.gestor.planilla.dto.PlanillaPersona</class>
     <class>pe.gestor.planilla.dto.PlanillaPlantilla</class>
     <class>pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle</class>
+    <class>pe.gestor.planilla.dto.PlanillaPersona</class>
+    <class>pe.gestor.login.dto.Empresa</class>
+    <class>pe.gestor.planilla.dto.PlanillaTipovia</class>
+    <class>pe.gestor.planilla.dto.PlanillaNacionalidad</class>
+    <class>pe.gestor.planilla.dto.PlanillaEntidadbancaria</class>
+    <class>pe.gestor.planilla.dto.PlanillaCldn</class>
+    <class>pe.gestor.planilla.dto.PlanillaPaisemisor</class>
+    <class>pe.gestor.planilla.dto.PlanillaUbigeo</class>
+    <class>pe.gestor.planilla.dto.VistaPlanillaPersona</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-       <!--<property name="javax.persistence.jdbc.password" value=""/>-->
-      <property name="javax.persistence.jdbc.password" value="Irondesk1530#$@"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <!--<property name="javax.persistence.jdbc.password" value="Irondesk1530#$@"/>-->
     </properties>
   </persistence-unit>
 </persistence>

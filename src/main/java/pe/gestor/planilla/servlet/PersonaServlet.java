@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pe.gestor.planilla.dao.PlanillaPersonaDAO;
-import pe.gestor.planilla.dao.VistaPlanillaPersonaDetalleDAO;
+import pe.gestor.planilla.dao.VistaPlanillaPersonaDAO;
 import pe.gestor.planilla.dto.PlanillaPersona;
-import pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle;
+import pe.gestor.planilla.dto.VistaPlanillaPersona;
 
 /**
  *
@@ -34,51 +34,63 @@ import pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle;
 public class PersonaServlet extends HttpServlet {
 
     private final PlanillaPersonaDAO personaDAO;
-    private final VistaPlanillaPersonaDetalleDAO vistaPersonaDetalleDAO;
+    private final VistaPlanillaPersonaDAO vistaPersonaDetalleDAO;
     private final EntityManagerFactory emf;
 
     public PersonaServlet() {
         this.emf = Persistence.createEntityManagerFactory("gestorFarmacia");
         this.personaDAO = new PlanillaPersonaDAO(emf);
-        this.vistaPersonaDetalleDAO = new VistaPlanillaPersonaDetalleDAO(emf);
+        this.vistaPersonaDetalleDAO = new VistaPlanillaPersonaDAO(emf);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
+
+        emf.getCache().evict(VistaPlanillaPersonaDAO.class);  // Evitar cache si es necesario
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         String pathInfo = request.getPathInfo();
 
-        emf.getCache().evict(VistaPlanillaPersonaDetalleDAO.class);  // Evitar cache si es necesario
-
         try {
-            if (pathInfo == null || pathInfo.equals("/")) {
-                // Obtener todos los registros de personas con todos los campos
-                List<VistaPlanillaPersonaDetalle> personaList = vistaPersonaDetalleDAO.findVistaPlanillaPersonaDetalleEntities();
+            if (pathInfo == null || pathInfo.equals("/") || pathInfo.isEmpty()) {
+                // Obtener todos los registros
+                List<VistaPlanillaPersona> personaList = vistaPersonaDetalleDAO.findVistaPlanillaPersonaEntities();
                 JSONArray jsonArray = new JSONArray();
-                for (VistaPlanillaPersonaDetalle persona : personaList) {
+                for (VistaPlanillaPersona persona : personaList) {
                     JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("codiPers", persona.getCodiPers());
+                    jsonObject.put("nombTipoDoc", persona.getNombTipoDoc());
                     jsonObject.put("numeDocu", persona.getNumeDocu());
                     jsonObject.put("nombre_completo", persona.getNombreCompleto());
                     jsonArray.put(jsonObject);
                 }
                 response.getWriter().write(jsonArray.toString());
             } else {
-                // Obtener un registro de persona por numeDocu (String)
-                String numeDocu = pathInfo.substring(1);  // Extraer el numeDocu del path
-                VistaPlanillaPersonaDetalle vpm = vistaPersonaDetalleDAO.findVistaPlanillaPersonaDetalle(numeDocu);
+                // Obtener un registro específico por codiPers o numeDocu
+                String param = pathInfo.substring(1).trim();
+                PlanillaPersona vpm = null;
+
+                int codiPers = Integer.parseInt(param);
+                vpm = personaDAO.findPlanillaPersona(codiPers);
+
                 if (vpm == null) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     response.getWriter().write("{\"error\":\"Registro no encontrado\"}");
                     return;
                 }
+
                 JSONObject jsonObject = new JSONObject();
+                /*jsonObject.put("codiPers", vpm.getCodiPers());
+                jsonObject.put("nombTipoDoc", vpm.getNombTipoDoc());
                 jsonObject.put("numeDocu", vpm.getNumeDocu());
-                jsonObject.put("nombre_completo", vpm.getNombreCompleto());
+                jsonObject.put("nombre_completo", vpm.getNombreCompleto());*/
+
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write(jsonObject.toString());
             }
-
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write(new JSONObject().put("error", "Error al obtener los datos: " + e.getMessage()).toString());
@@ -490,5 +502,5 @@ public class PersonaServlet extends HttpServlet {
         }
     }
     
-    */
+     */
 }

@@ -6,7 +6,6 @@ package pe.gestor.planilla.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanillaPersona.findAll", query = "SELECT p FROM PlanillaPersona p"),
     @NamedQuery(name = "PlanillaPersona.findByCodiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPers = :codiPers"),
     @NamedQuery(name = "PlanillaPersona.findByCodiTipoDoc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoDoc = :codiTipoDoc"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu AND p.codiTipoDoc = :codiTipoDoc"),
+    @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu"),
     @NamedQuery(name = "PlanillaPersona.findByCodiPaisEmis", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPaisEmis = :codiPaisEmis"),
     @NamedQuery(name = "PlanillaPersona.findByAppaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.appaPers = :appaPers"),
     @NamedQuery(name = "PlanillaPersona.findByApmaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.apmaPers = :apmaPers"),
@@ -72,32 +69,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanillaPersona.findByRefeZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.refeZona2 = :refeZona2"),
     @NamedQuery(name = "PlanillaPersona.findByCodiUbig2", query = "SELECT p FROM PlanillaPersona p WHERE p.codiUbig2 = :codiUbig2"),
     @NamedQuery(name = "PlanillaPersona.findByIndcCentAsis", query = "SELECT p FROM PlanillaPersona p WHERE p.indcCentAsis = :indcCentAsis"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiRegiLabo", query = "SELECT p FROM PlanillaPersona p WHERE p.codiRegiLabo = :codiRegiLabo"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiSituEduc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSituEduc = :codiSituEduc"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoOcup", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoOcup = :codiTipoOcup"),
-    @NamedQuery(name = "PlanillaPersona.findByTipoOcup", query = "SELECT p FROM PlanillaPersona p WHERE p.tipoOcup = :tipoOcup"),
-    @NamedQuery(name = "PlanillaPersona.findByDiscPers", query = "SELECT p FROM PlanillaPersona p WHERE p.discPers = :discPers"),
     @NamedQuery(name = "PlanillaPersona.findByCupsPers", query = "SELECT p FROM PlanillaPersona p WHERE p.cupsPers = :cupsPers"),
     @NamedQuery(name = "PlanillaPersona.findBySctrPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sctrPers = :sctrPers"),
     @NamedQuery(name = "PlanillaPersona.findBySnpPers", query = "SELECT p FROM PlanillaPersona p WHERE p.snpPers = :snpPers"),
     @NamedQuery(name = "PlanillaPersona.findByCodiAFP", query = "SELECT p FROM PlanillaPersona p WHERE p.codiAFP = :codiAFP"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoCntr", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoCntr = :codiTipoCntr"),
-    @NamedQuery(name = "PlanillaPersona.findBySujeregiAltr", query = "SELECT p FROM PlanillaPersona p WHERE p.sujeregiAltr = :sujeregiAltr"),
-    @NamedQuery(name = "PlanillaPersona.findBySujeJornTrab", query = "SELECT p FROM PlanillaPersona p WHERE p.sujeJornTrab = :sujeJornTrab"),
-    @NamedQuery(name = "PlanillaPersona.findBySujeHoraNoct", query = "SELECT p FROM PlanillaPersona p WHERE p.sujeHoraNoct = :sujeHoraNoct"),
-    @NamedQuery(name = "PlanillaPersona.findBySindPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sindPers = :sindPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiPeriRemu", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPeriRemu = :codiPeriRemu"),
     @NamedQuery(name = "PlanillaPersona.findByMontRemuPers", query = "SELECT p FROM PlanillaPersona p WHERE p.montRemuPers = :montRemuPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiSituTRegi", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSituTRegi = :codiSituTRegi"),
-    @NamedQuery(name = "PlanillaPersona.findByRentQuinta", query = "SELECT p FROM PlanillaPersona p WHERE p.rentQuinta = :rentQuinta"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiSituEspe", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSituEspe = :codiSituEspe"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoPago", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoPago = :codiTipoPago"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiCateOcup", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCateOcup = :codiCateOcup"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiConvDoblTrib", query = "SELECT p FROM PlanillaPersona p WHERE p.codiConvDoblTrib = :codiConvDoblTrib"),
     @NamedQuery(name = "PlanillaPersona.findByNumeRucTrab", query = "SELECT p FROM PlanillaPersona p WHERE p.numeRucTrab = :numeRucTrab"),
     @NamedQuery(name = "PlanillaPersona.findByAsigFamiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.asigFamiPers = :asigFamiPers"),
-    @NamedQuery(name = "PlanillaPersona.findByFechInicPlan", query = "SELECT p FROM PlanillaPersona p WHERE p.fechInicPlan = :fechInicPlan"),
-    @NamedQuery(name = "PlanillaPersona.findByFechFinPlan", query = "SELECT p FROM PlanillaPersona p WHERE p.fechFinPlan = :fechFinPlan"),
     @NamedQuery(name = "PlanillaPersona.findByCodiEntiBanc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiEntiBanc = :codiEntiBanc"),
     @NamedQuery(name = "PlanillaPersona.findByNumeCuen", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCuen = :numeCuen"),
     @NamedQuery(name = "PlanillaPersona.findByCodiPlant", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPlant = :codiPlant"),
@@ -244,21 +222,6 @@ public class PlanillaPersona implements Serializable {
     private String codiUbig2;
     @Column(name = "indcCentAsis")
     private Character indcCentAsis;
-    @Size(max = 2)
-    @Column(name = "codiRegiLabo")
-    private String codiRegiLabo;
-    @Size(max = 2)
-    @Column(name = "codiSituEduc")
-    private String codiSituEduc;
-    @Column(name = "codiTipoOcup")
-    private Character codiTipoOcup;
-    @Size(max = 6)
-    @Column(name = "tipoOcup")
-    private String tipoOcup;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "discPers")
-    private Character discPers;
     @Size(max = 12)
     @Column(name = "cupsPers")
     private String cupsPers;
@@ -270,46 +233,14 @@ public class PlanillaPersona implements Serializable {
     private boolean snpPers;
     @Column(name = "codiAFP")
     private Integer codiAFP;
-    @Size(max = 2)
-    @Column(name = "codiTipoCntr")
-    private String codiTipoCntr;
-    @Column(name = "sujeregiAltr")
-    private Character sujeregiAltr;
-    @Column(name = "sujeJornTrab")
-    private Character sujeJornTrab;
-    @Column(name = "sujeHoraNoct")
-    private Character sujeHoraNoct;
-    @Column(name = "sindPers")
-    private Character sindPers;
-    @Column(name = "codiPeriRemu")
-    private Character codiPeriRemu;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "montRemuPers")
     private BigDecimal montRemuPers;
-    @Column(name = "codiSituTRegi")
-    private Character codiSituTRegi;
-    @Column(name = "rentQuinta")
-    private Character rentQuinta;
-    @Column(name = "codiSituEspe")
-    private Character codiSituEspe;
-    @Column(name = "codiTipoPago")
-    private Character codiTipoPago;
-    @Size(max = 2)
-    @Column(name = "codiCateOcup")
-    private String codiCateOcup;
-    @Column(name = "codiConvDoblTrib")
-    private Character codiConvDoblTrib;
     @Size(max = 11)
     @Column(name = "numeRucTrab")
     private String numeRucTrab;
     @Column(name = "asigFamiPers")
     private Integer asigFamiPers;
-    @Column(name = "fechInicPlan")
-    @Temporal(TemporalType.DATE)
-    private Date fechInicPlan;
-    @Column(name = "fechFinPlan")
-    @Temporal(TemporalType.DATE)
-    private Date fechFinPlan;
     @Size(max = 3)
     @Column(name = "codiEntiBanc")
     private String codiEntiBanc;
@@ -330,7 +261,7 @@ public class PlanillaPersona implements Serializable {
         this.codiPers = codiPers;
     }
 
-    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String codiPaisEmis, String appaPers, String apmaPers, String nombPers, Character sexoPers, String codiNaci, Character discPers, boolean snpPers, boolean actiPers) {
+    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String codiPaisEmis, String appaPers, String apmaPers, String nombPers, Character sexoPers, String codiNaci, boolean snpPers, boolean actiPers) {
         this.codiPers = codiPers;
         this.codiTipoDoc = codiTipoDoc;
         this.numeDocu = numeDocu;
@@ -340,7 +271,6 @@ public class PlanillaPersona implements Serializable {
         this.nombPers = nombPers;
         this.sexoPers = sexoPers;
         this.codiNaci = codiNaci;
-        this.discPers = discPers;
         this.snpPers = snpPers;
         this.actiPers = actiPers;
     }
@@ -673,46 +603,6 @@ public class PlanillaPersona implements Serializable {
         this.indcCentAsis = indcCentAsis;
     }
 
-    public String getCodiRegiLabo() {
-        return codiRegiLabo;
-    }
-
-    public void setCodiRegiLabo(String codiRegiLabo) {
-        this.codiRegiLabo = codiRegiLabo;
-    }
-
-    public String getCodiSituEduc() {
-        return codiSituEduc;
-    }
-
-    public void setCodiSituEduc(String codiSituEduc) {
-        this.codiSituEduc = codiSituEduc;
-    }
-
-    public Character getCodiTipoOcup() {
-        return codiTipoOcup;
-    }
-
-    public void setCodiTipoOcup(Character codiTipoOcup) {
-        this.codiTipoOcup = codiTipoOcup;
-    }
-
-    public String getTipoOcup() {
-        return tipoOcup;
-    }
-
-    public void setTipoOcup(String tipoOcup) {
-        this.tipoOcup = tipoOcup;
-    }
-
-    public Character getDiscPers() {
-        return discPers;
-    }
-
-    public void setDiscPers(Character discPers) {
-        this.discPers = discPers;
-    }
-
     public String getCupsPers() {
         return cupsPers;
     }
@@ -745,108 +635,12 @@ public class PlanillaPersona implements Serializable {
         this.codiAFP = codiAFP;
     }
 
-    public String getCodiTipoCntr() {
-        return codiTipoCntr;
-    }
-
-    public void setCodiTipoCntr(String codiTipoCntr) {
-        this.codiTipoCntr = codiTipoCntr;
-    }
-
-    public Character getSujeregiAltr() {
-        return sujeregiAltr;
-    }
-
-    public void setSujeregiAltr(Character sujeregiAltr) {
-        this.sujeregiAltr = sujeregiAltr;
-    }
-
-    public Character getSujeJornTrab() {
-        return sujeJornTrab;
-    }
-
-    public void setSujeJornTrab(Character sujeJornTrab) {
-        this.sujeJornTrab = sujeJornTrab;
-    }
-
-    public Character getSujeHoraNoct() {
-        return sujeHoraNoct;
-    }
-
-    public void setSujeHoraNoct(Character sujeHoraNoct) {
-        this.sujeHoraNoct = sujeHoraNoct;
-    }
-
-    public Character getSindPers() {
-        return sindPers;
-    }
-
-    public void setSindPers(Character sindPers) {
-        this.sindPers = sindPers;
-    }
-
-    public Character getCodiPeriRemu() {
-        return codiPeriRemu;
-    }
-
-    public void setCodiPeriRemu(Character codiPeriRemu) {
-        this.codiPeriRemu = codiPeriRemu;
-    }
-
     public BigDecimal getMontRemuPers() {
         return montRemuPers;
     }
 
     public void setMontRemuPers(BigDecimal montRemuPers) {
         this.montRemuPers = montRemuPers;
-    }
-
-    public Character getCodiSituTRegi() {
-        return codiSituTRegi;
-    }
-
-    public void setCodiSituTRegi(Character codiSituTRegi) {
-        this.codiSituTRegi = codiSituTRegi;
-    }
-
-    public Character getRentQuinta() {
-        return rentQuinta;
-    }
-
-    public void setRentQuinta(Character rentQuinta) {
-        this.rentQuinta = rentQuinta;
-    }
-
-    public Character getCodiSituEspe() {
-        return codiSituEspe;
-    }
-
-    public void setCodiSituEspe(Character codiSituEspe) {
-        this.codiSituEspe = codiSituEspe;
-    }
-
-    public Character getCodiTipoPago() {
-        return codiTipoPago;
-    }
-
-    public void setCodiTipoPago(Character codiTipoPago) {
-        this.codiTipoPago = codiTipoPago;
-    }
-
-    public String getCodiCateOcup() {
-        return codiCateOcup;
-    }
-
-    public void setCodiCateOcup(String codiCateOcup) {
-        this.codiCateOcup = codiCateOcup;
-    }
-
-    public Character getCodiConvDoblTrib() {
-        return codiConvDoblTrib;
-    }
-
-    public void setCodiConvDoblTrib(Character codiConvDoblTrib) {
-        this.codiConvDoblTrib = codiConvDoblTrib;
     }
 
     public String getNumeRucTrab() {
@@ -863,22 +657,6 @@ public class PlanillaPersona implements Serializable {
 
     public void setAsigFamiPers(Integer asigFamiPers) {
         this.asigFamiPers = asigFamiPers;
-    }
-
-    public Date getFechInicPlan() {
-        return fechInicPlan;
-    }
-
-    public void setFechInicPlan(Date fechInicPlan) {
-        this.fechInicPlan = fechInicPlan;
-    }
-
-    public Date getFechFinPlan() {
-        return fechFinPlan;
-    }
-
-    public void setFechFinPlan(Date fechFinPlan) {
-        this.fechFinPlan = fechFinPlan;
     }
 
     public String getCodiEntiBanc() {

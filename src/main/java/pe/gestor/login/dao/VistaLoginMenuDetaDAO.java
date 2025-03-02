@@ -14,21 +14,25 @@ import pe.gestor.login.dto.VistaLoginMenuDeta;
  *
  * @author USER
  */
-public class VistaLoginMenuDetaDAO extends VistaLoginMenuDetaJpaController{
-    
+public class VistaLoginMenuDetaDAO extends VistaLoginMenuDetaJpaController {
+
     public VistaLoginMenuDetaDAO(EntityManagerFactory emf) {
         super(emf);
     }
-     public List<VistaLoginMenuDeta> listarMenuXUsua(int usecod) {
+
+    public List<VistaLoginMenuDeta> listarMenuXUsua(int usecod) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             Query q = em.createNamedQuery("VistaLoginMenuDeta.findByCodiUsua");
             q.setParameter("codiUsua", usecod);
-          
+
             List<VistaLoginMenuDeta> lista = q.getResultList();
             return lista;
-        
+
+        } catch (Exception ex) {
+            String mensaje = "";
+            return null;
         } finally {
             if (em != null) {
                 em.close();

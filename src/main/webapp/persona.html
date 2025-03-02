@@ -4,27 +4,31 @@
             <h5 class="h5 mb-0 text-gray-800">Gestión del Personal</h5>
         </div>
         <div class="card-body">
-             <nav class="navbar navbar-light bg-white p-2">  
+            <nav class="navbar navbar-light bg-white p-2">  
                 <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
                     <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
 
                     <div class="btn-group ms-auto">
-                        <div class="d-flex align-items-center">
-                            <!-- Campo de Fecha de Inicio -->
-                            <span class="mx-2 fw-bold">A:</span>
-                            <input type="date" class="form-control form-control-sm" id="fechaInicio" name="fechaInicio">
-                            <!-- Campo de Fecha de Fin -->
-                            <span class="mx-2 fw-bold">DE:</span>
-                            <input type="date" class="form-control form-control-sm" id="fechaFin" name="fechaFin" >
-                        </div>
-                        <button class="btn btn-primary btn-sm" id="btnPDF">
-                            <i class="fas fa-fw fa-print"></i>
-                            <span>Imprimir</span>
-                        </button>
-                        <button class="btn btn-primary btn-sm" id="btnExportar">
-                            <i class="fas fa-fw fa-file-excel"></i>
-                            <span>Exportar</span>
-                        </button>
+                        <nav class="navbar navbar-light bg-white p-2">
+                            <div class="container-fluid d-flex align-items-center p-0">
+                                <div class="d-flex align-items-center me-3"></div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-sm" id="btnAddPersona">
+                                        <i class="fas fa-fw fa-plus"></i>
+                                        <span>Nuevo</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" id="btnPDF">
+                                        <i class="fas fa-fw fa-print"></i>
+                                        <span>Imprimir</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" id="btnExportar">
+                                        <i class="fas fa-fw fa-file-excel"></i>
+                                        <span>Exportar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </nav>
                     </div>
                 </div>
             </nav>
@@ -33,8 +37,10 @@
             <table id="personaTable" class="table table-striped table-bordered w-100" >
                 <thead>
                     <tr>
+                        <th>Tipo Doc</th>
                         <th>Documento</th>
                         <th>Nombre Completo</th>
+                        <th>Activo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,29 +50,272 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="personaForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="personaModalLabel">Agregar Persona</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="codiPers" name="codiPers">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="codiPlant" class="form-label">Plantilla</label>
+                            <select class="form-select" id="codiPlant" name="codiPlant"></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="numeDocu" class="form-label d-block mb-2">DNI</label>
+                            <input type="text" class="form-control" id="numeDocu" name="numeDocu" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="nombPers" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombPers" name="nombPers" required>
+                        </div>   
+                        <div class="col-md-6 mb-4">
+                            <label for="suelPers" class="form-label">Sueldo</label>
+                            <input type="number" step="0.01" class="form-control" id="suelPers" name="suelPers" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="snpPers" class="form-label">SNP</label>
+                            <select class="form-select" id="snpPers" name="snpPers" required>
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <!-- Contenedor para AFP -->
+                        <div class="col-md-6 mb-4" id="divAFP">
+                            <label for="codiAFP" class="form-label">AFP</label>
+                            <select class="form-select" id="codiAFP" name="codiAFP"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="asigFamiPers" class="form-label">Num.Hijos</label>  
+                            <input type="text" class="form-control" id="asigFamiPers" name="asigFamiPers" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="actiPers" class="form-label">Activo</label>
+                            <select class="form-select" id="actiPers" name="actiPers" required>
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-fw fa-undo"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-fw fa-save"></i>Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
-    $(document).ready(function() {
-    // Inicializar la tabla con DataTables
-    var table = $('#personaTable').DataTable({
-        "ajax": {
-            "url": "personaservlet",  // URL al servlet que devuelve los datos en formato JSON
-            "type": "GET",
-            "dataSrc": function (json) {
-                // Aquí puedes hacer algo con los datos antes de pasarlos a DataTable
-                return json;  // Retorna el array de objetos para que DataTable lo use
+    $(document).ready(function () {
+        // Inicializar la tabla con DataTables
+        var table = $('#personaTable').DataTable({
+            "ajax": {
+                "url": "personaservlet", // URL al servlet que devuelve los datos en formato JSON
+                "type": "GET",
+                "dataSrc": function (json) {
+                    // Aquí puedes hacer algo con los datos antes de pasarlos a DataTable
+                    return json;  // Retorna el array de objetos para que DataTable lo use
+                }
+            },
+            "columns": [
+                {"data": "nombTipoDoc"}, // Documento
+                {"data": "numeDocu"}, // Documento               
+                {"data": "nombre_completo"}, // Nombre Completo
+                {data: 'actiPers', render: data => data ? 'Sí' : 'No'},
+                {
+                    data: null,
+                    render: (data, type, row) =>
+                            `<button class="btn btn-primary btnEdit" data-id="${row.codiPers}">
+                    <i class="fas fa-edit"></i>
+                </button>`
+                }
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
             }
-        },
-        "columns": [
-            { "data": "numeDocu" },  // Documento
-            { "data": "nombre_completo" }  // Nombre Completo
-        ],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
-        }
-    });
-});
+        });
 
+
+// Abrir modal para editar
+        $('#personaTable tbody').on('click', '.btnEdit', function () {
+
+            const id = $(this).data('id');
+            $.get(`personaservlet/${id}`, function (data) {
+
+                $('#codiPers').val(data.codiPers);
+                $('#numeDocu').val(data.numeDocu);
+                $('#nombPers').val(data.nombPers);
+                $('#codiAFP').val(data.codiAFP);
+                $('#actiPers').prop('checked', data.actiPers);
+                $('#codiPlant').val(data.codiPlant);
+                $('#suelPers').val(data.suelPers);
+                $('#snpPers').val(data.snpPers ? 'true' : 'false');
+                $('#asigFamiPers').val(data.asigFamiPers);
+
+                if (data.snpPers === true) {
+                    $('#divAFP').hide();
+                } else {
+                    $('#divAFP').show();
+                }
+
+                $('#personaModalLabel').text('Editar Persona');
+                $('#personaModal').modal('show');
+            });
+        });
+
+        // Agregar o Editar Persona
+        $('#personaForm').submit(function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            const id = $('#codiPers').val();
+            const url = id ? `personaservlet/${id}` : 'personaservlet';
+            const method = id ? 'PUT' : 'POST';
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: formData,
+                success: function () {
+                    $('#personaModal').modal('hide');
+                    personaTable.ajax.reload(null, false); // Mantener la posición actual de la tabla
+
+                }
+            });
+        });
+        // Limpiar modal al abrir para agregar
+        $('#btnAddPersona').click(function () {
+            $('#personaForm')[0].reset();
+            $('#codiPers').val('');
+            $('#personaModalLabel').text('Agregar Persona');
+            $('#personaModal').modal('show');
+        });
+        $('#btnPDF').click(function () {
+            const {jsPDF} = window.jspdf;
+            const doc = new jsPDF();
+
+            // Obtener la fecha y hora actual
+            const fechaActual = new Date();
+            const fecha = fechaActual.toLocaleDateString(); // Fecha en formato local
+            const hora = fechaActual.toLocaleTimeString(); // Hora en formato local
+            const fechaHora = `${fecha} ${hora}`;
+
+            // Configuración del nombre del sistema
+            const nombreSistema = 'Software de Planilla';
+
+            // Tamaño de página
+            const pageWidth = doc.internal.pageSize.getWidth();
+
+            // Agregar fecha y hora (esquina izquierda)
+            doc.setFontSize(8);
+            doc.text(fechaHora, 10, 10); // Posición (X: izquierda, Y: superior)
+
+            // Agregar nombre del sistema (esquina derecha)
+            const textWidthSistema = doc.getTextWidth(nombreSistema);
+            doc.text(nombreSistema, pageWidth - textWidthSistema - 10, 10); // Posición (X: derecha, Y: superior)
+
+            // Configuración del título centrado
+            const titulo = 'LISTADO DE PERSONAS';
+            const textWidthTitulo = doc.getTextWidth(titulo);
+            const textX = (pageWidth - textWidthTitulo) / 2;
+            doc.setFontSize(12); // Tamaño de fuente más grande para el título
+            doc.text(titulo, textX, 20);
+
+            // Obtener encabezados de la tabla
+            const headers = [];
+
+            $('#personaTable thead th').each(function (i, header) {
+                // Ignorar el último encabezado
+                if (i < $('#personaTable thead th').length - 1) {
+                    headers.push($(header).text());
+                }
+            });
+
+
+            // Obtener filas de la tabla
+            const rows = [];
+            $('#personaTable tbody tr').each(function () {
+                const row = [];
+                $(this).find('td').each(function (index) {
+                    // Omite la última columna
+                    if (index < $(this).parent().find('td').length - 1) {
+                        row.push($(this).text());
+                    }
+                });
+                rows.push(row);
+            });
+
+
+
+
+            // Generar la tabla en el PDF
+            doc.autoTable({
+                head: [headers],
+                body: rows,
+                startY: 30 // Comienza después del título
+            });
+
+            // Descargar el PDF
+            doc.save('Persona.pdf');
+        });
+        $('#btnExportar').click(function () {
+            // Crear un array para almacenar los datos de la tabla
+            var tableData = [];
+
+            // Agregar los encabezados de la tabla como la primera fila
+            var headers = [];
+            $('#personaTable thead th').each(function (i, header) {
+                // Ignorar el último encabezado
+                if (i < $('#personaTable thead th').length - 1) {
+                    headers.push($(header).text());
+                }
+            });
+            tableData.push(headers);
+
+            // Agregar las filas de datos de la tabla
+            $('#personaTable tbody tr').each(function () {
+                var rowData = [];
+                $(this).find('td').each(function (i, cell) {
+                    // Ignorar la última columna
+                    if (i < $(this).parent().find('td').length - 1) {
+                        rowData.push($(cell).text());
+                    }
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear una hoja de trabajo de Excel a partir del array de datos
+            var ws = XLSX.utils.aoa_to_sheet(tableData);
+
+            // Crear un libro de trabajo (workbook)
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Persona');
+
+            // Guardar el archivo Excel
+            XLSX.writeFile(wb, 'persona.xlsx');
+        });
+        $(document).ready(function () {
+            $('#personaModal .btn-close, #personaModal .btn-secondary').click(function () {
+                $('#personaModal').modal('hide');
+            });
+        });
+
+    });
 </script>
 
 </body>

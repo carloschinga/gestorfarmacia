@@ -108,7 +108,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Empresa[ codiEmpr=" + codiEmpr + " ]";
+        return "pe.gestor.login.dto.Empresa[ codiEmpr=" + codiEmpr + " ]";
     }
     
 }
