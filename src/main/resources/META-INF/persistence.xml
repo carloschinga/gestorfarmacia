@@ -23,6 +23,8 @@
     <class>pe.gestor.planilla.dto.PlanillaPaisemisor</class>
     <class>pe.gestor.planilla.dto.PlanillaUbigeo</class>
     <class>pe.gestor.planilla.dto.VistaPlanillaPersona</class>
+    <class>pe.gestor.ventas.dto.VentasPharma</class>
+    <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

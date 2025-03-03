@@ -1,14 +1,11 @@
 package pe.gestor.ventas.servlet;
 
-import com.opencsv.CSVReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -19,25 +16,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import pe.gestor.ventas.dto.VentasProductosStockSucursales;
-import pe.gestor.ventas.dao.VentasProductosStockSucursalesJpaController;
-import pe.gestor.ventas.dao.exceptions.PreexistingEntityException;
+import pe.gestor.ventas.dao.VentasProductosStockJpaController;
+import pe.gestor.ventas.dto.VentasProductosStock;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB - Se mantiene en memoria antes de escribir a disco
         maxFileSize = 1024 * 1024 * 10, // 10MB - Tamaño máximo del archivo
         maxRequestSize = 1024 * 1024 * 50 // 50MB - Tamaño máximo de la solicitud
 )
-@WebServlet(name = "ImportCSVServlet", urlPatterns = {"/importcsvservlet"})
-public class ImportCSVServlet extends HttpServlet {
+@WebServlet(name = "UploadProductosStockCSVServlet", urlPatterns = {"/uploadproductosstockcsvservlet"})
+public class UploadProductosStockCSVServlet extends HttpServlet {
 
-    private VentasProductosStockSucursalesJpaController ventasController;
+    private VentasProductosStockJpaController ventasProductosStockDAO;
 
     @Override
     public void init() throws ServletException {
         // Inicializa el EntityManagerFactory y el controlador JPA
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
-        ventasController = new VentasProductosStockSucursalesJpaController(emf);
+        ventasProductosStockDAO = new VentasProductosStockJpaController(emf);
     }
 
     @Override
@@ -51,10 +47,10 @@ public class ImportCSVServlet extends HttpServlet {
                 // Procesar cada registro
                 for (CSVRecord record : records) {
                     try {
-                        VentasProductosStockSucursales producto = new VentasProductosStockSucursales();
+                        VentasProductosStock producto = new VentasProductosStock();
 
                         // Mapea los valores de las columnas
-                        producto.setCodigo(Long.parseLong(record.get("Codigo")));
+                        producto.setCodigo(record.get("Codigo"));
                         producto.setCategoria(record.get("Categoria"));
 
                         // Validar que el campo Laboratorio no esté vacío
@@ -65,14 +61,14 @@ public class ImportCSVServlet extends HttpServlet {
                             producto.setLaboratorio(laboratorio);
                         }
 
-                        producto.setNombre(record.get("Nombre"));
+                        producto.setNombreProducto(record.get("Nombre"));
 
                         // Manejo de PVP1 y valores numéricos con control de errores
                         try {
-                            producto.setPvp1(new BigDecimal(record.get("PVP1")));
+                            producto.setPvp(new BigDecimal(record.get("PVP1")));
                         } catch (NumberFormatException e) {
                             System.err.println("Error al convertir PVP1: " + record.get("PVP1"));
-                            producto.setPvp1(BigDecimal.ZERO); // Valor por defecto
+                            producto.setPvp(BigDecimal.ZERO); // Valor por defecto
                         }
 
                         // Procesar los stocks, asegurando que el valor sea numérico
@@ -87,7 +83,7 @@ public class ImportCSVServlet extends HttpServlet {
                         producto.setStockTotal(parseIntegerWithDefault(record.get("Stock Total")));
 
                         // Guardar la entidad en la base de datos
-                        ventasController.create(producto);
+                        ventasProductosStockDAO.create(producto);
                     } catch (Exception e) {
                         System.err.println("Error al procesar el registro: " + e.getMessage());
                     }

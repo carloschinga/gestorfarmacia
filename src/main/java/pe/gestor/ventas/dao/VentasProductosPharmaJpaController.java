@@ -14,15 +14,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.ventas.dao.exceptions.NonexistentEntityException;
 import pe.gestor.ventas.dao.exceptions.PreexistingEntityException;
-import pe.gestor.ventas.dto.VentasProductos;
+import pe.gestor.ventas.dto.VentasProductosPharma;
 
 /**
  *
  * @author USER
  */
-public class VentasProductosJpaController implements Serializable {
+public class VentasProductosPharmaJpaController implements Serializable {
 
-    public VentasProductosJpaController(EntityManagerFactory emf) {
+    public VentasProductosPharmaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,16 +31,16 @@ public class VentasProductosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(VentasProductos ventasProductos) throws PreexistingEntityException, Exception {
+    public void create(VentasProductosPharma ventasProductosPharma) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(ventasProductos);
+            em.persist(ventasProductosPharma);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findVentasProductos(ventasProductos.getCodigo()) != null) {
-                throw new PreexistingEntityException("VentasProductos " + ventasProductos + " already exists.", ex);
+            if (findVentasProductosPharma(ventasProductosPharma.getCodigo()) != null) {
+                throw new PreexistingEntityException("VentasProductosPharma " + ventasProductosPharma + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -50,19 +50,19 @@ public class VentasProductosJpaController implements Serializable {
         }
     }
 
-    public void edit(VentasProductos ventasProductos) throws NonexistentEntityException, Exception {
+    public void edit(VentasProductosPharma ventasProductosPharma) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            ventasProductos = em.merge(ventasProductos);
+            ventasProductosPharma = em.merge(ventasProductosPharma);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = ventasProductos.getCodigo();
-                if (findVentasProductos(id) == null) {
-                    throw new NonexistentEntityException("The ventasProductos with id " + id + " no longer exists.");
+                String id = ventasProductosPharma.getCodigo();
+                if (findVentasProductosPharma(id) == null) {
+                    throw new NonexistentEntityException("The ventasProductosPharma with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -78,14 +78,14 @@ public class VentasProductosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            VentasProductos ventasProductos;
+            VentasProductosPharma ventasProductosPharma;
             try {
-                ventasProductos = em.getReference(VentasProductos.class, id);
-                ventasProductos.getCodigo();
+                ventasProductosPharma = em.getReference(VentasProductosPharma.class, id);
+                ventasProductosPharma.getCodigo();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ventasProductos with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The ventasProductosPharma with id " + id + " no longer exists.", enfe);
             }
-            em.remove(ventasProductos);
+            em.remove(ventasProductosPharma);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -94,19 +94,19 @@ public class VentasProductosJpaController implements Serializable {
         }
     }
 
-    public List<VentasProductos> findVentasProductosEntities() {
-        return findVentasProductosEntities(true, -1, -1);
+    public List<VentasProductosPharma> findVentasProductosPharmaEntities() {
+        return findVentasProductosPharmaEntities(true, -1, -1);
     }
 
-    public List<VentasProductos> findVentasProductosEntities(int maxResults, int firstResult) {
-        return findVentasProductosEntities(false, maxResults, firstResult);
+    public List<VentasProductosPharma> findVentasProductosPharmaEntities(int maxResults, int firstResult) {
+        return findVentasProductosPharmaEntities(false, maxResults, firstResult);
     }
 
-    private List<VentasProductos> findVentasProductosEntities(boolean all, int maxResults, int firstResult) {
+    private List<VentasProductosPharma> findVentasProductosPharmaEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(VentasProductos.class));
+            cq.select(cq.from(VentasProductosPharma.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -118,20 +118,20 @@ public class VentasProductosJpaController implements Serializable {
         }
     }
 
-    public VentasProductos findVentasProductos(String id) {
+    public VentasProductosPharma findVentasProductosPharma(String id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(VentasProductos.class, id);
+            return em.find(VentasProductosPharma.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getVentasProductosCount() {
+    public int getVentasProductosPharmaCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<VentasProductos> rt = cq.from(VentasProductos.class);
+            Root<VentasProductosPharma> rt = cq.from(VentasProductosPharma.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

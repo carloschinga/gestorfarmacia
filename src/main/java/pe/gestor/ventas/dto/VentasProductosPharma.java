@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -19,44 +18,53 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author USER
  */
 @Entity
-@Table(name = "ventas_productos")
+@Table(name = "ventas_productos_pharma")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "VentasProductos.findAll", query = "SELECT v FROM VentasProductos v"),
-    @NamedQuery(name = "VentasProductos.findByCodigo", query = "SELECT v FROM VentasProductos v WHERE v.codigo = :codigo"),
-    @NamedQuery(name = "VentasProductos.findByCategoria", query = "SELECT v FROM VentasProductos v WHERE v.categoria = :categoria"),
-    @NamedQuery(name = "VentasProductos.findByLaboratorio", query = "SELECT v FROM VentasProductos v WHERE v.laboratorio = :laboratorio"),
-    @NamedQuery(name = "VentasProductos.findByNombre", query = "SELECT v FROM VentasProductos v WHERE v.nombre = :nombre"),
-    @NamedQuery(name = "VentasProductos.findByPrecioCaja", query = "SELECT v FROM VentasProductos v WHERE v.precioCaja = :precioCaja"),
-    @NamedQuery(name = "VentasProductos.findByPvp1", query = "SELECT v FROM VentasProductos v WHERE v.pvp1 = :pvp1"),
-    @NamedQuery(name = "VentasProductos.findByPvp2", query = "SELECT v FROM VentasProductos v WHERE v.pvp2 = :pvp2"),
-    @NamedQuery(name = "VentasProductos.findByPrecioCostoUnitario", query = "SELECT v FROM VentasProductos v WHERE v.precioCostoUnitario = :precioCostoUnitario"),
-    @NamedQuery(name = "VentasProductos.findByPrecioBlister", query = "SELECT v FROM VentasProductos v WHERE v.precioBlister = :precioBlister"),
-    @NamedQuery(name = "VentasProductos.findByStock", query = "SELECT v FROM VentasProductos v WHERE v.stock = :stock"),
-    @NamedQuery(name = "VentasProductos.findByStockMin", query = "SELECT v FROM VentasProductos v WHERE v.stockMin = :stockMin"),
-    @NamedQuery(name = "VentasProductos.findByLote", query = "SELECT v FROM VentasProductos v WHERE v.lote = :lote"),
-    @NamedQuery(name = "VentasProductos.findByFechaVencimiento", query = "SELECT v FROM VentasProductos v WHERE v.fechaVencimiento = :fechaVencimiento")})
-public class VentasProductos implements Serializable {
+    @NamedQuery(name = "VentasProductosPharma.findAll", query = "SELECT v FROM VentasProductosPharma v"),
+    @NamedQuery(name = "VentasProductosPharma.findByCodigo", query = "SELECT v FROM VentasProductosPharma v WHERE v.codigo = :codigo"),
+    @NamedQuery(name = "VentasProductosPharma.findByCategoria", query = "SELECT v FROM VentasProductosPharma v WHERE v.categoria = :categoria"),
+    @NamedQuery(name = "VentasProductosPharma.findByLaboratorio", query = "SELECT v FROM VentasProductosPharma v WHERE v.laboratorio = :laboratorio"),
+    @NamedQuery(name = "VentasProductosPharma.findByNombre", query = "SELECT v FROM VentasProductosPharma v WHERE v.nombre = :nombre"),
+    @NamedQuery(name = "VentasProductosPharma.findByPrecioCaja", query = "SELECT v FROM VentasProductosPharma v WHERE v.precioCaja = :precioCaja"),
+    @NamedQuery(name = "VentasProductosPharma.findByPvp1", query = "SELECT v FROM VentasProductosPharma v WHERE v.pvp1 = :pvp1"),
+    @NamedQuery(name = "VentasProductosPharma.findByPvp2", query = "SELECT v FROM VentasProductosPharma v WHERE v.pvp2 = :pvp2"),
+    @NamedQuery(name = "VentasProductosPharma.findByPrecioCostoUnitario", query = "SELECT v FROM VentasProductosPharma v WHERE v.precioCostoUnitario = :precioCostoUnitario"),
+    @NamedQuery(name = "VentasProductosPharma.findByPrecioBlister", query = "SELECT v FROM VentasProductosPharma v WHERE v.precioBlister = :precioBlister"),
+    @NamedQuery(name = "VentasProductosPharma.findByStock", query = "SELECT v FROM VentasProductosPharma v WHERE v.stock = :stock"),
+    @NamedQuery(name = "VentasProductosPharma.findByStockMin", query = "SELECT v FROM VentasProductosPharma v WHERE v.stockMin = :stockMin"),
+    @NamedQuery(name = "VentasProductosPharma.findByLote", query = "SELECT v FROM VentasProductosPharma v WHERE v.lote = :lote"),
+    @NamedQuery(name = "VentasProductosPharma.findByFechaVencimiento", query = "SELECT v FROM VentasProductosPharma v WHERE v.fechaVencimiento = :fechaVencimiento"),
+    @NamedQuery(name = "VentasProductosPharma.findByPrincA", query = "SELECT v FROM VentasProductosPharma v WHERE v.princA = :princA")})
+public class VentasProductosPharma implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 15)
     @Column(name = "codigo")
     private String codigo;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "categoria")
     private String categoria;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "laboratorio")
     private String laboratorio;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -71,25 +79,34 @@ public class VentasProductos implements Serializable {
     @Column(name = "precio_blister")
     private BigDecimal precioBlister;
     @Column(name = "stock")
-    private Integer stock;
+    private BigDecimal stock;
     @Column(name = "stock_min")
-    private Integer stockMin;
-    @Size(max = 50)
+    private BigDecimal stockMin;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "lote")
     private String lote;
     @Column(name = "fecha_vencimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaVencimiento;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "principales_activos")
-    private String principalesActivos;
+    @Size(max = 255)
+    @Column(name = "princ_a")
+    private String princA;
 
-    public VentasProductos() {
+    public VentasProductosPharma() {
     }
 
-    public VentasProductos(String codigo) {
+    public VentasProductosPharma(String codigo) {
         this.codigo = codigo;
+    }
+
+    public VentasProductosPharma(String codigo, String categoria, String laboratorio, String nombre, String lote) {
+        this.codigo = codigo;
+        this.categoria = categoria;
+        this.laboratorio = laboratorio;
+        this.nombre = nombre;
+        this.lote = lote;
     }
 
     public String getCodigo() {
@@ -164,19 +181,19 @@ public class VentasProductos implements Serializable {
         this.precioBlister = precioBlister;
     }
 
-    public Integer getStock() {
+    public BigDecimal getStock() {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(BigDecimal stock) {
         this.stock = stock;
     }
 
-    public Integer getStockMin() {
+    public BigDecimal getStockMin() {
         return stockMin;
     }
 
-    public void setStockMin(Integer stockMin) {
+    public void setStockMin(BigDecimal stockMin) {
         this.stockMin = stockMin;
     }
 
@@ -196,12 +213,12 @@ public class VentasProductos implements Serializable {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public String getPrincipalesActivos() {
-        return principalesActivos;
+    public String getPrincA() {
+        return princA;
     }
 
-    public void setPrincipalesActivos(String principalesActivos) {
-        this.principalesActivos = principalesActivos;
+    public void setPrincA(String princA) {
+        this.princA = princA;
     }
 
     @Override
@@ -214,10 +231,10 @@ public class VentasProductos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VentasProductos)) {
+        if (!(object instanceof VentasProductosPharma)) {
             return false;
         }
-        VentasProductos other = (VentasProductos) object;
+        VentasProductosPharma other = (VentasProductosPharma) object;
         if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
@@ -226,7 +243,7 @@ public class VentasProductos implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.gestor.ventas.dto.VentasProductos[ codigo=" + codigo + " ]";
+        return "pe.gestor.ventas.dto.VentasProductosPharma[ codigo=" + codigo + " ]";
     }
     
 }

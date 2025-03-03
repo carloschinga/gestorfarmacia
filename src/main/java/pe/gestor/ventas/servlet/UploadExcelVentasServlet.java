@@ -88,7 +88,7 @@ public class UploadExcelVentasServlet extends HttpServlet {
                 try {
                     String dateString = row.getCell(0).getStringCellValue();
 
-                    compra.setSede(Integer.parseInt(sede));
+               //     compra.setSede(Integer.parseInt(sede));
                     Date date = formatter.parse(dateString);
                     compra.setFechaVenta(date);
                     compra.setUsuario(row.getCell(1).getStringCellValue());

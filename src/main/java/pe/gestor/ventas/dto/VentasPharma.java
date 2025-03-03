@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "VentasPharma.findAll", query = "SELECT v FROM VentasPharma v"),
     @NamedQuery(name = "VentasPharma.findById", query = "SELECT v FROM VentasPharma v WHERE v.id = :id"),
-    @NamedQuery(name = "VentasPharma.findBySede", query = "SELECT v FROM VentasPharma v WHERE v.sede = :sede"),
+    @NamedQuery(name = "VentasPharma.findByCodiSede", query = "SELECT v FROM VentasPharma v WHERE v.codiSede = :codiSede"),
     @NamedQuery(name = "VentasPharma.findByFechaVenta", query = "SELECT v FROM VentasPharma v WHERE v.fechaVenta = :fechaVenta"),
     @NamedQuery(name = "VentasPharma.findByUsuario", query = "SELECT v FROM VentasPharma v WHERE v.usuario = :usuario"),
     @NamedQuery(name = "VentasPharma.findByLaboratorio", query = "SELECT v FROM VentasPharma v WHERE v.laboratorio = :laboratorio"),
@@ -61,29 +61,21 @@ public class VentasPharma implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "sede")
-    private int sede;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "codiSede")
+    private int codiSede;
     @Column(name = "fecha_venta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVenta;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "usuario")
     private String usuario;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "laboratorio")
     private String laboratorio;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "codigo")
     private String codigo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "producto")
     private String producto;
     @Size(max = 50)
@@ -98,10 +90,8 @@ public class VentasPharma implements Serializable {
     @Size(max = 50)
     @Column(name = "estado")
     private String estado;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "cantidad_vendida")
-    private int cantidadVendida;
+    private Integer cantidadVendida;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "costo_unitario")
     private BigDecimal costoUnitario;
@@ -127,14 +117,9 @@ public class VentasPharma implements Serializable {
         this.id = id;
     }
 
-    public VentasPharma(Integer id, int sede, Date fechaVenta, String usuario, String codigo, String producto, int cantidadVendida) {
+    public VentasPharma(Integer id, int codiSede) {
         this.id = id;
-        this.sede = sede;
-        this.fechaVenta = fechaVenta;
-        this.usuario = usuario;
-        this.codigo = codigo;
-        this.producto = producto;
-        this.cantidadVendida = cantidadVendida;
+        this.codiSede = codiSede;
     }
 
     public Integer getId() {
@@ -145,12 +130,12 @@ public class VentasPharma implements Serializable {
         this.id = id;
     }
 
-    public int getSede() {
-        return sede;
+    public int getCodiSede() {
+        return codiSede;
     }
 
-    public void setSede(int sede) {
-        this.sede = sede;
+    public void setCodiSede(int codiSede) {
+        this.codiSede = codiSede;
     }
 
     public Date getFechaVenta() {
@@ -225,11 +210,11 @@ public class VentasPharma implements Serializable {
         this.estado = estado;
     }
 
-    public int getCantidadVendida() {
+    public Integer getCantidadVendida() {
         return cantidadVendida;
     }
 
-    public void setCantidadVendida(int cantidadVendida) {
+    public void setCantidadVendida(Integer cantidadVendida) {
         this.cantidadVendida = cantidadVendida;
     }
 

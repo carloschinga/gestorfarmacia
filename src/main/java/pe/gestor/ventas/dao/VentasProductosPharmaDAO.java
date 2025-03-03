@@ -8,11 +8,11 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author san21
+ * @author USER
  */
-public class VentasProductosStockSucursalesDAO  extends VentasProductosStockSucursalesJpaController{
+public class VentasProductosPharmaDAO extends VentasProductosPharmaJpaController{
     
-    public VentasProductosStockSucursalesDAO(EntityManagerFactory emf) {
+    public VentasProductosPharmaDAO(EntityManagerFactory emf) {
         super(emf);
     }
     
