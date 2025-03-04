@@ -1,15 +1,125 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>En desarrollo....</div>
-    </body>
+<style>
+    .chart-container {
+        display: flex;
+        justify-content: center; /* Centrar los gráficos */
+        gap: 20px; /* Espaciado entre gráficos */
+        flex-wrap: wrap; /* Para que se adapten en pantallas pequeñas */
+    }
+
+    .chart-box {
+        flex: 1;
+        min-width: 300px; /* Ancho mínimo por gráfico */
+        max-width: 400px; /* Ancho máximo */
+        text-align: center;
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center">Dashboard de Ventas</h2>
+
+    <div class="chart-container">
+        <div class="chart-box">
+            <h4>Ventas por Mes</h4>
+            <canvas id="ventasPorMes"></canvas>
+        </div>
+        <div class="chart-box">
+            <h4>Ventas por Producto</h4>
+            <canvas id="ventasPorProducto"></canvas>
+        </div>
+        <div class="chart-box">
+            <h4>Ventas por Sede</h4>
+            <canvas id="ventasPorSede"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function fetchVentasData() {
+        try {
+            const response = await fetch('ventasgraficosservlet');
+            const data = await response.json();
+
+            console.log("Datos recibidos del servlet:", data); // Debug
+
+            if (!data || typeof data !== 'object') {
+                throw new Error("Los datos recibidos no son válidos");
+            }
+
+            return data;
+        } catch (error) {
+            console.error("Error al obtener los datos", error);
+            return null;
+        }
+    }
+
+    async function renderCharts() {
+        const data = await fetchVentasData();
+        if (!data)
+            return;
+
+        if (!data.ventasPorMes || !data.ventasPorProducto || !data.ventasPorSede) {
+            console.error("El JSON no tiene los datos esperados:", data);
+            return;
+        }
+
+        // 🔹 Obtener los 20 productos más vendidos correctamente
+        const topProductos = Object.entries(data.ventasPorProducto)
+                .sort((a, b) => b[1] - a[1]) // Ordenar de mayor a menor ventas
+                .slice(0, 20); // Seleccionar los 20 primeros
+
+        const topProductosLabels = topProductos.map(p => p[0]);
+        const topProductosValues = topProductos.map(p => p[1]);
+
+        // 🔹 Configurar gráficos
+        const chartConfigs = [
+            {
+                id: "ventasPorMes",
+                type: "bar",
+                label: "Total Vendido",
+                labels: Object.keys(data.ventasPorMes),
+                values: Object.values(data.ventasPorMes),
+                backgroundColor: "rgba(54, 162, 235, 0.5)",
+                borderColor: "rgba(54, 162, 235, 1)"
+            },
+            {
+                id: "ventasPorProducto",
+                type: "bar", // Puedes cambiar a "pie" o "horizontalBar" si prefieres
+                label: "Top 20 Productos Más Vendidos",
+                labels: topProductosLabels, // 🔹 Ahora sí trae los 20 más vendidos
+                values: topProductosValues,
+                backgroundColor: Array.from({length: 20}, () => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`)
+            },
+            {
+                id: "ventasPorSede",
+                type: "doughnut",
+                labels: Object.keys(data.ventasPorSede),
+                values: Object.values(data.ventasPorSede),
+                backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"]
+            }
+        ];
+
+        // 🔹 Generar gráficos dinámicamente
+        chartConfigs.forEach(config => {
+            new Chart(document.getElementById(config.id), {
+                type: config.type,
+                data: {
+                    labels: config.labels,
+                    datasets: [{
+                            label: config.label || "",
+                            data: config.values,
+                            backgroundColor: config.backgroundColor,
+                            borderColor: config.borderColor || null,
+                            borderWidth: config.borderColor ? 1 : null
+                        }]
+                },
+                options: {
+                    responsive: true,
+                    scales: config.type === "bar" ? {y: {beginAtZero: true}} : {}
+                }
+            });
+        });
+    }
+
+    renderCharts();
+
+</script>
 </html>
