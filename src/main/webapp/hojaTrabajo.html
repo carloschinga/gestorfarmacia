@@ -1,17 +1,24 @@
 <style>
     .chart-container {
-        display: flex;
-        justify-content: center; /* Centrar los gráficos */
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas */
         gap: 20px; /* Espaciado entre gráficos */
-        flex-wrap: wrap; /* Para que se adapten en pantallas pequeñas */
+        justify-content: center;
+        align-items: start;
+        text-align: center;
     }
 
     .chart-box {
-        flex: 1;
-        min-width: 300px; /* Ancho mínimo por gráfico */
-        max-width: 400px; /* Ancho máximo */
-        text-align: center;
+        min-width: 300px;
+        max-width: 500px;
+        margin: auto;
     }
+
+    /* 🔹 Asegurar que "Ventas por Sede" ocupe toda la segunda fila */
+    .chart-box:nth-child(3) {
+        grid-column: span 2;
+    }
+
 </style>
 <div class="container mt-5">
     <h2 class="text-center">Dashboard de Ventas</h2>
@@ -36,13 +43,14 @@
     async function fetchVentasData() {
         try {
             const response = await fetch('ventasgraficosservlet');
-            const data = await response.json();
+            if (!response.ok)
+                throw new Error(`HTTP error! Status: ${response.status}`);
 
+            const data = await response.json();
             console.log("Datos recibidos del servlet:", data); // Debug
 
-            if (!data || typeof data !== 'object') {
+            if (!data || typeof data !== 'object')
                 throw new Error("Los datos recibidos no son válidos");
-            }
 
             return data;
         } catch (error) {
@@ -50,6 +58,8 @@
             return null;
         }
     }
+
+    let chartInstances = {}; // 🔹 Para almacenar referencias a los gráficos
 
     async function renderCharts() {
         const data = await fetchVentasData();
@@ -82,11 +92,25 @@
             },
             {
                 id: "ventasPorProducto",
-                type: "bar", // Puedes cambiar a "pie" o "horizontalBar" si prefieres
+                type: "bar",
                 label: "Top 20 Productos Más Vendidos",
-                labels: topProductosLabels, // 🔹 Ahora sí trae los 20 más vendidos
+                labels: topProductosLabels,
                 values: topProductosValues,
-                backgroundColor: Array.from({length: 20}, () => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`)
+                backgroundColor: Array.from({length: 20}, () => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`),
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45, // 🔹 Rotar etiquetas para que no se sobrepongan
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             },
             {
                 id: "ventasPorSede",
@@ -99,7 +123,18 @@
 
         // 🔹 Generar gráficos dinámicamente
         chartConfigs.forEach(config => {
-            new Chart(document.getElementById(config.id), {
+            const canvas = document.getElementById(config.id);
+            if (!canvas) {
+                console.error(`No se encontró el canvas con id: ${config.id}`);
+                return;
+            }
+
+            // 🔹 Destruir el gráfico previo si ya existe (para evitar errores)
+            if (chartInstances[config.id]) {
+                chartInstances[config.id].destroy();
+            }
+
+            chartInstances[config.id] = new Chart(canvas, {
                 type: config.type,
                 data: {
                     labels: config.labels,
@@ -113,12 +148,13 @@
                 },
                 options: {
                     responsive: true,
-                    scales: config.type === "bar" ? {y: {beginAtZero: true}} : {}
+                    scales: config.scales || (config.type === "bar" ? {y: {beginAtZero: true}} : {})
                 }
             });
         });
     }
 
+// 🔹 Iniciar los gráficos
     renderCharts();
 
 </script>
