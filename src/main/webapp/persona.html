@@ -61,54 +61,121 @@
                 <div class="modal-body">
                     <input type="hidden" id="codiPers" name="codiPers">
                     <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <label for="codiPlant" class="form-label">Plantilla</label>
-                            <select class="form-select" id="codiPlant" name="codiPlant"></select>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiTipoDoc" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="codiTipoDoc" name="codiTipoDoc" required>
+                                <option value="">Selecciona un tipo de documento</option>
+                            </select>
                         </div>
-                        <div class="col-md-6 mb-4">
-                            <label for="numeDocu" class="form-label d-block mb-2">DNI</label>
+                        <div class="col-md-4 mb-4">
+                            <label for="numeDocu" class="form-label d-block mb-2">Documento</label>
                             <input type="text" class="form-control" id="numeDocu" name="numeDocu" required>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <label for="nombPers" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombPers" name="nombPers" required>
-                        </div>   
-                        <div class="col-md-6 mb-4">
-                            <label for="suelPers" class="form-label">Sueldo</label>
-                            <input type="number" step="0.01" class="form-control" id="suelPers" name="suelPers" required>
+                        <div class="col-md-4 mb-4">
+                            <label for="appaPers" class="form-label">Apellido Paterno</label>
+                            <input type="text" class="form-control" id="appaPers" name="appaPers" required>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
+                            <label for="apmaPers" class="form-label">Apellido Materno</label>
+                            <input type="text" class="form-control" id="apmaPers" name="apmaPers" required>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="nombPers" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombPers" name="nombPers" required>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiNaci" class="form-label">Código de Nacionalidad</label>
+                            <select class="form-select" id="codiNaci" name="codiNaci" required>
+                                <option value="">Selecciona un código</option>
+                                <!-- Agregar más opciones según sea necesario -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label for="sexoPers" class="form-label">Sexo</label>
+                            <select class="form-select" id="sexoPers" name="sexoPers" required>
+                                <option value="M">M</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiPaisEmis" class="form-label">País de Emisión</label>
+                            <select class="form-select" id="codiPaisEmis" name="codiPaisEmis" required>
+                                <option value="">Selecciona un país de emisión</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiCLDN" class="form-label">Código CLDN</label>
+                            <select class="form-select" id="codiCLDN" name="codiCLDN" required>
+                                <option value="">Selecciona un código</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label for="numeCelu" class="form-label">Número de Celular</label>
+                            <input type="text" class="form-control" id="numeCelu" name="numeCelu">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="mailPers" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="mailPers" name="mailPers">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiTipoVia" class="form-label">Tipo de Vía</label>
+                            <select class="form-select" id="codiTipoVia" name="codiTipoVia" required>
+                                <option value="">Selecciona un tipo de vía</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label for="nombVia" class="form-label">Nombre de la Vía</label>
+                            <input type="text" class="form-control" id="nombVia" name="nombVia">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="numeVia" class="form-label">Número de la Vía</label>
+                            <input type="text" class="form-control" id="numeVia" name="numeVia">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="depaPers" class="form-label">Departamento</label>
+                            <input type="text" class="form-control" id="depaPers" name="depaPers">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label for="codiUbig" class="form-label">Código Ubiq.</label>
+                            <select class="form-select" id="codiUbig" name="codiUbig" required>
+                                <option value="">Selecciona un código</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
                             <label for="snpPers" class="form-label">SNP</label>
                             <select class="form-select" id="snpPers" name="snpPers" required>
                                 <option value="true">Sí</option>
                                 <option value="false">No</option>
                             </select>
                         </div>
-                        <!-- Contenedor para AFP -->
-                        <div class="col-md-6 mb-4" id="divAFP">
-                            <label for="codiAFP" class="form-label">AFP</label>
-                            <select class="form-select" id="codiAFP" name="codiAFP"></select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <label for="asigFamiPers" class="form-label">Num.Hijos</label>  
-                            <input type="text" class="form-control" id="asigFamiPers" name="asigFamiPers" required>
-                        </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label for="actiPers" class="form-label">Activo</label>
                             <select class="form-select" id="actiPers" name="actiPers" required>
                                 <option value="true">Sí</option>
                                 <option value="false">No</option>
                             </select>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label for="codiEntiBanc" class="form-label">Entidad Bancaria</label>
+                            <select class="form-select" id="codiEntiBanc" name="codiEntiBanc" required>
+                                <option value="">Selecciona un código</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-fw fa-undo"></i>Cancelar
@@ -154,57 +221,68 @@
 
 // Abrir modal para editar
         $('#personaTable tbody').on('click', '.btnEdit', function () {
-
-            const id = $(this).data('id');
+            const id = $(this).data('id'); // Obtener el ID de la persona a editar
             $.get(`personaservlet/${id}`, function (data) {
-
+                // Llenar el formulario con los datos de la persona
                 $('#codiPers').val(data.codiPers);
                 $('#numeDocu').val(data.numeDocu);
                 $('#nombPers').val(data.nombPers);
-                $('#codiAFP').val(data.codiAFP);
-                $('#actiPers').prop('checked', data.actiPers);
-                $('#codiPlant').val(data.codiPlant);
-                $('#suelPers').val(data.suelPers);
+                $('#appaPers').val(data.appaPers);
+                $('#apmaPers').val(data.apmaPers);
+                $('#codiNaci').val(data.codiNaci);
+                $('#sexoPers').val(data.sexoPers);
+                $('#codiPaisEmis').val(data.codiPaisEmis);
+                $('#codiCLDN').val(data.codiCLDN);
+                $('#numeCelu').val(data.numeCelu);
+                $('#mailPers').val(data.mailPers);
+                $('#codiTipoVia').val(data.codiTipoVia);
+                $('#nombVia').val(data.nombVia);
+                $('#numeVia').val(data.numeVia);
+                $('#depaPers').val(data.depaPers);
+                $('#codiUbig').val(data.codiUbig);
                 $('#snpPers').val(data.snpPers ? 'true' : 'false');
-                $('#asigFamiPers').val(data.asigFamiPers);
+                $('#actiPers').val(data.actiPers ? 'true' : 'false');
+                $('#codiEntiBanc').val(data.codiEntiBanc);
 
-                if (data.snpPers === true) {
-                    $('#divAFP').hide();
-                } else {
-                    $('#divAFP').show();
-                }
-
-                $('#personaModalLabel').text('Editar Persona');
-                $('#personaModal').modal('show');
+                $('#personaModalLabel').text('Editar Persona'); // Cambiar el título del modal a "Editar"
+                $('#personaModal').modal('show'); // Mostrar el modal
             });
         });
 
         // Agregar o Editar Persona
+        // Función para manejar la creación o edición de la persona
         $('#personaForm').submit(function (e) {
-            e.preventDefault();
-            const formData = $(this).serialize();
-            const id = $('#codiPers').val();
-            const url = id ? `personaservlet/${id}` : 'personaservlet';
-            const method = id ? 'PUT' : 'POST';
+            e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+            const formData = $(this).serialize(); // Serializar los datos del formulario
+            const id = $('#codiPers').val(); // Obtener el ID (si existe) del formulario
+            const url = id ? `personaservlet/${id}` : 'personaservlet'; // URL para la creación o edición
+            const method = id ? 'PUT' : 'POST'; // Si tiene ID, usamos PUT, sino POST
 
+            // Realizar la solicitud AJAX
             $.ajax({
                 url: url,
                 type: method,
                 data: formData,
-                success: function () {
+                success: function (response) {
+                    // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
                     $('#personaModal').modal('hide');
-                    personaTable.ajax.reload(null, false); // Mantener la posición actual de la tabla
-
+                    personaTable.ajax.reload(null, false); // Recargar la tabla sin cambiar la posición actual
+                    alert('Persona guardada exitosamente'); // Mensaje de éxito
+                },
+                error: function (xhr, status, error) {
+                    // Si ocurre un error, mostramos el mensaje de error
+                    alert('Hubo un error al guardar los datos: ' + error);
                 }
             });
         });
-        // Limpiar modal al abrir para agregar
         $('#btnAddPersona').click(function () {
+            // Limpiar los campos del formulario
             $('#personaForm')[0].reset();
-            $('#codiPers').val('');
-            $('#personaModalLabel').text('Agregar Persona');
-            $('#personaModal').modal('show');
+            $('#codiPers').val(''); // Limpiar el ID de la persona (es nuevo)
+            $('#personaModalLabel').text('Agregar Persona'); // Cambiar el título del modal a "Agregar"
+            $('#personaModal').modal('show'); // Mostrar el modal
         });
+
         $('#btnPDF').click(function () {
             const {jsPDF} = window.jspdf;
             const doc = new jsPDF();
@@ -316,6 +394,112 @@
         });
 
     });
+    //agregue
+    // tipo de documneto
+    $.ajax({
+        url: 'tipodocumentoservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiTipoDoc');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    //pais emisor
+    $.ajax({
+        url: 'paisemisorservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiPaisEmis');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiPaisEmis + '">' + nombre.nombPaisEmis + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    //cldn
+    $.ajax({
+        url: 'cldnservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiCLDN');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiCldn + '">' + nombre.nombCldn + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    //codinaci
+    $.ajax({
+        url: 'nacionalidadservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiNaci');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiNaci + '">' + nombre.nombNaci + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    //tipo via
+    $.ajax({
+        url: 'tipoviaservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiTipoVia');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiTipoVia + '">' + nombre.nombTipoVia + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    //ubigeo
+    $.ajax({
+        url: 'ubigeoservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiUbig');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+    $.ajax({
+        url: 'entidadbancariaservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiEntiBanc');
+            combo.empty();
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiEntiBanc + '">' + nombre.nombEntiBanc + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+
 </script>
 
 </body>
