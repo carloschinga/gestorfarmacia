@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.planilla.dao.exceptions.NonexistentEntityException;
@@ -24,6 +25,7 @@ public class PlanillaPlantillaJpaController implements Serializable {
     public PlanillaPlantillaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -77,7 +79,8 @@ public class PlanillaPlantillaJpaController implements Serializable {
                 planillaPlantilla = em.getReference(PlanillaPlantilla.class, id);
                 planillaPlantilla.getCodiPlant();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The planillaPlantilla with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The planillaPlantilla with id " + id + " no longer exists.",
+                        enfe);
             }
             em.remove(planillaPlantilla);
             em.getTransaction().commit();
@@ -133,5 +136,5 @@ public class PlanillaPlantillaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

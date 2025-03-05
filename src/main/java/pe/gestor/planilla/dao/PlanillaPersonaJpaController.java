@@ -24,6 +24,7 @@ public class PlanillaPersonaJpaController implements Serializable {
     public PlanillaPersonaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -50,6 +51,8 @@ public class PlanillaPersonaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             planillaPersona = em.merge(planillaPersona);
+            em.flush();
+            em.refresh(planillaPersona);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -133,5 +136,5 @@ public class PlanillaPersonaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

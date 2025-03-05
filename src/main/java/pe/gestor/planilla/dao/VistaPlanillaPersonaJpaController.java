@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.planilla.dao.exceptions.NonexistentEntityException;
@@ -25,6 +26,7 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
     public VistaPlanillaPersonaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -40,7 +42,8 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findVistaPlanillaPersona(vistaPlanillaPersona.getCodiPers()) != null) {
-                throw new PreexistingEntityException("VistaPlanillaPersona " + vistaPlanillaPersona + " already exists.", ex);
+                throw new PreexistingEntityException(
+                        "VistaPlanillaPersona " + vistaPlanillaPersona + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -56,13 +59,16 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             vistaPlanillaPersona = em.merge(vistaPlanillaPersona);
+            em.flush();
+            em.refresh(vistaPlanillaPersona);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 int id = vistaPlanillaPersona.getCodiPers();
                 if (findVistaPlanillaPersona(id) == null) {
-                    throw new NonexistentEntityException("The vistaPlanillaPersona with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException(
+                            "The vistaPlanillaPersona with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -83,7 +89,8 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
                 vistaPlanillaPersona = em.getReference(VistaPlanillaPersona.class, id);
                 vistaPlanillaPersona.getCodiPers();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The vistaPlanillaPersona with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The vistaPlanillaPersona with id " + id + " no longer exists.",
+                        enfe);
             }
             em.remove(vistaPlanillaPersona);
             em.getTransaction().commit();
@@ -105,16 +112,29 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
     private List<VistaPlanillaPersona> findVistaPlanillaPersonaEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
+            // Limpiar caché antes de la consulta
+            em.getEntityManagerFactory().getCache().evictAll();
+
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(VistaPlanillaPersona.class));
             Query q = em.createQuery(cq);
+
+            // Configurar propiedades para forzar refresco
+            q.setHint("javax.persistence.cache.retrieveMode", "BYPASS");
+            q.setHint("javax.persistence.cache.storeMode", "REFRESH");
+
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
-            return q.getResultList();
+
+            // No cerrar el EntityManager, permitir reutilización
+            List<VistaPlanillaPersona> resultList = q.getResultList();
+            return resultList;
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -139,5 +159,13 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
+        List<VistaPlanillaPersona> list = new VistaPlanillaPersonaJpaController(emf).findVistaPlanillaPersonaEntities();
+        for (VistaPlanillaPersona p : list) {
+            System.out.println(p.getCodiPers() + " " + p.getNombreCompleto());
+        }
+    }
+
 }

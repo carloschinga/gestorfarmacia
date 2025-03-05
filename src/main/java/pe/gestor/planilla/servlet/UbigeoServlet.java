@@ -23,7 +23,7 @@ import pe.gestor.planilla.dto.PlanillaUbigeo;
  *
  * @author USER
  */
-@WebServlet(name = "UbigeoServlet", urlPatterns = {"/ubigeoservlet"})
+@WebServlet(name = "UbigeoServlet", urlPatterns = { "/ubigeoservlet" })
 public class UbigeoServlet extends HttpServlet {
 
     private final PlanillaUbigeoDAO ubigeoDAO;
@@ -40,8 +40,20 @@ public class UbigeoServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        String nivel = request.getParameter("nivel");
+        String codiUbig = request.getParameter("codiUbig");
+
         try {
-            List<PlanillaUbigeo> ubigeos = ubigeoDAO.findPlanillaUbigeoEntities();
+            List<PlanillaUbigeo> ubigeos;
+            if (nivel.equals("1")) {
+                ubigeos = ubigeoDAO.getListNive(nivel.charAt(0));
+            } else if (nivel.equals("2")) {
+                ubigeos = ubigeoDAO.getListNiveByParent(codiUbig);
+            } else if (nivel.equals("3")) {
+                ubigeos = ubigeoDAO.getListNiveByParent(codiUbig);
+            } else {
+                throw new IllegalArgumentException("Nivel no valido");
+            }
             JSONArray jsonArray = new JSONArray();
 
             for (PlanillaUbigeo ubigeo : ubigeos) {
@@ -53,9 +65,10 @@ public class UbigeoServlet extends HttpServlet {
             }
 
             response.getWriter().write(jsonArray.toString());
+
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Error al procesar la solicitud: " + e.getMessage() + "\"}");
+            response.getWriter().write(new JSONObject().put("error", e.getMessage()).toString());
         }
     }
 }

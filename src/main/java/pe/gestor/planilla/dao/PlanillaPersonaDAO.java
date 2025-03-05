@@ -14,13 +14,13 @@ import pe.gestor.planilla.dto.PlanillaPersona;
  *
  * @author USER
  */
-public class PlanillaPersonaDAO extends PlanillaPersonaJpaController{
+public class PlanillaPersonaDAO extends PlanillaPersonaJpaController {
 
     public PlanillaPersonaDAO(EntityManagerFactory emf) {
         super(emf);
     }
 
-      public List<PlanillaPersona> listarActivos() {
+    public List<PlanillaPersona> listarActivos() {
         EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery("Persona.findByActiPers");

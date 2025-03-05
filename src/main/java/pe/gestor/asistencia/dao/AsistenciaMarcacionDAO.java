@@ -10,10 +10,10 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author USER
  */
-public class AsistenciaMarcacionDAO extends AsistenciaMarcacionJpaController{
-    
+public class AsistenciaMarcacionDAO extends AsistenciaMarcacionJpaController {
+
     public AsistenciaMarcacionDAO(EntityManagerFactory emf) {
         super(emf);
     }
-    
+
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence           http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
   <persistence-unit name="gestorFarmacia" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>pe.gestor.compras.dto.ComprasVentas</class>
@@ -18,6 +20,7 @@
     <class>pe.gestor.login.dto.Empresa</class>
     <class>pe.gestor.planilla.dto.PlanillaTipovia</class>
     <class>pe.gestor.planilla.dto.PlanillaNacionalidad</class>
+    <class>pe.gestor.planilla.dto.PlanillaAfp</class>
     <class>pe.gestor.planilla.dto.PlanillaEntidadbancaria</class>
     <class>pe.gestor.planilla.dto.PlanillaCldn</class>
     <class>pe.gestor.planilla.dto.PlanillaPaisemisor</class>
@@ -27,11 +30,17 @@
     <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <!--<property name="javax.persistence.jdbc.password" value="Irondesk1530#$@"/>-->
+      <property name="hibernate.cache.use_second_level_cache" value="false" />
+      <property name="hibernate.cache.use_query_cache" value="false" />
+      <property name="hibernate.cache.region.factory_class"
+        value="org.hibernate.cache.internal.NoCachingRegionFactory" />
+      <property name="javax.persistence.jdbc.url"
+        value="jdbc:mysql://localhost:3333/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL" />
+      <property name="javax.persistence.jdbc.user" value="root" />
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+      <property name="javax.persistence.jdbc.password" value="root" />
+      <!--<property
+      name="javax.persistence.jdbc.password" value="Irondesk1530#$@"/>-->
     </properties>
   </persistence-unit>
 </persistence>

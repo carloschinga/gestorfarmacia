@@ -97,6 +97,7 @@
                         <div class="col-md-4 mb-4">
                             <label for="sexoPers" class="form-label">Sexo</label>
                             <select class="form-select" id="sexoPers" name="sexoPers" required>
+                                <option value="">Selecciona un código</option>
                                 <option value="M">M</option>
                                 <option value="F">F</option>
                             </select>
@@ -146,23 +147,39 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="codiUbig" class="form-label">Código Ubiq.</label>
-                            <select class="form-select" id="codiUbig" name="codiUbig" required>
-                                <option value="">Selecciona un código</option>
+                            <label for="nivel1" class="form-label">Nivel 1</label>
+                            <select class="form-select" id="nivel1" name="nivel1" required>
+                                <option value="">Selecciona un nivel 1</option>
                             </select>
                         </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <label for="nivel2" class="form-label">Nivel 2</label>
+                            <select class="form-select" id="nivel2" name="nivel2" required disabled>
+                                <option value="">Selecciona un nivel 2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <label for="nivel3" class="form-label">Nivel 3</label>
+                            <select class="form-select" id="nivel3" name="nivel3" required disabled>
+                                <option value="">Selecciona un nivel 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 mb-4">
                             <label for="snpPers" class="form-label">SNP</label>
                             <select class="form-select" id="snpPers" name="snpPers" required>
+                                <option value="">Selecciona un código</option>
                                 <option value="true">Sí</option>
                                 <option value="false">No</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="actiPers" class="form-label">Activo</label>
-                            <select class="form-select" id="actiPers" name="actiPers" required>
-                                <option value="true">Sí</option>
-                                <option value="false">No</option>
+                            <label for="codiEntiBanc" class="form-label">Codigo AFP</label>
+                            <select class="form-select" id="codiAFP" name="codiAFP" disabled>
+                                <option value="Ninguno">Selecciona un código</option>
                             </select>
                         </div>
                     </div>
@@ -171,6 +188,20 @@
                             <label for="codiEntiBanc" class="form-label">Entidad Bancaria</label>
                             <select class="form-select" id="codiEntiBanc" name="codiEntiBanc" required>
                                 <option value="">Selecciona un código</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="codiEntiBanc" class="form-label">Codigo Plantilla</label>
+                            <select class="form-select" id="codiPlantilla" name="codiPlantilla" required>
+                                <option value="">Selecciona un código</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="actiPers" class="form-label">Activo</label>
+                            <select class="form-select" id="actiPers" name="actiPers" required>
+                                <option value="">Selecciona un código</option>
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -191,12 +222,12 @@
 <script>
     $(document).ready(function () {
         // Inicializar la tabla con DataTables
-        var table = $('#personaTable').DataTable({
+        var tablePersona = $('#personaTable').DataTable({
             "ajax": {
                 "url": "personaservlet", // URL al servlet que devuelve los datos en formato JSON
                 "type": "GET",
                 "dataSrc": function (json) {
-                    // Aquí puedes hacer algo con los datos antes de pasarlos a DataTable
+                    console.log({json});
                     return json;  // Retorna el array de objetos para que DataTable lo use
                 }
             },
@@ -204,7 +235,7 @@
                 {"data": "nombTipoDoc"}, // Documento
                 {"data": "numeDocu"}, // Documento               
                 {"data": "nombre_completo"}, // Nombre Completo
-                {data: 'actiPers', render: data => data ? 'Sí' : 'No'},
+                {data: 'actiPers', render: data => data === 1 ? 'Sí' : 'No'},
                 {
                     data: null,
                     render: (data, type, row) =>
@@ -222,13 +253,17 @@
 // Abrir modal para editar
         $('#personaTable tbody').on('click', '.btnEdit', function () {
             const id = $(this).data('id'); // Obtener el ID de la persona a editar
+
             $.get(`personaservlet/${id}`, function (data) {
+
+                console.log({data});
                 // Llenar el formulario con los datos de la persona
                 $('#codiPers').val(data.codiPers);
+                $('#codiTipoDoc').val(data.codiTipoDoc);
                 $('#numeDocu').val(data.numeDocu);
-                $('#nombPers').val(data.nombPers);
                 $('#appaPers').val(data.appaPers);
                 $('#apmaPers').val(data.apmaPers);
+                $('#nombPers').val(data.nombPers);
                 $('#codiNaci').val(data.codiNaci);
                 $('#sexoPers').val(data.sexoPers);
                 $('#codiPaisEmis').val(data.codiPaisEmis);
@@ -239,10 +274,25 @@
                 $('#nombVia').val(data.nombVia);
                 $('#numeVia').val(data.numeVia);
                 $('#depaPers').val(data.depaPers);
-                $('#codiUbig').val(data.codiUbig);
+                
                 $('#snpPers').val(data.snpPers ? 'true' : 'false');
                 $('#actiPers').val(data.actiPers ? 'true' : 'false');
                 $('#codiEntiBanc').val(data.codiEntiBanc);
+                $('#codiPlantilla').val(data.codiPlantilla);
+
+                if (data.codiAFP) {
+                    $('#codiAFP').prop('disabled', false);
+                }
+                $('#codiAFP').val(data.codiAFP);
+
+
+                $('#nivel2').prop('disabled', false);
+                $('#nivel3').prop('disabled', false);
+
+                $('#nivel1').val(data.nivel1);
+                if (data.nivel1) {
+                    cargarNivel2(data.nivel1, data.nivel2, data.nivel3);
+                }
 
                 $('#personaModalLabel').text('Editar Persona'); // Cambiar el título del modal a "Editar"
                 $('#personaModal').modal('show'); // Mostrar el modal
@@ -258,16 +308,18 @@
             const url = id ? `personaservlet/${id}` : 'personaservlet'; // URL para la creación o edición
             const method = id ? 'PUT' : 'POST'; // Si tiene ID, usamos PUT, sino POST
 
-            // Realizar la solicitud AJAX
+            // console.log(formData);
             $.ajax({
                 url: url,
                 type: method,
                 data: formData,
                 success: function (response) {
-                    // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
-                    $('#personaModal').modal('hide');
-                    personaTable.ajax.reload(null, false); // Recargar la tabla sin cambiar la posición actual
-                    alert('Persona guardada exitosamente'); // Mensaje de éxito
+                    if (response.success) {
+                        // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
+                        $('#personaModal').modal('hide');
+                        tablePersona.ajax.reload(null, false);
+                        alert('Proceso exitoso'); // Mensaje de éxito
+                    }
                 },
                 error: function (xhr, status, error) {
                     // Si ocurre un error, mostramos el mensaje de error
@@ -275,6 +327,7 @@
                 }
             });
         });
+        
         $('#btnAddPersona').click(function () {
             // Limpiar los campos del formulario
             $('#personaForm')[0].reset();
@@ -394,7 +447,62 @@
         });
 
     });
-    //agregue
+
+    function cargarNivel2(codiUbig, nivel2Value, nivel3Value) {
+        $.ajax({
+            url: 'ubigeoservlet',
+            type: 'GET',
+            data: {
+                nivel: 2,
+                codiUbig: codiUbig
+            },
+            success: function (data) {
+                console.log("Data del nivel 2 al editar: " + {data});
+                let combo = $('#nivel2');
+                combo.empty();
+                combo.append('<option value="">Seleccione</option>');
+                $.each(data, function (index, nombre) {
+                    combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+                });
+
+                if (nivel2Value) {
+                    $('#nivel2').val(nivel2Value);
+                    cargarNivel3(nivel2Value, nivel3Value);
+                }
+            },
+            error: function () {
+                alert('Error al cargar los datos del nivel 2.');
+            }
+        })
+    }
+
+    function cargarNivel3(codiUbig, nivel3Value) {
+        $.ajax({
+            url: 'ubigeoservlet',
+            type: 'GET',
+            data: {
+                nivel: 3,
+                codiUbig: codiUbig
+            },
+            success: function (data) {
+                console.log("Data del nivel 3 al editar: " + {data});
+                let combo = $('#nivel3');
+                combo.empty();
+                combo.append('<option value="">Seleccione</option>');
+                $.each(data, function (index, nombre) {
+                    combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+                });
+
+                if (nivel3Value) {
+                    $('#nivel3').val(nivel3Value);
+                }
+            },
+            error: function () {
+                alert("Error al cargar los datos del nivel 3");
+            }
+        })
+    }
+
     // tipo de documneto
     $.ajax({
         url: 'tipodocumentoservlet',
@@ -402,6 +510,7 @@
         success: function (data) {
             let combo = $('#codiTipoDoc');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
             });
@@ -410,6 +519,7 @@
             alert('Error al cargar los nombres.');
         }
     });
+
     //pais emisor
     $.ajax({
         url: 'paisemisorservlet',
@@ -417,6 +527,7 @@
         success: function (data) {
             let combo = $('#codiPaisEmis');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiPaisEmis + '">' + nombre.nombPaisEmis + '</option>');
             });
@@ -425,6 +536,7 @@
             alert('Error al cargar los nombres.');
         }
     });
+
     //cldn
     $.ajax({
         url: 'cldnservlet',
@@ -432,6 +544,7 @@
         success: function (data) {
             let combo = $('#codiCLDN');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiCldn + '">' + nombre.nombCldn + '</option>');
             });
@@ -440,6 +553,7 @@
             alert('Error al cargar los nombres.');
         }
     });
+
     //codinaci
     $.ajax({
         url: 'nacionalidadservlet',
@@ -447,6 +561,7 @@
         success: function (data) {
             let combo = $('#codiNaci');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiNaci + '">' + nombre.nombNaci + '</option>');
             });
@@ -455,6 +570,7 @@
             alert('Error al cargar los nombres.');
         }
     });
+
     //tipo via
     $.ajax({
         url: 'tipoviaservlet',
@@ -462,6 +578,7 @@
         success: function (data) {
             let combo = $('#codiTipoVia');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiTipoVia + '">' + nombre.nombTipoVia + '</option>');
             });
@@ -470,29 +587,165 @@
             alert('Error al cargar los nombres.');
         }
     });
+
     //ubigeo
     $.ajax({
         url: 'ubigeoservlet',
         type: 'GET',
+        data: { nivel: 1},
         success: function (data) {
-            let combo = $('#codiUbig');
+            let combo = $('#nivel1');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los datos del nivel 1.');
+        }
+    });
+    
+
+    function cargarAFP() {
+        const snp = $('#snpPers').val();
+
+        if (snp === "false") {
+            $('#codiAFP').prop('disabled', false);
+            $.ajax({
+            url: 'afpservlet',
+            type: 'GET',
+            success: function (data) {
+            let combo = $('#codiAFP');
+            combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
             });
         },
         error: function () {
             alert('Error al cargar los nombres.');
         }
     });
+        } else {
+            $('#codiAFP').prop('disabled', true).empty().append('<option value="">Selecciona un código</option>');
+            $.ajax({
+                url: 'afpservlet',
+                type: 'GET',
+                success: function (data) {
+                    let combo = $('#codiAFP');
+                    combo.empty();
+                    combo.append('<option value="">Selecciona un código</option>');
+                    $.each(data, function (index, nombre) {
+                        combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error al cargar los nombres.');
+                }
+            })
+        }
+    }
+
+    $('#snpPers').change(function () {
+        cargarAFP();
+    });
+
+
+    $('#nivel1').change(function () {
+        let codiUbig = $(this).val();
+
+        if (codiUbig) {
+            $('#nivel2').prop('disabled', false);
+            $.ajax({
+                url: 'ubigeoservlet',
+                type: 'GET',
+                data: { nivel: 2, codiUbig: codiUbig},
+                success: function (data) {
+                    let combo = $('#nivel2');
+                    combo.empty();
+                    combo.append('<option value="">Selecciona un código</option>');
+                    $.each(data, function (index, nombre) {
+                        combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error al cargar los datos del nivel 2.');
+                }
+            });
+        } else {
+            $('#nivel2').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 2</option>');
+            $('#nivel3').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 3</option>');
+        }
+    });
+
+    $('#nivel2').change(function () {
+        let codiUbig = $(this).val();
+
+        if (codiUbig) {
+            $('#nivel3').prop('disabled', false);
+            $.ajax({
+                url: 'ubigeoservlet',
+                type: 'GET',
+                data: { nivel: 3, codiUbig: codiUbig},
+                success: function (data) {
+                    let combo = $('#nivel3');
+                    combo.empty();
+                    combo.append('<option value="">Selecciona un código</option>');
+                    $.each(data, function (index, nombre) {
+                        combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error al cargar los datos del nivel 3.');
+                }
+            });
+        } else {
+            $('#nivel3').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 3</option>');
+        }
+    });
+
     $.ajax({
         url: 'entidadbancariaservlet',
         type: 'GET',
         success: function (data) {
             let combo = $('#codiEntiBanc');
             combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
             $.each(data, function (index, nombre) {
                 combo.append('<option value="' + nombre.codiEntiBanc + '">' + nombre.nombEntiBanc + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+
+    $.ajax({
+        url: 'afpservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiAFP');
+            combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+            });
+        },
+        error: function () {
+            alert('Error al cargar los nombres.');
+        }
+    });
+
+    $.ajax({
+        url: 'plantillaservlet',
+        type: 'GET',
+        success: function (data) {
+            let combo = $('#codiPlantilla');
+            combo.empty();
+            combo.append('<option value="">Selecciona un código</option>');
+            $.each(data, function (index, nombre) {
+                combo.append('<option value="' + nombre.codiPlant + '">' + nombre.nombPlant + '</option>');
             });
         },
         error: function () {

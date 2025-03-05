@@ -27,59 +27,59 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "planilla_persona")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PlanillaPersona.findAll", query = "SELECT p FROM PlanillaPersona p"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPers = :codiPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoDoc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoDoc = :codiTipoDoc"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiPaisEmis", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPaisEmis = :codiPaisEmis"),
-    @NamedQuery(name = "PlanillaPersona.findByAppaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.appaPers = :appaPers"),
-    @NamedQuery(name = "PlanillaPersona.findByApmaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.apmaPers = :apmaPers"),
-    @NamedQuery(name = "PlanillaPersona.findByNombPers", query = "SELECT p FROM PlanillaPersona p WHERE p.nombPers = :nombPers"),
-    @NamedQuery(name = "PlanillaPersona.findBySexoPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sexoPers = :sexoPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiNaci", query = "SELECT p FROM PlanillaPersona p WHERE p.codiNaci = :codiNaci"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiCLDN", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCLDN = :codiCLDN"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeCelu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCelu = :numeCelu"),
-    @NamedQuery(name = "PlanillaPersona.findByMailPers", query = "SELECT p FROM PlanillaPersona p WHERE p.mailPers = :mailPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoVia", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoVia = :codiTipoVia"),
-    @NamedQuery(name = "PlanillaPersona.findByNombVia", query = "SELECT p FROM PlanillaPersona p WHERE p.nombVia = :nombVia"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeVia", query = "SELECT p FROM PlanillaPersona p WHERE p.numeVia = :numeVia"),
-    @NamedQuery(name = "PlanillaPersona.findByDepaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.depaPers = :depaPers"),
-    @NamedQuery(name = "PlanillaPersona.findByIntePers", query = "SELECT p FROM PlanillaPersona p WHERE p.intePers = :intePers"),
-    @NamedQuery(name = "PlanillaPersona.findByManzPers", query = "SELECT p FROM PlanillaPersona p WHERE p.manzPers = :manzPers"),
-    @NamedQuery(name = "PlanillaPersona.findByLotePers", query = "SELECT p FROM PlanillaPersona p WHERE p.lotePers = :lotePers"),
-    @NamedQuery(name = "PlanillaPersona.findByKiloPers", query = "SELECT p FROM PlanillaPersona p WHERE p.kiloPers = :kiloPers"),
-    @NamedQuery(name = "PlanillaPersona.findByBlocPers", query = "SELECT p FROM PlanillaPersona p WHERE p.blocPers = :blocPers"),
-    @NamedQuery(name = "PlanillaPersona.findByEtapPers", query = "SELECT p FROM PlanillaPersona p WHERE p.etapPers = :etapPers"),
-    @NamedQuery(name = "PlanillaPersona.findByTipoZona", query = "SELECT p FROM PlanillaPersona p WHERE p.tipoZona = :tipoZona"),
-    @NamedQuery(name = "PlanillaPersona.findByNombZona", query = "SELECT p FROM PlanillaPersona p WHERE p.nombZona = :nombZona"),
-    @NamedQuery(name = "PlanillaPersona.findByRefeZona", query = "SELECT p FROM PlanillaPersona p WHERE p.refeZona = :refeZona"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiUbig", query = "SELECT p FROM PlanillaPersona p WHERE p.codiUbig = :codiUbig"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiTipoVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoVia2 = :codiTipoVia2"),
-    @NamedQuery(name = "PlanillaPersona.findByNombVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.nombVia2 = :nombVia2"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.numeVia2 = :numeVia2"),
-    @NamedQuery(name = "PlanillaPersona.findByDepaPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.depaPers2 = :depaPers2"),
-    @NamedQuery(name = "PlanillaPersona.findByIntePers2", query = "SELECT p FROM PlanillaPersona p WHERE p.intePers2 = :intePers2"),
-    @NamedQuery(name = "PlanillaPersona.findByManzPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.manzPers2 = :manzPers2"),
-    @NamedQuery(name = "PlanillaPersona.findByLotePers2", query = "SELECT p FROM PlanillaPersona p WHERE p.lotePers2 = :lotePers2"),
-    @NamedQuery(name = "PlanillaPersona.findByKiloPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.kiloPers2 = :kiloPers2"),
-    @NamedQuery(name = "PlanillaPersona.findByBlocPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.blocPers2 = :blocPers2"),
-    @NamedQuery(name = "PlanillaPersona.findByEtapPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.etapPers2 = :etapPers2"),
-    @NamedQuery(name = "PlanillaPersona.findByTipoZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.tipoZona2 = :tipoZona2"),
-    @NamedQuery(name = "PlanillaPersona.findByNombZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.nombZona2 = :nombZona2"),
-    @NamedQuery(name = "PlanillaPersona.findByRefeZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.refeZona2 = :refeZona2"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiUbig2", query = "SELECT p FROM PlanillaPersona p WHERE p.codiUbig2 = :codiUbig2"),
-    @NamedQuery(name = "PlanillaPersona.findByIndcCentAsis", query = "SELECT p FROM PlanillaPersona p WHERE p.indcCentAsis = :indcCentAsis"),
-    @NamedQuery(name = "PlanillaPersona.findByCupsPers", query = "SELECT p FROM PlanillaPersona p WHERE p.cupsPers = :cupsPers"),
-    @NamedQuery(name = "PlanillaPersona.findBySctrPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sctrPers = :sctrPers"),
-    @NamedQuery(name = "PlanillaPersona.findBySnpPers", query = "SELECT p FROM PlanillaPersona p WHERE p.snpPers = :snpPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiAFP", query = "SELECT p FROM PlanillaPersona p WHERE p.codiAFP = :codiAFP"),
-    @NamedQuery(name = "PlanillaPersona.findByMontRemuPers", query = "SELECT p FROM PlanillaPersona p WHERE p.montRemuPers = :montRemuPers"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeRucTrab", query = "SELECT p FROM PlanillaPersona p WHERE p.numeRucTrab = :numeRucTrab"),
-    @NamedQuery(name = "PlanillaPersona.findByAsigFamiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.asigFamiPers = :asigFamiPers"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiEntiBanc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiEntiBanc = :codiEntiBanc"),
-    @NamedQuery(name = "PlanillaPersona.findByNumeCuen", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCuen = :numeCuen"),
-    @NamedQuery(name = "PlanillaPersona.findByCodiPlant", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPlant = :codiPlant"),
-    @NamedQuery(name = "PlanillaPersona.findByActiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.actiPers = :actiPers")})
+        @NamedQuery(name = "PlanillaPersona.findAll", query = "SELECT p FROM PlanillaPersona p"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPers = :codiPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoDoc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoDoc = :codiTipoDoc"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiPaisEmis", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPaisEmis = :codiPaisEmis"),
+        @NamedQuery(name = "PlanillaPersona.findByAppaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.appaPers = :appaPers"),
+        @NamedQuery(name = "PlanillaPersona.findByApmaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.apmaPers = :apmaPers"),
+        @NamedQuery(name = "PlanillaPersona.findByNombPers", query = "SELECT p FROM PlanillaPersona p WHERE p.nombPers = :nombPers"),
+        @NamedQuery(name = "PlanillaPersona.findBySexoPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sexoPers = :sexoPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiNaci", query = "SELECT p FROM PlanillaPersona p WHERE p.codiNaci = :codiNaci"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiCLDN", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCLDN = :codiCLDN"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeCelu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCelu = :numeCelu"),
+        @NamedQuery(name = "PlanillaPersona.findByMailPers", query = "SELECT p FROM PlanillaPersona p WHERE p.mailPers = :mailPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoVia", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoVia = :codiTipoVia"),
+        @NamedQuery(name = "PlanillaPersona.findByNombVia", query = "SELECT p FROM PlanillaPersona p WHERE p.nombVia = :nombVia"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeVia", query = "SELECT p FROM PlanillaPersona p WHERE p.numeVia = :numeVia"),
+        @NamedQuery(name = "PlanillaPersona.findByDepaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.depaPers = :depaPers"),
+        @NamedQuery(name = "PlanillaPersona.findByIntePers", query = "SELECT p FROM PlanillaPersona p WHERE p.intePers = :intePers"),
+        @NamedQuery(name = "PlanillaPersona.findByManzPers", query = "SELECT p FROM PlanillaPersona p WHERE p.manzPers = :manzPers"),
+        @NamedQuery(name = "PlanillaPersona.findByLotePers", query = "SELECT p FROM PlanillaPersona p WHERE p.lotePers = :lotePers"),
+        @NamedQuery(name = "PlanillaPersona.findByKiloPers", query = "SELECT p FROM PlanillaPersona p WHERE p.kiloPers = :kiloPers"),
+        @NamedQuery(name = "PlanillaPersona.findByBlocPers", query = "SELECT p FROM PlanillaPersona p WHERE p.blocPers = :blocPers"),
+        @NamedQuery(name = "PlanillaPersona.findByEtapPers", query = "SELECT p FROM PlanillaPersona p WHERE p.etapPers = :etapPers"),
+        @NamedQuery(name = "PlanillaPersona.findByTipoZona", query = "SELECT p FROM PlanillaPersona p WHERE p.tipoZona = :tipoZona"),
+        @NamedQuery(name = "PlanillaPersona.findByNombZona", query = "SELECT p FROM PlanillaPersona p WHERE p.nombZona = :nombZona"),
+        @NamedQuery(name = "PlanillaPersona.findByRefeZona", query = "SELECT p FROM PlanillaPersona p WHERE p.refeZona = :refeZona"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiUbig", query = "SELECT p FROM PlanillaPersona p WHERE p.codiUbig = :codiUbig"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoVia2 = :codiTipoVia2"),
+        @NamedQuery(name = "PlanillaPersona.findByNombVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.nombVia2 = :nombVia2"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeVia2", query = "SELECT p FROM PlanillaPersona p WHERE p.numeVia2 = :numeVia2"),
+        @NamedQuery(name = "PlanillaPersona.findByDepaPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.depaPers2 = :depaPers2"),
+        @NamedQuery(name = "PlanillaPersona.findByIntePers2", query = "SELECT p FROM PlanillaPersona p WHERE p.intePers2 = :intePers2"),
+        @NamedQuery(name = "PlanillaPersona.findByManzPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.manzPers2 = :manzPers2"),
+        @NamedQuery(name = "PlanillaPersona.findByLotePers2", query = "SELECT p FROM PlanillaPersona p WHERE p.lotePers2 = :lotePers2"),
+        @NamedQuery(name = "PlanillaPersona.findByKiloPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.kiloPers2 = :kiloPers2"),
+        @NamedQuery(name = "PlanillaPersona.findByBlocPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.blocPers2 = :blocPers2"),
+        @NamedQuery(name = "PlanillaPersona.findByEtapPers2", query = "SELECT p FROM PlanillaPersona p WHERE p.etapPers2 = :etapPers2"),
+        @NamedQuery(name = "PlanillaPersona.findByTipoZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.tipoZona2 = :tipoZona2"),
+        @NamedQuery(name = "PlanillaPersona.findByNombZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.nombZona2 = :nombZona2"),
+        @NamedQuery(name = "PlanillaPersona.findByRefeZona2", query = "SELECT p FROM PlanillaPersona p WHERE p.refeZona2 = :refeZona2"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiUbig2", query = "SELECT p FROM PlanillaPersona p WHERE p.codiUbig2 = :codiUbig2"),
+        @NamedQuery(name = "PlanillaPersona.findByIndcCentAsis", query = "SELECT p FROM PlanillaPersona p WHERE p.indcCentAsis = :indcCentAsis"),
+        @NamedQuery(name = "PlanillaPersona.findByCupsPers", query = "SELECT p FROM PlanillaPersona p WHERE p.cupsPers = :cupsPers"),
+        @NamedQuery(name = "PlanillaPersona.findBySctrPers", query = "SELECT p FROM PlanillaPersona p WHERE p.sctrPers = :sctrPers"),
+        @NamedQuery(name = "PlanillaPersona.findBySnpPers", query = "SELECT p FROM PlanillaPersona p WHERE p.snpPers = :snpPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiAFP", query = "SELECT p FROM PlanillaPersona p WHERE p.codiAFP = :codiAFP"),
+        @NamedQuery(name = "PlanillaPersona.findByMontRemuPers", query = "SELECT p FROM PlanillaPersona p WHERE p.montRemuPers = :montRemuPers"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeRucTrab", query = "SELECT p FROM PlanillaPersona p WHERE p.numeRucTrab = :numeRucTrab"),
+        @NamedQuery(name = "PlanillaPersona.findByAsigFamiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.asigFamiPers = :asigFamiPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiEntiBanc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiEntiBanc = :codiEntiBanc"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeCuen", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCuen = :numeCuen"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiPlant", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPlant = :codiPlant"),
+        @NamedQuery(name = "PlanillaPersona.findByActiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.actiPers = :actiPers") })
 public class PlanillaPersona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -233,7 +233,8 @@ public class PlanillaPersona implements Serializable {
     private boolean snpPers;
     @Column(name = "codiAFP")
     private Integer codiAFP;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
+    // consider using these annotations to enforce field validation
     @Column(name = "montRemuPers")
     private BigDecimal montRemuPers;
     @Size(max = 11)
@@ -261,7 +262,8 @@ public class PlanillaPersona implements Serializable {
         this.codiPers = codiPers;
     }
 
-    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String codiPaisEmis, String appaPers, String apmaPers, String nombPers, Character sexoPers, String codiNaci, boolean snpPers, boolean actiPers) {
+    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String codiPaisEmis, String appaPers,
+            String apmaPers, String nombPers, Character sexoPers, String codiNaci, boolean snpPers, boolean actiPers) {
         this.codiPers = codiPers;
         this.codiTipoDoc = codiTipoDoc;
         this.numeDocu = numeDocu;
@@ -705,7 +707,8 @@ public class PlanillaPersona implements Serializable {
             return false;
         }
         PlanillaPersona other = (PlanillaPersona) object;
-        if ((this.codiPers == null && other.codiPers != null) || (this.codiPers != null && !this.codiPers.equals(other.codiPers))) {
+        if ((this.codiPers == null && other.codiPers != null)
+                || (this.codiPers != null && !this.codiPers.equals(other.codiPers))) {
             return false;
         }
         return true;
@@ -715,5 +718,5 @@ public class PlanillaPersona implements Serializable {
     public String toString() {
         return "pe.gestor.planilla.dto.PlanillaPersona[ codiPers=" + codiPers + " ]";
     }
-    
+
 }

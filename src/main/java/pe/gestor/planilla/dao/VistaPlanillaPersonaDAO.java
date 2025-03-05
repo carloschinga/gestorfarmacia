@@ -10,10 +10,10 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author USER
  */
-public class VistaPlanillaPersonaDAO extends VistaPlanillaPersonaJpaController{
-    
+public class VistaPlanillaPersonaDAO extends VistaPlanillaPersonaJpaController {
+
     public VistaPlanillaPersonaDAO(EntityManagerFactory emf) {
         super(emf);
     }
-    
+
 }
