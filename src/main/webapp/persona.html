@@ -152,14 +152,14 @@
                                 <option value="">Selecciona un nivel 1</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4 mb-4">
                             <label for="nivel2" class="form-label">Nivel 2</label>
                             <select class="form-select" id="nivel2" name="nivel2" required disabled>
                                 <option value="">Selecciona un nivel 2</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4 mb-4">
                             <label for="nivel3" class="form-label">Nivel 3</label>
                             <select class="form-select" id="nivel3" name="nivel3" required disabled>
@@ -274,7 +274,7 @@
                 $('#nombVia').val(data.nombVia);
                 $('#numeVia').val(data.numeVia);
                 $('#depaPers').val(data.depaPers);
-                
+
                 $('#snpPers').val(data.snpPers ? 'true' : 'false');
                 $('#actiPers').val(data.actiPers ? 'true' : 'false');
                 $('#codiEntiBanc').val(data.codiEntiBanc);
@@ -327,7 +327,7 @@
                 }
             });
         });
-        
+
         $('#btnAddPersona').click(function () {
             // Limpiar los campos del formulario
             $('#personaForm')[0].reset();
@@ -592,7 +592,7 @@
     $.ajax({
         url: 'ubigeoservlet',
         type: 'GET',
-        data: { nivel: 1},
+        data: {nivel: 1},
         success: function (data) {
             let combo = $('#nivel1');
             combo.empty();
@@ -605,7 +605,7 @@
             alert('Error al cargar los datos del nivel 1.');
         }
     });
-    
+
 
     function cargarAFP() {
         const snp = $('#snpPers').val();
@@ -613,20 +613,20 @@
         if (snp === "false") {
             $('#codiAFP').prop('disabled', false);
             $.ajax({
-            url: 'afpservlet',
-            type: 'GET',
-            success: function (data) {
-            let combo = $('#codiAFP');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+                url: 'afpservlet',
+                type: 'GET',
+                success: function (data) {
+                    let combo = $('#codiAFP');
+                    combo.empty();
+                    combo.append('<option value="">Selecciona un código</option>');
+                    $.each(data, function (index, nombre) {
+                        combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error al cargar los nombres.');
+                }
             });
-        },
-        error: function () {
-            alert('Error al cargar los nombres.');
-        }
-    });
         } else {
             $('#codiAFP').prop('disabled', true).empty().append('<option value="">Selecciona un código</option>');
             $.ajax({
@@ -660,7 +660,7 @@
             $.ajax({
                 url: 'ubigeoservlet',
                 type: 'GET',
-                data: { nivel: 2, codiUbig: codiUbig},
+                data: {nivel: 2, codiUbig: codiUbig},
                 success: function (data) {
                     let combo = $('#nivel2');
                     combo.empty();
@@ -687,7 +687,7 @@
             $.ajax({
                 url: 'ubigeoservlet',
                 type: 'GET',
-                data: { nivel: 3, codiUbig: codiUbig},
+                data: {nivel: 3, codiUbig: codiUbig},
                 success: function (data) {
                     let combo = $('#nivel3');
                     combo.empty();
