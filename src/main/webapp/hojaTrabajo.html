@@ -34,12 +34,11 @@
         </div>
         <div class="chart-box">
             <h4>Ventas por Sede</h4>
-            <canvas id="ventasPorSede"></canvas>
+            <canvas id="ventasSede"></canvas>
         </div>
     </div>
 </div>
-
-<script>
+  <script>
     async function fetchVentasData() {
         try {
             const response = await fetch('ventasgraficosservlet');
@@ -66,13 +65,15 @@
         if (!data)
             return;
 
-        if (!data.ventasPorMes || !data.ventasPorProducto || !data.ventasPorSede) {
-            console.error("El JSON no tiene los datos esperados:", data);
+        // 🔹 CORRECCIÓN: Ahora usamos "ventasSede" en lugar de "ventasPorSede"
+        if (!data.ventasPorMes || !data.ventasPorProducto || !data.ventasSede) {
+            console.error("❌ El JSON no tiene los datos esperados:", data);
             return;
         }
 
         // 🔹 Obtener los 20 productos más vendidos correctamente
         const topProductos = Object.entries(data.ventasPorProducto)
+                .filter(([_, value]) => value !== null) // 🔹 Evita errores con valores null
                 .sort((a, b) => b[1] - a[1]) // Ordenar de mayor a menor ventas
                 .slice(0, 20); // Seleccionar los 20 primeros
 
@@ -113,10 +114,10 @@
                 }
             },
             {
-                id: "ventasPorSede",
+                id: "ventasSede", // 🔹 CORREGIDO: Ahora coincide con el JSON del servlet
                 type: "doughnut",
-                labels: Object.keys(data.ventasPorSede),
-                values: Object.values(data.ventasPorSede),
+                labels: Object.keys(data.ventasSede), // 🔹 AHORA TOMA "ventasSede"
+                values: Object.values(data.ventasSede),
                 backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"]
             }
         ];
@@ -154,7 +155,7 @@
         });
     }
 
-// 🔹 Iniciar los gráficos
+    // 🔹 Iniciar los gráficos
     renderCharts();
 
 </script>

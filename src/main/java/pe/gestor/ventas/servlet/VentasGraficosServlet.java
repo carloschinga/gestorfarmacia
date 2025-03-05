@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pe.gestor.ventas.dao.VentasGraficosMensualesDAO;
+import pe.gestor.ventas.dao.VentasGraficosXSedeDAO;
 import pe.gestor.ventas.dao.VistaVentasGraficosXMesDAO;
 import pe.gestor.ventas.dao.VistaVentasPorProductoDAO;
 import pe.gestor.ventas.dto.VentasGraficosMensuales;
 import pe.gestor.ventas.dto.VistaVentasGraficosXMes;
 import pe.gestor.ventas.dto.VistaVentasPorProducto;
+import pe.gestor.ventas.dto.VentasGraficosXSede;
 
 @WebServlet(name = "VentasGraficosServlet", urlPatterns = {"/ventasgraficosservlet"})
 public class VentasGraficosServlet extends HttpServlet {
@@ -28,6 +30,7 @@ public class VentasGraficosServlet extends HttpServlet {
     private VentasGraficosMensualesDAO ventasGraficosMensualesDAO;
     private VistaVentasGraficosXMesDAO vistaVentasGraficosXMesDAO;
     private VistaVentasPorProductoDAO vistaVentaproductoDAO;
+    private VentasGraficosXSedeDAO vistaVentasedeDAO;
 
     @Override
     public void init() throws ServletException {
@@ -35,6 +38,7 @@ public class VentasGraficosServlet extends HttpServlet {
         ventasGraficosMensualesDAO = new VentasGraficosMensualesDAO(emf);
         vistaVentasGraficosXMesDAO= new VistaVentasGraficosXMesDAO(emf);
         vistaVentaproductoDAO= new VistaVentasPorProductoDAO(emf);
+        vistaVentasedeDAO= new VentasGraficosXSedeDAO(emf);
     }
 
     @Override
@@ -60,11 +64,18 @@ public class VentasGraficosServlet extends HttpServlet {
                 // Ventas por Producto (🔹 Aquí aseguramos que se suman correctamente)
                 ventasPorProducto.put(ventaxproducto.getProducto(), ventaxproducto.getTotalVendido());
             }
+           List<VentasGraficosXSede> ventasxsede = vistaVentasedeDAO.findVentasGraficosXSedeEntities();
+            Map<String, BigInteger> ventasSede = new HashMap<>();
+           for (VentasGraficosXSede ventaxsedes : ventasxsede) {
+
+                //Ventas por Producto (🔹 Aquí aseguramos que se suman correctamente)
+                ventasSede.put(ventaxsedes.getNombreSede(), ventaxsedes.getTotalVendido());
+            }
                     
             
 
            
-            Map<String, Integer> ventasPorSede = new HashMap<>();
+            //Map<String, Integer> ventasPorSede = new HashMap<>();
 
            
 
@@ -72,7 +83,7 @@ public class VentasGraficosServlet extends HttpServlet {
             Map<String, Object> jsonResponse = new HashMap<>();
             jsonResponse.put("ventasPorMes", ventasPorMes);
             jsonResponse.put("ventasPorProducto", ventasPorProducto);
-            jsonResponse.put("ventasPorSede", ventasPorSede);
+            jsonResponse.put("ventasSede", ventasSede);
 
             out.print(new Gson().toJson(jsonResponse));
 
