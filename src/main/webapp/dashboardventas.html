@@ -49,143 +49,149 @@
         </div>
     </div></div>
 <script>
-    async function fetchVentasData() {
-        try {
-            const response = await fetch('ventasgraficosservlet');
-            if (!response.ok)
-                throw new Error(`HTTP error! Status: ${response.status}`);
-
-            const data = await response.json();
-            console.log("📊 Datos recibidos del servlet:", data);
-
-            if (!data || typeof data !== 'object' ||
-                    !data.ventasPorMes || !data.ventasPorProducto || !data.ventasSede) {
-                throw new Error("❌ El JSON no tiene los datos esperados");
-            }
-
-            return data;
-        } catch (error) {
-            console.error("⚠️ Error al obtener los datos", error);
-            return null;
+  async function fetchVentasData() {
+    try {
+        const response = await fetch('ventasgraficosservlet');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        const data = await response.json();
+        console.log("📊 Datos recibidos del servlet:", data);
+
+        if (!data || typeof data !== 'object' || 
+            !data.ventasPorMes || !data.ventasPorProducto || !data.ventasSede) {
+            throw new Error("❌ El JSON no tiene los datos esperados");
+        }
+
+        return data;
+    } catch (error) {
+        console.error("⚠️ Error al obtener los datos", error);
+        return null;
     }
+}
 
-    let chartInstances = {};
+// Verifica que `chartInstances` solo se declare una vez
+if (typeof chartInstances === "undefined") {
+    var chartInstances = {};
+}
 
-    async function renderCharts() {
-        const data = await fetchVentasData();
-        if (!data)
-            return;
+async function renderCharts() {
+    const data = await fetchVentasData();
+    if (!data) return;
 
-        // Top 20 productos más vendidos (filtrando valores null)
-        const topProductos = Object.entries(data.ventasPorProducto)
-                .filter(([_, value]) => value !== null)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 20);
+    // Top 20 productos más vendidos (filtrando valores null)
+    const topProductos = Object.entries(data.ventasPorProducto || {})
+        .filter(([_, value]) => value !== null)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 20);
 
-        const topProductosLabels = topProductos.map(p => p[0]);
-        const topProductosValues = topProductos.map(p => p[1]);
+    const topProductosLabels = topProductos.map(p => p[0]);
+    const topProductosValues = topProductos.map(p => p[1]);
 
-        const chartConfigs = [
-            {
-                id: "ventasPorMes",
-                type: "bar",
-                label: "Total Vendido",
-                labels: Object.keys(data.ventasPorMes),
-                values: Object.values(data.ventasPorMes),
-                backgroundColor: "rgba(54, 162, 235, 0.5)",
-                borderColor: "rgba(54, 162, 235, 1)",
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {y: {beginAtZero: true}}
-                }
-            },
-            {
-                id: "ventasPorProducto",
-                type: "bar",
-                label: "Top 20 Productos Más Vendidos",
-                labels: topProductosLabels,
-                values: topProductosValues,
-                backgroundColor: Array.from({length: 20}, () =>
-                        `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`
-                ),
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            ticks: {autoSkip: false, maxRotation: 0, font: {size: 12}},
-                            title: {display: true, text: "Productos", font: {size: 14, weight: "bold"}}
-                        },
-                        x: {
-                            beginAtZero: true,
-                            title: {display: true, text: "Cantidad Vendida", font: {size: 14, weight: "bold"}}
-                        }
+    const chartConfigs = [
+        {
+            id: "ventasPorMes",
+            type: "bar",
+            label: "Total Vendido",
+            labels: Object.keys(data.ventasPorMes || {}),
+            values: Object.values(data.ventasPorMes || {}),
+            backgroundColor: "rgba(54, 162, 235, 0.5)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
+        },
+        {
+            id: "ventasPorProducto",
+            type: "bar",
+            label: "Top 20 Productos Más Vendidos",
+            labels: topProductosLabels,
+            values: topProductosValues,
+            backgroundColor: Array.from({ length: 20 }, () =>
+                `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`
+            ),
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        ticks: { autoSkip: false, maxRotation: 0, font: { size: 12 } },
+                        title: { display: true, text: "Productos", font: { size: 14, weight: "bold" } }
                     },
-                    plugins: {
-                        legend: {position: "top", labels: {font: {size: 12}}}
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: "Cantidad Vendida", font: { size: 14, weight: "bold" } }
                     }
-                }
-            },
-            {
-                id: "ventasSede",
-                type: "doughnut",
-                label: "Ventas por Sede",
-                labels: Object.keys(data.ventasSede),
-                values: Object.values(data.ventasSede),
-                backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            }
-        ];
-
-        // Ajustar tamaño de todos los `canvas`
-        document.querySelectorAll("canvas").forEach(canvas => {
-            canvas.style.maxWidth = "500px";
-            canvas.style.maxHeight = "450px"; /* Mantener altura uniforme */
-        });
-
-        // Renderizar los gráficos
-        chartConfigs.forEach(config => {
-            const canvas = document.getElementById(config.id);
-            if (!canvas) {
-                console.error(`❌ No se encontró el canvas con id: ${config.id}`);
-                return;
-            }
-
-            // Destruir gráfico previo si existe
-            if (chartInstances[config.id]) {
-                chartInstances[config.id].destroy();
-            }
-
-            // Crear el nuevo gráfico
-            chartInstances[config.id] = new Chart(canvas, {
-                type: config.type,
-                data: {
-                    labels: config.labels,
-                    datasets: [{
-                            label: config.label || "",
-                            data: config.values,
-                            backgroundColor: config.backgroundColor,
-                            borderColor: config.borderColor || null,
-                            borderWidth: config.borderColor ? 1 : null
-                        }]
                 },
-                options: config.options || {responsive: true, scales: config.type === "bar" ? {y: {beginAtZero: true}} : {}}
-            });
-        });
-
-        // Asegurar que el gráfico de "Ventas por Sede" esté centrado
-        const ventasSedeCanvas = document.getElementById("ventasSede");
-        if (ventasSedeCanvas) {
-            ventasSedeCanvas.style.display = "block";
-            ventasSedeCanvas.style.margin = "auto";
+                plugins: {
+                    legend: { position: "top", labels: { font: { size: 12 } } }
+                }
+            }
+        },
+        {
+            id: "ventasSede",
+            type: "doughnut",
+            label: "Ventas por Sede",
+            labels: Object.keys(data.ventasSede || {}),
+            values: Object.values(data.ventasSede || {}),
+            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
         }
-    }
+    ];
 
-    renderCharts();
+    // Ajustar tamaño de todos los `canvas`
+    document.querySelectorAll("canvas").forEach(canvas => {
+        if (canvas) {
+            canvas.style.maxWidth = "500px";
+            canvas.style.maxHeight = "450px"; // Mantener altura uniforme
+        }
+    });
+
+    // Renderizar los gráficos
+    chartConfigs.forEach(config => {
+        const canvas = document.getElementById(config.id);
+        if (!canvas) {
+            console.error(`❌ No se encontró el canvas con id: ${config.id}`);
+            return;
+        }
+
+        // Destruir gráfico previo si existe
+        if (chartInstances[config.id]) {
+            chartInstances[config.id].destroy();
+        }
+
+        // Crear el nuevo gráfico
+        chartInstances[config.id] = new Chart(canvas, {
+            type: config.type,
+            data: {
+                labels: config.labels,
+                datasets: [{
+                    label: config.label || "",
+                    data: config.values,
+                    backgroundColor: config.backgroundColor,
+                    borderColor: config.borderColor || null,
+                    borderWidth: config.borderColor ? 1 : null
+                }]
+            },
+            options: config.options || { responsive: true, scales: config.type === "bar" ? { y: { beginAtZero: true } } : {} }
+        });
+    });
+
+    // Asegurar que el gráfico de "Ventas por Sede" esté centrado
+    const ventasSedeCanvas = document.getElementById("ventasSede");
+    if (ventasSedeCanvas) {
+        ventasSedeCanvas.style.display = "block";
+        ventasSedeCanvas.style.margin = "auto";
+    }
+}
+
+// Ejecutar la función principal
+renderCharts();
 </script>
