@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pe.gestor.asistencia.dao;
+package pe.gestor.compras.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,17 +12,17 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import pe.gestor.asistencia.dao.exceptions.NonexistentEntityException;
-import pe.gestor.asistencia.dao.exceptions.PreexistingEntityException;
-import pe.gestor.ventas.dto.VentasProductosStock;
+import pe.gestor.compras.dao.exceptions.NonexistentEntityException;
+import pe.gestor.compras.dao.exceptions.PreexistingEntityException;
+import pe.gestor.compras.dto.VistaComprasHojaTrabajo;
 
 /**
  *
  * @author USER
  */
-public class VentasProductosStockJpaController implements Serializable {
+public class VistaComprasHojaTrabajoJpaController implements Serializable {
 
-    public VentasProductosStockJpaController(EntityManagerFactory emf) {
+    public VistaComprasHojaTrabajoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,16 +31,16 @@ public class VentasProductosStockJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(VentasProductosStock ventasProductosStock) throws PreexistingEntityException, Exception {
+    public void create(VistaComprasHojaTrabajo vistaComprasHojaTrabajo) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(ventasProductosStock);
+            em.persist(vistaComprasHojaTrabajo);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findVentasProductosStock(ventasProductosStock.getCodigo()) != null) {
-                throw new PreexistingEntityException("VentasProductosStock " + ventasProductosStock + " already exists.", ex);
+            if (findVistaComprasHojaTrabajo(vistaComprasHojaTrabajo.getCodigo()) != null) {
+                throw new PreexistingEntityException("VistaComprasHojaTrabajo " + vistaComprasHojaTrabajo + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -50,19 +50,19 @@ public class VentasProductosStockJpaController implements Serializable {
         }
     }
 
-    public void edit(VentasProductosStock ventasProductosStock) throws NonexistentEntityException, Exception {
+    public void edit(VistaComprasHojaTrabajo vistaComprasHojaTrabajo) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            ventasProductosStock = em.merge(ventasProductosStock);
+            vistaComprasHojaTrabajo = em.merge(vistaComprasHojaTrabajo);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = ventasProductosStock.getCodigo();
-                if (findVentasProductosStock(id) == null) {
-                    throw new NonexistentEntityException("The ventasProductosStock with id " + id + " no longer exists.");
+                String id = vistaComprasHojaTrabajo.getCodigo();
+                if (findVistaComprasHojaTrabajo(id) == null) {
+                    throw new NonexistentEntityException("The vistaComprasHojaTrabajo with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -78,14 +78,14 @@ public class VentasProductosStockJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            VentasProductosStock ventasProductosStock;
+            VistaComprasHojaTrabajo vistaComprasHojaTrabajo;
             try {
-                ventasProductosStock = em.getReference(VentasProductosStock.class, id);
-                ventasProductosStock.getCodigo();
+                vistaComprasHojaTrabajo = em.getReference(VistaComprasHojaTrabajo.class, id);
+                vistaComprasHojaTrabajo.getCodigo();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ventasProductosStock with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The vistaComprasHojaTrabajo with id " + id + " no longer exists.", enfe);
             }
-            em.remove(ventasProductosStock);
+            em.remove(vistaComprasHojaTrabajo);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -94,19 +94,19 @@ public class VentasProductosStockJpaController implements Serializable {
         }
     }
 
-    public List<VentasProductosStock> findVentasProductosStockEntities() {
-        return findVentasProductosStockEntities(true, -1, -1);
+    public List<VistaComprasHojaTrabajo> findVistaComprasHojaTrabajoEntities() {
+        return findVistaComprasHojaTrabajoEntities(true, -1, -1);
     }
 
-    public List<VentasProductosStock> findVentasProductosStockEntities(int maxResults, int firstResult) {
-        return findVentasProductosStockEntities(false, maxResults, firstResult);
+    public List<VistaComprasHojaTrabajo> findVistaComprasHojaTrabajoEntities(int maxResults, int firstResult) {
+        return findVistaComprasHojaTrabajoEntities(false, maxResults, firstResult);
     }
 
-    private List<VentasProductosStock> findVentasProductosStockEntities(boolean all, int maxResults, int firstResult) {
+    private List<VistaComprasHojaTrabajo> findVistaComprasHojaTrabajoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(VentasProductosStock.class));
+            cq.select(cq.from(VistaComprasHojaTrabajo.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -118,20 +118,20 @@ public class VentasProductosStockJpaController implements Serializable {
         }
     }
 
-    public VentasProductosStock findVentasProductosStock(String id) {
+    public VistaComprasHojaTrabajo findVistaComprasHojaTrabajo(String id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(VentasProductosStock.class, id);
+            return em.find(VistaComprasHojaTrabajo.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getVentasProductosStockCount() {
+    public int getVistaComprasHojaTrabajoCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<VentasProductosStock> rt = cq.from(VentasProductosStock.class);
+            Root<VistaComprasHojaTrabajo> rt = cq.from(VistaComprasHojaTrabajo.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

@@ -27,6 +27,8 @@
     <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
     <class>pe.gestor.ventas.dto.VistaVentasGraficosXMes</class>
     <class>pe.gestor.ventas.dto.VistaVentasPorProducto</class>
+    <class>pe.gestor.compras.dto.VistaComprasHojaTrabajo</class>
+    <class>pe.gestor.compras.dto.ComprasProveedor</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
