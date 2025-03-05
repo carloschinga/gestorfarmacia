@@ -1,15 +1,315 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>En desarrollo....</div>
-    </body>
-</html>
+
+<style>
+    .codigo-wrap {
+        width: 100px !important;  /* Fija el ancho en 100px */
+        max-width: 100px !important; /* Evita expansión */
+        white-space: nowrap !important; /* Mantiene el texto en una sola línea */
+        overflow: hidden !important; /* Oculta el texto que excede el tamaño */
+        text-overflow: ellipsis !important; /* Agrega puntos suspensivos (...) si es muy largo */
+        font-size: 12px; /* Opcional: reducir el tamaño de la fuente */
+    }
+    .fila-resaltada {
+        background-color: #ffcccc !important;  /* Fondo rojo claro */
+    }
+    .text-right {
+        text-align: right !important;
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="h5 mb-0 text-gray-800">Hoja de Trabajo</h5>
+        </div>
+        <div class="card-body">
+            <nav class="navbar navbar-light bg-white p-2">  
+                <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
+                    <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
+                    <div class="btn-group ms-auto">
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm" id="btnOrdenCompra">
+                                <i class="fas fa-cogs"></i> <span>Generar OC</span>
+                            </button>
+                            <button class="btn btn-primary btn-sm"  id="btnLimpiarSeleccion">
+                                <i class="fas fa-fw fa-trash-o"></i> <span>Limpiar Selección</span>
+                            </button>
+
+                            <button class="btn btn-primary btn-sm" id="btnExportar">
+                                <i class="fas fa-fw fa-file-excel"></i> <span>Exportar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <hr/>
+
+            <!-- Contenedor con scroll horizontal -->
+            <div class="table-responsive">
+                <table id="comprasTable" class="table table-striped table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Categoría</th>
+                            <th>Laboratorio</th>
+                            <th>Nombre</th>
+                            <th>Precio Caja</th>
+                            <th>PVP1</th>
+
+                            <th>Precio Costo Unitario</th>
+
+                            <th>Margen Ganancia</th>
+                            <th>Stock Total</th>
+                            <th>Ventas</th>
+                            <th>Mes1</th>
+                            <th>Mes2</th>
+                            <th>Cant</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para mostrar los seleccionados -->
+<!-- Modal -->
+<div class="modal fade" id="modalSeleccionados" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Orden de Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            Documento:
+                        </div>
+                        <div class="col-2">
+                            <select id="cmbTipoComprobante" class="form-select form-control-sm"  disabled>
+                                <option value="1">Orden de Compra</option></select>
+                        </div>
+                        <div class="col-2">
+                            Proveedor
+                        </div>
+                        <div class="col-2">
+                             <select id="cmbProveedor" class="form-select form-control-sm" style="width: 100%;"></select>
+
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            Numero:
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="form-control form-control-sm"  value="Autogenerado" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            Fecha
+                        </div>
+                        <div class="col-2">
+
+                            <input type="date" class="form-control form-control-sm" id="fecha" name="fecha">
+                        </div>
+                    </div>
+                    <hr/>             
+                    <table class="table table-bordered" id="modalTable">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Categoría</th>
+                                <th>Laboratorio</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Precio Caja</th>
+                                <th>Subtotal</th>
+                                <th>IGV</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se insertarán los productos seleccionados -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-right">Total:</th>
+                                <th id="subtotalGeneral" class="text-right">0.00</th>
+                                <th id="igvGeneral" class="text-right">0.00</th>
+                                <th id="totalGeneral" class="text-right" style="color: #000000">0.00</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="9" id="totalGeneralTexto" >Total:</th>
+
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ¡Acción realizada con éxito!
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        let fechaActual = moment().format('YYYY-MM-DD');
+        $("#fecha").val(fechaActual);
+
+        cargarProveedores();
+        
+        $('#cmbProveedor').select2({
+            placeholder: "Seleccione un proveedor",
+            allowClear: true
+        });
+
+        let tablaSeleccionados = $('#tablaSeleccionados').DataTable({
+            "autoWidth": false,
+            "scrollX": true,
+            "pageLength": 10,
+            "language": {"url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"}
+        });
+
+        let table = $('#comprasTable').DataTable({
+            "autoWidth": false,
+            "columnDefs": [{"width": "200px", "targets": 0, "className": "codigo-wrap"}],
+            "ajax": {"url": "hojatrabajoservlet", "dataSrc": ""},
+            "columns": [
+                {"data": "codigo"},
+                {"data": "categoria"},
+                {"data": "laboratorio"},
+                {"data": "nombre"},
+                {"data": "precioCaja", "render": data => data ?? ''},
+                {"data": "pvp1", "render": data => data ?? ''},
+                {"data": "precioCostoUnitario", "render": data => data ?? ''},
+                {"data": "margenGanancia", "render": data => data ?? ''},
+                {"data": "stockTotal"},
+                {"data": "ventas"},
+                {"data": "mes1"},
+                {"data": "mes2"},
+                {"data": "codigo", "render": data => `<input type='number' class='cant' data-codpro='${data}' min='0' style='width: 50px;'>`}
+            ],
+            "scrollX": true,
+            "pageLength": 100,
+            "language": {"url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"}
+        });
+
+        $(document).on("input", ".cant", function () {
+            $(this).closest("tr").toggleClass("fila-resaltada", $(this).val().trim() !== "");
+        });
+
+        $(document).on("input", ".precio-caja", function () {
+            let fila = $(this).closest("tr");
+            let precioCaja = parseFloat($(this).val()) || 0;
+            let cantidad = parseInt(fila.find("td:eq(4)").text()) || 0;
+            let subtotal = (cantidad * precioCaja).toFixed(2);
+            let igv = (subtotal * 0.18).toFixed(2);
+            let total = (parseFloat(subtotal) + parseFloat(igv)).toFixed(2);
+
+            fila.find(".subtotal").text(subtotal);
+            fila.find(".igv").text(igv);
+            fila.find(".total").text(total);
+            actualizarTotales();
+        });
+
+        $("#modalTable tbody").on("click", ".btnEliminar", function () {
+            $(this).closest("tr").remove();
+            actualizarTotales();
+        });
+
+        $('#btnLimpiarSeleccion').on("click", function () {
+            $(".cant").val("").removeClass("fila-resaltada");
+            $("#modalTable tbody").empty();
+            mostrarAlerta("Se limpió correctamente", "success");
+        });
+
+        $('#btnOrdenCompra').on("click", function () {
+            let filasSeleccionadas = [];
+
+            $("#comprasTable tbody tr").each(function () {
+                let inputCant = $(this).find(".cant").val().trim();
+                if (inputCant && !isNaN(inputCant)) {
+                    let filaHTML = `
+                <tr>
+                    <td>${$(this).find("td:eq(0)").text()}</td>
+                    <td>${$(this).find("td:eq(1)").text()}</td>
+                    <td>${$(this).find("td:eq(2)").text()}</td>
+                    <td>${$(this).find("td:eq(3)").text()}</td>
+                    <td>${inputCant}</td>
+                    <td><input type="number" class="form-control precio-caja" value="${parseFloat($(this).find("td:eq(4)").text()) || 0}" min="0"></td>
+                    <td class="subtotal"></td>
+                    <td class="igv"></td>
+                    <td class="total"></td>
+                    <td><button class="btn btn-danger btn-sm btnEliminar"><i class="fas fa-trash-alt"></i></button></td>
+                </tr>`;
+                    filasSeleccionadas.push(filaHTML);
+                }
+            });
+
+            if (filasSeleccionadas.length) {
+                $("#modalTable tbody").html(filasSeleccionadas.join(''));
+                $("#modalSeleccionados").modal("show");
+                actualizarTotales();
+            } else {
+                mostrarAlerta("No existen datos seleccionados", "error");
+            }
+        });
+
+        function cargarProveedores() {
+            $.ajax({
+                url: 'proveedorservlet',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    let select = $('#cmbProveedor').empty().append('<option value="">Seleccione un proveedor</option>');
+                    data.forEach(proveedor => select.append(`<option value="${proveedor.codiProv}">${proveedor.nombProv}</option>`));
+                },
+                error: function () {
+                    mostrarAlerta("Error al obtener proveedores", "error");
+                }
+            });
+        }
+
+        function actualizarTotales() {
+            let subtotalGeneral = 0, igvGeneral = 0, totalGeneral = 0;
+            $("#modalTable tbody tr").each(function () {
+                let subtotal = parseFloat($(this).find(".subtotal").text()) || 0;
+                let igv = parseFloat($(this).find(".igv").text()) || 0;
+                let total = parseFloat($(this).find(".total").text()) || 0;
+                subtotalGeneral += subtotal;
+                igvGeneral += igv;
+                totalGeneral += total;
+            });
+            $("#subtotalGeneral").text(subtotalGeneral.toFixed(2));
+            $("#igvGeneral").text(igvGeneral.toFixed(2));
+            $("#totalGeneral").text("S/ " + totalGeneral.toFixed(2));
+        }
+
+        function mostrarAlerta(mensaje, icono) {
+            Swal.fire({toast: true, position: "top-end", icon: icono, title: mensaje, showConfirmButton: false, timer: 2000});
+        }
+    });
+</script>

@@ -28,6 +28,10 @@
     <class>pe.gestor.planilla.dto.VistaPlanillaPersona</class>
     <class>pe.gestor.ventas.dto.VentasPharma</class>
     <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
+    <class>pe.gestor.ventas.dto.VistaVentasGraficosXMes</class>
+    <class>pe.gestor.ventas.dto.VistaVentasPorProducto</class>
+    <class>pe.gestor.compras.dto.VistaComprasHojaTrabajo</class>
+    <class>pe.gestor.compras.dto.ComprasProveedor</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.cache.use_second_level_cache" value="false" />
