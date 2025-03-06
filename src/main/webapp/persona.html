@@ -224,6 +224,22 @@
 <script>
     $(document).ready(function () {
 
+        function mostrarAlerta(mensaje, icono) {
+            Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: icono,
+                title: mensaje,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                customClass: {
+                    popup: "swal2-sm"
+                }
+            });
+        }
+
+
 
         console.log("Document ready, initializing table...");
 
@@ -240,7 +256,7 @@
                         return Array.isArray(json) ? json : [];
                     },
                     "error": function (xhr, error, thrown) {
-                        console.error("Error loading data from server:", error, thrown);
+                        mostrarAlerta("Error al cargar los datos de la tabla", "error");
                     }
                 },
                 "columns": [
@@ -330,6 +346,9 @@
             const url = id ? `personaservlet/${id}` : 'personaservlet'; // URL para la creación o edición
             const method = id ? 'PUT' : 'POST'; // Si tiene ID, usamos PUT, sino POST
 
+            const init = id ? "actualizar" : "crear";
+            const mensaje = id ? "Actualizar" : "Crear";
+
             if (!formData.codiAFP) {
                 formData.codiAFP = 0;
             }
@@ -344,12 +363,11 @@
                         // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
                         $('#personaModal').modal('hide');
                         tablePersona.ajax.reload(null, false);
-                        alert('Proceso exitoso'); // Mensaje de éxito
+                        mostrarAlerta(`${mensaje} exitoso`,"success");
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Si ocurre un error, mostramos el mensaje de error
-                    alert('Hubo un error al guardar los datos: ' + error);
+                    mostrarAlerta(`Error al ${init} la persona`,"error");
                 }
             });
         });
@@ -430,6 +448,7 @@
             // Descargar el PDF
             doc.save('Persona.pdf');
         });
+        
         $('#btnExportar').click(function () {
             // Crear un array para almacenar los datos de la tabla
             var tableData = [];
@@ -483,7 +502,6 @@
                 codiUbig: codiUbig
             },
             success: function (data) {
-                console.log("Data del nivel 2 al editar: " + { data });
                 let combo = $('#nivel2');
                 combo.empty();
                 combo.append('<option value="">Seleccione</option>');
@@ -497,7 +515,7 @@
                 }
             },
             error: function () {
-                alert('Error al cargar los datos del nivel 2.');
+                mostrarAlerta("Errro al cargar los datos del nivel 2.", "error");
             }
         })
     }
@@ -524,7 +542,7 @@
                 }
             },
             error: function () {
-                alert("Error al cargar los datos del nivel 3");
+                mostrarAlerta("Errro al cargar los datos del nivel 3.", "error");
             }
         })
     }
@@ -542,7 +560,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de tipo de documento.", "error");
         }
     });
 
@@ -559,7 +577,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de pais de emisión.", "error");
         }
     });
 
@@ -576,7 +594,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de CLDN.", "error");
         }
     });
 
@@ -593,7 +611,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de nacionalidad.", "error");
         }
     });
 
@@ -610,7 +628,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de tipo de via.", "error");
         }
     });
 
@@ -628,7 +646,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los datos del nivel 1.');
+            mostrarAlerta("Errro al cargar los datos de nivel 1.", "error");
         }
     });
 
@@ -650,7 +668,7 @@
                     });
                 },
                 error: function () {
-                    alert('Error al cargar los nombres.');
+                    mostrarAlerta("Errro al cargar los datos de AFP.", "error");
                 }
             });
         } else {
@@ -667,7 +685,7 @@
                     });
                 },
                 error: function () {
-                    alert('Error al cargar los nombres.');
+                    mostrarAlerta("Errro al cargar los datos de AFP.", "error");
                 }
             })
         }
@@ -696,7 +714,7 @@
                     });
                 },
                 error: function () {
-                    alert('Error al cargar los datos del nivel 2.');
+                    mostrarAlerta("Errro al cargar los datos de nivel 2.", "error");
                 }
             });
         } else {
@@ -723,7 +741,7 @@
                     });
                 },
                 error: function () {
-                    alert('Error al cargar los datos del nivel 3.');
+                    mostrarAlerta("Errro al cargar los datos de nivel 3.", "error");
                 }
             });
         } else {
@@ -743,7 +761,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de entidad bancaria.", "error");
         }
     });
 
@@ -775,7 +793,7 @@
             });
         },
         error: function () {
-            alert('Error al cargar los nombres.');
+            mostrarAlerta("Errro al cargar los datos de plantilla.", "error");
         }
     });
 
