@@ -1,0 +1,75 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="h5 mb-0 text-gray-800">Ordenes de Compra</h5>
+        </div>
+        <div class="card-body">
+            <nav class="navbar navbar-light bg-white p-2">  
+                <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
+                    <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
+
+                    <div class="btn-group ms-auto">
+                        <nav class="navbar navbar-light bg-white p-2">
+                            <div class="container-fluid d-flex align-items-center p-0">
+                                <div class="d-flex align-items-center me-3"></div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-sm" id="btnAddPersona">
+                                        <i class="fas fa-fw fa-plus"></i>
+                                        <span>Nuevo</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" id="btnPDF">
+                                        <i class="fas fa-fw fa-print"></i>
+                                        <span>Imprimir</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" id="btnExportar">
+                                        <i class="fas fa-fw fa-file-excel"></i>
+                                        <span>Exportar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </nav>
+
+            <hr/>
+            <table id="comprasTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Estado</th>
+                        <th>Usuario Registro</th>
+                        <th>Fecha Registro</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#comprasTable').DataTable({
+            "ajax": {
+                "url": "ocservlet",
+                "dataSrc": ""
+            },
+            "columns": [
+                {"data": "codiOC"},
+                {"data": "fechOC"},
+                {"data": "codiProv"},
+                {"data": "estdOC"},
+                {"data": "codiUsuaRegi"},
+                {"data": "fechUsuaRegi"}
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
+            }
+        });
+    });
+</script>
+</body>
+</html>

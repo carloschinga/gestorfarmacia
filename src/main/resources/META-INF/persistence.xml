@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <persistence-unit name="gestorFarmacia" transaction-type="RESOURCE_LOCAL">
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>pe.gestor.compras.dto.ComprasVentas</class>
-        <class>pe.gestor.ventas.dto.VentasSede</class>
-        <class>pe.gestor.login.dto.VistaLoginUsuarioRol</class>
-        <class>pe.gestor.planilla.dto.PlanillaTipodoc</class>
-        <class>pe.gestor.asistencia.dto.AsistenciaMarcacion</class>
-        <class>pe.gestor.asistencia.dto.VistaAsistenciaMarcacionpersona</class>
-        <class>pe.gestor.login.dto.LoginRolPagina</class>
-        <class>pe.gestor.login.dto.LoginPagina</class>
-        <class>pe.gestor.login.dto.LoginRol</class>
-        <class>pe.gestor.login.dto.VistaLoginMenuDeta</class>
-        <class>pe.gestor.planilla.dto.PlanillaPlantilla</class>
-        <class>pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle</class>
-        <class>pe.gestor.planilla.dto.PlanillaPersona</class>
-        <class>pe.gestor.login.dto.Empresa</class>
-        <class>pe.gestor.planilla.dto.PlanillaTipovia</class>
-        <class>pe.gestor.planilla.dto.PlanillaNacionalidad</class>
-        <class>pe.gestor.planilla.dto.PlanillaAfp</class>
-        <class>pe.gestor.planilla.dto.PlanillaEntidadbancaria</class>
-        <class>pe.gestor.planilla.dto.PlanillaCldn</class>
-        <class>pe.gestor.planilla.dto.PlanillaPaisemisor</class>
-        <class>pe.gestor.planilla.dto.PlanillaUbigeo</class>
-        <class>pe.gestor.planilla.dto.VistaPlanillaPersona</class>
-        <class>pe.gestor.ventas.dto.VentasPharma</class>
-        <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
-        <class>pe.gestor.ventas.dto.VistaVentasGraficosXMes</class>
-        <class>pe.gestor.ventas.dto.VistaVentasPorProducto</class>
-        <class>pe.gestor.compras.dto.VistaComprasHojaTrabajo</class>
-        <class>pe.gestor.compras.dto.ComprasProveedor</class>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <!--<property name="hibernate.cache.use_second_level_cache" value="false" />
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="gestorFarmacia" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>pe.gestor.compras.dto.ComprasVentas</class>
+    <class>pe.gestor.ventas.dto.VentasSede</class>
+    <class>pe.gestor.login.dto.VistaLoginUsuarioRol</class>
+    <class>pe.gestor.planilla.dto.PlanillaTipodoc</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaMarcacion</class>
+    <class>pe.gestor.asistencia.dto.VistaAsistenciaMarcacionpersona</class>
+    <class>pe.gestor.login.dto.LoginRolPagina</class>
+    <class>pe.gestor.login.dto.LoginPagina</class>
+    <class>pe.gestor.login.dto.LoginRol</class>
+    <class>pe.gestor.login.dto.VistaLoginMenuDeta</class>
+    <class>pe.gestor.planilla.dto.PlanillaPlantilla</class>
+    <class>pe.gestor.planilla.dto.VistaPlanillaPersonaDetalle</class>
+    <class>pe.gestor.planilla.dto.PlanillaPersona</class>
+    <class>pe.gestor.login.dto.Empresa</class>
+    <class>pe.gestor.planilla.dto.PlanillaTipovia</class>
+    <class>pe.gestor.planilla.dto.PlanillaNacionalidad</class>
+    <class>pe.gestor.planilla.dto.PlanillaAfp</class>
+    <class>pe.gestor.planilla.dto.PlanillaEntidadbancaria</class>
+    <class>pe.gestor.planilla.dto.PlanillaCldn</class>
+    <class>pe.gestor.planilla.dto.PlanillaPaisemisor</class>
+    <class>pe.gestor.planilla.dto.PlanillaUbigeo</class>
+    <class>pe.gestor.planilla.dto.VistaPlanillaPersona</class>
+    <class>pe.gestor.ventas.dto.VentasPharma</class>
+    <class>pe.gestor.ventas.dto.VentasProductosPharma</class>
+    <class>pe.gestor.ventas.dto.VistaVentasGraficosXMes</class>
+    <class>pe.gestor.ventas.dto.VistaVentasPorProducto</class>
+    <class>pe.gestor.compras.dto.VistaComprasHojaTrabajo</class>
+    <class>pe.gestor.compras.dto.ComprasProveedor</class>
+    <class>pe.gestor.compras.dto.ComprasOc</class>
+    <class>pe.gestor.compras.dto.ComprasOcd</class>
+    <class>pe.gestor.compras.dto.ComprasOcEstado</class>
+    <class>pe.gestor.compras.dto.VistaComprasOc</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <!--<property name="hibernate.cache.use_second_level_cache" value="false" />
             <property name="hibernate.cache.use_query_cache" value="false" />
             <property name="hibernate.cache.region.factory_class"
                       value="org.hibernate.cache.internal.NoCachingRegionFactory" />-->
-            <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.password" value="" />
-            <!--<property
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <!--<property
             name="javax.persistence.jdbc.password" value="Irondesk1530#$@"/>-->
-        </properties>
-    </persistence-unit>
+    </properties>
+  </persistence-unit>
 </persistence>
