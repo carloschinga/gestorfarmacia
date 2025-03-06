@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ComprasOc.findByCodiProv", query = "SELECT c FROM ComprasOc c WHERE c.codiProv = :codiProv"),
     @NamedQuery(name = "ComprasOc.findByCodiEstdOC", query = "SELECT c FROM ComprasOc c WHERE c.codiEstdOC = :codiEstdOC"),
     @NamedQuery(name = "ComprasOc.findByCodiUsuaRegi", query = "SELECT c FROM ComprasOc c WHERE c.codiUsuaRegi = :codiUsuaRegi"),
-    @NamedQuery(name = "ComprasOc.findByFechUsuaRegi", query = "SELECT c FROM ComprasOc c WHERE c.fechUsuaRegi = :fechUsuaRegi")})
+    @NamedQuery(name = "ComprasOc.findByFechUsuaRegi", query = "SELECT c FROM ComprasOc c WHERE c.fechUsuaRegi = :fechUsuaRegi"),
+    @NamedQuery(name = "ComprasOc.findByActiOC", query = "SELECT c FROM ComprasOc c WHERE c.actiOC = :actiOC")})
 public class ComprasOc implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,6 +66,10 @@ public class ComprasOc implements Serializable {
     @Column(name = "fechUsuaRegi")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechUsuaRegi;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "actiOC")
+    private short actiOC;
 
     public ComprasOc() {
     }
@@ -73,13 +78,14 @@ public class ComprasOc implements Serializable {
         this.codiOC = codiOC;
     }
 
-    public ComprasOc(Integer codiOC, Date fechOC, int codiProv, int codiEstdOC, int codiUsuaRegi, Date fechUsuaRegi) {
+    public ComprasOc(Integer codiOC, Date fechOC, int codiProv, int codiEstdOC, int codiUsuaRegi, Date fechUsuaRegi, short actiOC) {
         this.codiOC = codiOC;
         this.fechOC = fechOC;
         this.codiProv = codiProv;
         this.codiEstdOC = codiEstdOC;
         this.codiUsuaRegi = codiUsuaRegi;
         this.fechUsuaRegi = fechUsuaRegi;
+        this.actiOC = actiOC;
     }
 
     public Integer getCodiOC() {
@@ -128,6 +134,14 @@ public class ComprasOc implements Serializable {
 
     public void setFechUsuaRegi(Date fechUsuaRegi) {
         this.fechUsuaRegi = fechUsuaRegi;
+    }
+
+    public short getActiOC() {
+        return actiOC;
+    }
+
+    public void setActiOC(short actiOC) {
+        this.actiOC = actiOC;
     }
 
     @Override

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "VistaComprasOc.findByCodiOC", query = "SELECT v FROM VistaComprasOc v WHERE v.codiOC = :codiOC"),
     @NamedQuery(name = "VistaComprasOc.findByFechOC", query = "SELECT v FROM VistaComprasOc v WHERE v.fechOC = :fechOC"),
     @NamedQuery(name = "VistaComprasOc.findByCodiProv", query = "SELECT v FROM VistaComprasOc v WHERE v.codiProv = :codiProv"),
+    @NamedQuery(name = "VistaComprasOc.findByNombProv", query = "SELECT v FROM VistaComprasOc v WHERE v.nombProv = :nombProv"),
     @NamedQuery(name = "VistaComprasOc.findByCodiEstdOC", query = "SELECT v FROM VistaComprasOc v WHERE v.codiEstdOC = :codiEstdOC"),
     @NamedQuery(name = "VistaComprasOc.findByNombEstdOC", query = "SELECT v FROM VistaComprasOc v WHERE v.nombEstdOC = :nombEstdOC"),
     @NamedQuery(name = "VistaComprasOc.findByActiOC", query = "SELECT v FROM VistaComprasOc v WHERE v.actiOC = :actiOC"),
@@ -53,6 +54,11 @@ public class VistaComprasOc implements Serializable {
     @NotNull
     @Column(name = "codiProv")
     private int codiProv;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "nombProv")
+    private String nombProv;
     @Basic(optional = false)
     @NotNull
     @Column(name = "codiEstdOC")
@@ -101,6 +107,14 @@ public class VistaComprasOc implements Serializable {
 
     public void setCodiProv(int codiProv) {
         this.codiProv = codiProv;
+    }
+
+    public String getNombProv() {
+        return nombProv;
+    }
+
+    public void setNombProv(String nombProv) {
+        this.nombProv = nombProv;
     }
 
     public int getCodiEstdOC() {
