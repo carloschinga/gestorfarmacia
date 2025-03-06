@@ -1,0 +1,247 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="h5 mb-0 text-gray-800">Ordenes de Compra</h5>
+        </div>
+        <div class="card-body">
+            <nav class="navbar navbar-light bg-white p-2">  
+                <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
+                    <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
+
+                    <div class="btn-group ms-auto">
+                        <nav class="navbar navbar-light bg-white p-2">
+                            <div class="container-fluid d-flex align-items-center p-0">
+                                <div class="d-flex align-items-center me-3"></div>
+
+                                <div class="btn-group">
+
+                                    <button class="btn btn-primary btn-sm" id="btnPDF">
+                                        <i class="fas fa-fw fa-print"></i>
+                                        <span>Imprimir</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" id="btnExportar">
+                                        <i class="fas fa-fw fa-file-excel"></i>
+                                        <span>Exportar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </nav>
+
+            <hr/>
+            <table id="comprasTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Estado</th>
+                        <th>Activo</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#comprasTable').DataTable({
+            "ajax": {
+                "url": "ocservlet",
+                "dataSrc": ""
+            },
+            "columns": [
+                {"data": "codiOC"},
+                {"data": "fechOC"},
+                {"data": "nombProv"},
+                {"data": "nombEstdOC"},
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (row && row.codiOC) {
+                            return `<button class="btn btn-primary btnPrint" data-id="${row.codiOC}">
+                                <i class="fas fa-print"></i>
+                            </button>`;
+                        }
+                        return '';
+                    }
+                }
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
+            }
+        });
+        $(document).on("click", ".btnPrint", function () {
+            let codiOC = $(this).data("id");
+
+            $.ajax({
+                url: `ocprintservlet/${codiOC}`, // Se asume que el servlet devuelve la orden específica
+                type: "GET",
+                dataType: "json",
+                success: function (ordenCompra) {
+                    if (ordenCompra) {
+                        generarPDF(ordenCompra);
+                    } else {
+                        alert("No se encontraron datos para la orden de compra.");
+                    }
+                },
+                error: function () {
+                    alert("Error al obtener los datos de la orden de compra.");
+                }
+            });
+        });
+        $('#btnPDF').click(function () {
+            const {jsPDF} = window.jspdf;
+            const doc = new jsPDF();
+
+            // Obtener la fecha y hora actual
+            const fechaActual = new Date();
+            const fecha = fechaActual.toLocaleDateString(); // Fecha en formato local
+            const hora = fechaActual.toLocaleTimeString(); // Hora en formato local
+            const fechaHora = `${fecha} ${hora}`;
+
+            // Configuración del nombre del sistema
+            const nombreSistema = 'Software de Planilla';
+
+            // Tamaño de página
+            const pageWidth = doc.internal.pageSize.getWidth();
+
+            // Agregar fecha y hora (esquina izquierda)
+            doc.setFontSize(8);
+            doc.text(fechaHora, 10, 10); // Posición (X: izquierda, Y: superior)
+
+            // Agregar nombre del sistema (esquina derecha)
+            const textWidthSistema = doc.getTextWidth(nombreSistema);
+            doc.text(nombreSistema, pageWidth - textWidthSistema - 10, 10); // Posición (X: derecha, Y: superior)
+
+            // Configuración del título centrado
+            const titulo = 'LISTADO DE ORDENES DE COMPRA';
+            const textWidthTitulo = doc.getTextWidth(titulo);
+            const textX = (pageWidth - textWidthTitulo) / 2;
+            doc.setFontSize(12); // Tamaño de fuente más grande para el título
+            doc.text(titulo, textX, 20);
+
+            // Obtener encabezados de la tabla
+            const headers = [];
+
+            $('#comprasTable thead th').each(function (i, header) {
+                // Ignorar el último encabezado
+                if (i < $('#comprasTable thead th').length - 1) {
+                    headers.push($(header).text());
+                }
+            });
+
+
+            // Obtener filas de la tabla
+            const rows = [];
+            $('#comprasTable tbody tr').each(function () {
+                const row = [];
+                $(this).find('td').each(function (index) {
+                    // Omite la última columna
+                    if (index < $(this).parent().find('td').length - 1) {
+                        row.push($(this).text());
+                    }
+                });
+                rows.push(row);
+            });
+
+
+
+
+            // Generar la tabla en el PDF
+            doc.autoTable({
+                head: [headers],
+                body: rows,
+                startY: 30 // Comienza después del título
+            });
+
+            // Descargar el PDF
+            doc.save('oc.pdf');
+        });
+        $('#btnExportar').click(function () {
+            // Crear un array para almacenar los datos de la tabla
+            var tableData = [];
+
+            // Agregar los encabezados de la tabla como la primera fila
+            var headers = [];
+            $('#comprasTable thead th').each(function (i, header) {
+                // Ignorar el último encabezado
+                if (i < $('#personaTable thead th').length - 1) {
+                    headers.push($(header).text());
+                }
+            });
+            tableData.push(headers);
+
+            // Agregar las filas de datos de la tabla
+            $('#comprasTable tbody tr').each(function () {
+                var rowData = [];
+                $(this).find('td').each(function (i, cell) {
+                    // Ignorar la última columna
+                    if (i < $(this).parent().find('td').length - 1) {
+                        rowData.push($(cell).text());
+                    }
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear una hoja de trabajo de Excel a partir del array de datos
+            var ws = XLSX.utils.aoa_to_sheet(tableData);
+
+            // Crear un libro de trabajo (workbook)
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Ordenes de Compra');
+
+            // Guardar el archivo Excel
+            XLSX.writeFile(wb, 'oc.xlsx');
+        });
+        
+        const {jsPDF} = window.jspdf;
+        function generarPDF(ordenCompra) {
+            const doc = new jsPDF();
+
+            // Título
+            doc.setFontSize(16);
+            doc.text("Orden de Compra", 105, 20, null, null, "center");
+
+            // Datos de la orden
+            doc.setFontSize(12);
+            doc.text(`Número de Orden: ${ordenCompra.codiOC}`, 20, 40);
+            doc.text(`Fecha: ${ordenCompra.fechOC}`, 20, 50);
+            doc.text(`Proveedor: ${ordenCompra.nombProv}`, 20, 60);
+            doc.text(`Estado: ${ordenCompra.nombEstdOC}`, 20, 70);
+
+            // Encabezado de la tabla
+            let startY = 90;
+            doc.setFontSize(10);
+            doc.text("Producto", 20, startY);
+            doc.text("Cantidad", 80, startY);
+            doc.text("Precio", 120, startY);
+            doc.text("Total", 160, startY);
+
+            // Línea separadora
+            doc.line(20, startY + 2, 180, startY + 2);
+
+            // Agregar productos
+            startY += 10;
+            ordenCompra.detalles.forEach((detalle) => {
+                doc.text(detalle.nombProd, 20, startY);
+                doc.text(detalle.cantiProd.toString(), 80, startY);
+                doc.text(`S/ ${detalle.precProd.toFixed(2)}`, 120, startY);
+                doc.text(`S/ ${detalle.totaProd.toFixed(2)}`, 160, startY);
+                startY += 10;
+            });
+
+            // Total general
+            doc.setFontSize(12);
+            doc.text(`Total General: S/ ${ordenCompra.total.toFixed(2)}`, 140, startY + 10);
+
+            // Guardar el PDF
+            doc.save(`OrdenCompra_${ordenCompra.codiOC}.pdf`);
+        }
+    });
+</script>
+</body>
+</html>
