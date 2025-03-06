@@ -7,24 +7,22 @@
             <nav class="navbar navbar-light bg-white p-2">
                 <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
                     <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
-
                     <div class="btn-group ms-auto">
                         <nav class="navbar navbar-light bg-white p-2">
                             <div class="container-fluid d-flex align-items-center p-0">
                                 <div class="d-flex align-items-center me-3"></div>
-
                                 <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" id="btnAddPersona">
-                                        <i class="fas fa-fw fa-plus"></i>
-                                        <span>Nuevo</span>
+                                        <i class="fas fa-fw fa-plus small"></i>
+                                        <span class="small">Nuevo</span>
                                     </button>
                                     <button class="btn btn-primary btn-sm" id="btnPDF">
-                                        <i class="fas fa-fw fa-print"></i>
-                                        <span>Imprimir</span>
+                                        <i class="fas fa-fw fa-print small"></i>
+                                        <span class="small">Imprimir</span>
                                     </button>
                                     <button class="btn btn-primary btn-sm" id="btnExportar">
-                                        <i class="fas fa-fw fa-file-excel"></i>
-                                        <span>Exportar</span>
+                                        <i class="fas fa-fw fa-file-excel small"></i>
+                                        <span class="small">Exportar</span>
                                     </button>
                                 </div>
                             </div>
@@ -34,7 +32,7 @@
             </nav>
 
             <hr />
-            <table id="personaTable" class="table table-striped table-bordered w-100">
+            <table id="personaTable" class="table table-striped table-bordered w-100 small">
                 <thead>
                     <tr>
                         <th>Tipo Doc</th>
@@ -49,157 +47,158 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form id="personaForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="personaModalLabel">Agregar Persona</h5>
+                    <h5 class="modal-title small" id="personaModalLabel">Agregar Persona</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="codiPers" name="codiPers">
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="codiTipoDoc" class="form-label">Tipo de Documento</label>
-                            <select class="form-select" id="codiTipoDoc" name="codiTipoDoc" required>
+                            <label for="codiTipoDoc" class="form-label small">Tipo de Documento</label>
+                            <select class="form-select form-control-sm" id="codiTipoDoc" name="codiTipoDoc" required>
                                 <option value="">Selecciona un tipo de documento</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="numeDocu" class="form-label d-block mb-2">Documento</label>
-                            <input type="text" class="form-control" id="numeDocu" name="numeDocu" required>
+                            <label for="numeDocu" class="form-label small d-block mb-2">Documento</label>
+                            <input type="text" class="form-control form-control-sm" id="numeDocu" name="numeDocu"
+                                required>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="appaPers" class="form-label">Apellido Paterno</label>
-                            <input type="text" class="form-control" id="appaPers" name="appaPers" required>
+                            <label for="appaPers" class="form-label small">Apellido Paterno</label>
+                            <input type="text" class="form-control form-control-sm" id="appaPers" name="appaPers"
+                                required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="apmaPers" class="form-label">Apellido Materno</label>
-                            <input type="text" class="form-control" id="apmaPers" name="apmaPers" required>
+                            <label for="apmaPers" class="form-label small">Apellido Materno</label>
+                            <input type="text" class="form-control form-control-sm" id="apmaPers" name="apmaPers"
+                                required>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="nombPers" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombPers" name="nombPers" required>
+                            <label for="nombPers" class="form-label small">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" id="nombPers" name="nombPers"
+                                required>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiNaci" class="form-label">Código de Nacionalidad</label>
-                            <select class="form-select" id="codiNaci" name="codiNaci" required>
+                            <label for="codiNaci" class="form-label small">Código de Nacionalidad</label>
+                            <select class="form-select form-control-sm" id="codiNaci" name="codiNaci" required>
                                 <option value="">Selecciona un código</option>
-                                <!-- Agregar más opciones según sea necesario -->
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="sexoPers" class="form-label">Sexo</label>
-                            <select class="form-select" id="sexoPers" name="sexoPers" required>
+                            <label for="sexoPers" class="form-label small">Sexo</label>
+                            <select class="form-select form-control-sm" id="sexoPers" name="sexoPers" required>
                                 <option value="">Selecciona un código</option>
                                 <option value="M">M</option>
                                 <option value="F">F</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiPaisEmis" class="form-label">País de Emisión</label>
-                            <select class="form-select" id="codiPaisEmis" name="codiPaisEmis" required>
+                            <label for="codiPaisEmis" class="form-label small">País de Emisión</label>
+                            <select class="form-select form-control-sm" id="codiPaisEmis" name="codiPaisEmis" required>
                                 <option value="">Selecciona un país de emisión</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiCLDN" class="form-label">Código CLDN</label>
-                            <select class="form-select" id="codiCLDN" name="codiCLDN" required>
+                            <label for="codiCLDN" class="form-label small">Código CLDN</label>
+                            <select class="form-select form-control-sm" id="codiCLDN" name="codiCLDN" required>
                                 <option value="">Selecciona un código</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="numeCelu" class="form-label">Número de Celular</label>
-                            <input type="text" class="form-control" id="numeCelu" name="numeCelu">
+                            <label for="numeCelu" class="form-label small">Número de Celular</label>
+                            <input type="text" class="form-control form-control-sm" id="numeCelu" name="numeCelu">
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="mailPers" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="mailPers" name="mailPers">
+                            <label for="mailPers" class="form-label small">Correo Electrónico</label>
+                            <input type="email" class="form-control form-control-sm" id="mailPers" name="mailPers">
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiTipoVia" class="form-label">Tipo de Vía</label>
-                            <select class="form-select" id="codiTipoVia" name="codiTipoVia" required>
+                            <label for="codiTipoVia" class="form-label small">Tipo de Vía</label>
+                            <select class="form-select form-control-sm" id="codiTipoVia" name="codiTipoVia" required>
                                 <option value="">Selecciona un tipo de vía</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="nombVia" class="form-label">Nombre de la Vía</label>
-                            <input type="text" class="form-control" id="nombVia" name="nombVia">
+                            <label for="nombVia" class="form-label small">Nombre de la Vía</label>
+                            <input type="text" class="form-control form-control-sm" id="nombVia" name="nombVia">
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="numeVia" class="form-label">Número de la Vía</label>
-                            <input type="text" class="form-control" id="numeVia" name="numeVia">
+                            <label for="numeVia" class="form-label small">Número de la Vía</label>
+                            <input type="text" class="form-control form-control-sm" id="numeVia" name="numeVia">
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="depaPers" class="form-label">Departamento</label>
-                            <input type="text" class="form-control" id="depaPers" name="depaPers">
+                            <label for="depaPers" class="form-label small">Departamento</label>
+                            <input type="text" class="form-control form-control-sm" id="depaPers" name="depaPers">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="nivel1" class="form-label">Departamento</label>
-                            <select class="form-select" id="nivel1" name="nivel1" required>
+                            <label for="nivel1" class="form-label small">Departamento</label>
+                            <select class="form-select form-control-sm" id="nivel1" name="nivel1" required>
                                 <option value="">Selecciona un nivel 1</option>
                             </select>
                         </div>
-
-
                         <div class="col-md-4 mb-4">
-                            <label for="nivel2" class="form-label">Provincia</label>
-                            <select class="form-select" id="nivel2" name="nivel2" required disabled>
+                            <label for="nivel2" class="form-label small">Provincia</label>
+                            <select class="form-select form-control-sm" id="nivel2" name="nivel2" required disabled>
                                 <option value="">Selecciona un nivel 2</option>
                             </select>
                         </div>
-
-
                         <div class="col-md-4 mb-4">
-                            <label for="nivel3" class="form-label">Distrito</label>
-                            <select class="form-select" id="nivel3" name="nivel3" required disabled>
+                            <label for="nivel3" class="form-label small">Distrito</label>
+                            <select class="form-select form-control-sm" id="nivel3" name="nivel3" required disabled>
                                 <option value="">Selecciona un nivel 3</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="snpPers" class="form-label">SNP</label>
-                            <select class="form-select" id="snpPers" name="snpPers" required>
+                            <label for="snpPers" class="form-label small">SNP</label>
+                            <select class="form-select form-control-sm" id="snpPers" name="snpPers" required>
                                 <option value="">Selecciona un código</option>
                                 <option value="true">Sí</option>
                                 <option value="false">No</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Codigo AFP</label>
-                            <select class="form-select" id="codiAFP" name="codiAFP" disabled>
+                            <label for="codiEntiBanc" class="form-label small">Codigo AFP</label>
+                            <select class="form-select form-control-sm" id="codiAFP" name="codiAFP" disabled>
                                 <option value="0">Selecciona un código</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Entidad Bancaria</label>
-                            <select class="form-select" id="codiEntiBanc" name="codiEntiBanc" required>
+                            <label for="codiEntiBanc" class="form-label small">Entidad Bancaria</label>
+                            <select class="form-select form-control-sm" id="codiEntiBanc" name="codiEntiBanc" required>
                                 <option value="">Selecciona un código</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Codigo Plantilla</label>
-                            <select class="form-select" id="codiPlantilla" name="codiPlantilla" required>
+                            <label for="codiEntiBanc" class="form-label small">Codigo Plantilla</label>
+                            <select class="form-select form-control-sm" id="codiPlantilla" name="codiPlantilla"
+                                required>
                                 <option value="">Selecciona un código</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="actiPers" class="form-label">Activo</label>
-                            <select class="form-select" id="actiPers" name="actiPers" required>
+                            <label for="actiPers" class="form-label small">Activo</label>
+                            <select class="form-select form-control-sm" id="actiPers" name="actiPers" required>
                                 <option value="">Selecciona un código</option>
                                 <option value="true">Sí</option>
                                 <option value="false">No</option>
@@ -209,11 +208,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-fw fa-undo"></i>Cancelar
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fas fa-fw fa-undo small"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-fw fa-save"></i>Guardar
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-fw fa-save small"></i>Guardar
                     </button>
                 </div>
             </form>
@@ -312,7 +311,7 @@
                 $('#nombVia').val(data.nombVia);
                 $('#numeVia').val(data.numeVia);
                 $('#depaPers').val(data.depaPers);
-                
+
                 $('#snpPers').val(data.snpPers ? 'true' : 'false');
                 $('#actiPers').val(data.actiPers ? 'true' : 'false');
                 $('#codiEntiBanc').val(data.codiEntiBanc);
@@ -363,11 +362,11 @@
                         // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
                         $('#personaModal').modal('hide');
                         tablePersona.ajax.reload(null, false);
-                        mostrarAlerta(`${mensaje} exitoso`,"success");
+                        mostrarAlerta(`${mensaje} exitoso`, "success");
                     }
                 },
                 error: function (xhr, status, error) {
-                    mostrarAlerta(`Error al ${init} la persona`,"error");
+                    mostrarAlerta(`Error al ${init} la persona`, "error");
                 }
             });
         });
@@ -448,7 +447,7 @@
             // Descargar el PDF
             doc.save('Persona.pdf');
         });
-        
+
         $('#btnExportar').click(function () {
             // Crear un array para almacenar los datos de la tabla
             var tableData = [];
