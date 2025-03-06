@@ -4,7 +4,7 @@
             <h5 class="h5 mb-0 text-gray-800">Gestión del Personal</h5>
         </div>
         <div class="card-body">
-            <nav class="navbar navbar-light bg-white p-2">  
+            <nav class="navbar navbar-light bg-white p-2">
                 <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
                     <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
 
@@ -33,14 +33,13 @@
                 </div>
             </nav>
 
-            <hr/>
-            <table id="personaTable" class="table table-striped table-bordered w-100" >
+            <hr />
+            <table id="personaTable" class="table table-striped table-bordered w-100">
                 <thead>
                     <tr>
                         <th>Tipo Doc</th>
                         <th>Documento</th>
                         <th>Nombre Completo</th>
-                        <th>Activo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -147,21 +146,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <label for="nivel1" class="form-label">Nivel 1</label>
+                            <label for="nivel1" class="form-label">Departamento</label>
                             <select class="form-select" id="nivel1" name="nivel1" required>
                                 <option value="">Selecciona un nivel 1</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4 mb-4">
-                            <label for="nivel2" class="form-label">Nivel 2</label>
+                            <label for="nivel2" class="form-label">Provincia</label>
                             <select class="form-select" id="nivel2" name="nivel2" required disabled>
                                 <option value="">Selecciona un nivel 2</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4 mb-4">
-                            <label for="nivel3" class="form-label">Nivel 3</label>
+                            <label for="nivel3" class="form-label">Distrito</label>
                             <select class="form-select" id="nivel3" name="nivel3" required disabled>
                                 <option value="">Selecciona un nivel 3</option>
                             </select>
@@ -179,7 +178,7 @@
                         <div class="col-md-4 mb-4">
                             <label for="codiEntiBanc" class="form-label">Codigo AFP</label>
                             <select class="form-select" id="codiAFP" name="codiAFP" disabled>
-                                <option value="Ninguno">Selecciona un código</option>
+                                <option value="0">Selecciona un código</option>
                             </select>
                         </div>
                     </div>
@@ -219,45 +218,66 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
-        // Inicializar la tabla con DataTables
-        var tablePersona = $('#personaTable').DataTable({
-            "ajax": {
-                "url": "personaservlet", // URL al servlet que devuelve los datos en formato JSON
-                "type": "GET",
-                "dataSrc": function (json) {
-                    console.log({json});
-                    return json;  // Retorna el array de objetos para que DataTable lo use
-                }
-            },
-            "columns": [
-                {"data": "nombTipoDoc"}, // Documento
-                {"data": "numeDocu"}, // Documento               
-                {"data": "nombre_completo"}, // Nombre Completo
-                {data: 'actiPers', render: data => data === 1 ? 'Sí' : 'No'},
-                {
-                    data: null,
-                    render: (data, type, row) =>
-                            `<button class="btn btn-primary btnEdit" data-id="${row.codiPers}">
-                    <i class="fas fa-edit"></i>
-                </button>`
-                }
-            ],
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"  // Para traducir DataTables al español
-            }
-        });
 
 
-// Abrir modal para editar
+        console.log("Document ready, initializing table...");
+
+        // Initialize the DataTable with proper error handling
+        try {
+            var tablePersona = $('#personaTable').DataTable({
+                "processing": true,
+                "ajax": {
+                    "url": "personaservlet",
+                    "type": "GET",
+                    "dataSrc": function (json) {
+                        console.log("Datos recibidos:", json);
+                        // Make sure to return an array even if the response is empty or malformed
+                        return Array.isArray(json) ? json : [];
+                    },
+                    "error": function (xhr, error, thrown) {
+                        console.error("Error loading data from server:", error, thrown);
+                    }
+                },
+                "columns": [
+                    { "data": "nombTipoDoc" },
+                    { "data": "numeDocu" },
+                    { "data": "nombre_completo" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (row && row.codiPers) {
+                                return `<button class="btn btn-primary btnEdit" data-id="${row.codiPers}">
+                                <i class="fas fa-edit"></i>
+                            </button>`;
+                            }
+                            return '';
+                        }
+                    }
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+
+            tablePersona.ajax.reload();
+
+            console.log("DataTable initialized successfully");
+        } catch (error) {
+            console.error("Error initializing DataTable:", error);
+        }
+
+
+        // Abrir modal para editar
         $('#personaTable tbody').on('click', '.btnEdit', function () {
-            const id = $(this).data('id'); // Obtener el ID de la persona a editar
+            const id = $(this).data('id');
 
             $.get(`personaservlet/${id}`, function (data) {
 
-                console.log({data});
-                // Llenar el formulario con los datos de la persona
+                console.log({ data });
+
                 $('#codiPers').val(data.codiPers);
                 $('#codiTipoDoc').val(data.codiTipoDoc);
                 $('#numeDocu').val(data.numeDocu);
@@ -274,13 +294,14 @@
                 $('#nombVia').val(data.nombVia);
                 $('#numeVia').val(data.numeVia);
                 $('#depaPers').val(data.depaPers);
-                
+
                 $('#snpPers').val(data.snpPers ? 'true' : 'false');
                 $('#actiPers').val(data.actiPers ? 'true' : 'false');
                 $('#codiEntiBanc').val(data.codiEntiBanc);
                 $('#codiPlantilla').val(data.codiPlantilla);
 
-                if (data.codiAFP) {
+                // Comparar data.codiAfp con null para verificar
+                if (data.codiAFP !== null) {
                     $('#codiAFP').prop('disabled', false);
                 }
                 $('#codiAFP').val(data.codiAFP);
@@ -294,19 +315,22 @@
                     cargarNivel2(data.nivel1, data.nivel2, data.nivel3);
                 }
 
-                $('#personaModalLabel').text('Editar Persona'); // Cambiar el título del modal a "Editar"
-                $('#personaModal').modal('show'); // Mostrar el modal
+                $('#personaModalLabel').text('Editar Persona');
+                $('#personaModal').modal('show');
             });
         });
 
         // Agregar o Editar Persona
-        // Función para manejar la creación o edición de la persona
         $('#personaForm').submit(function (e) {
             e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
             const formData = $(this).serialize(); // Serializar los datos del formulario
             const id = $('#codiPers').val(); // Obtener el ID (si existe) del formulario
             const url = id ? `personaservlet/${id}` : 'personaservlet'; // URL para la creación o edición
             const method = id ? 'PUT' : 'POST'; // Si tiene ID, usamos PUT, sino POST
+
+            if (!formData.codiAFP) {
+                formData.codiAFP = 0;
+            }
 
             // console.log(formData);
             $.ajax({
@@ -327,7 +351,7 @@
                 }
             });
         });
-        
+
         $('#btnAddPersona').click(function () {
             // Limpiar los campos del formulario
             $('#personaForm')[0].reset();
@@ -337,7 +361,7 @@
         });
 
         $('#btnPDF').click(function () {
-            const {jsPDF} = window.jspdf;
+            const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             // Obtener la fecha y hora actual
@@ -457,7 +481,7 @@
                 codiUbig: codiUbig
             },
             success: function (data) {
-                console.log("Data del nivel 2 al editar: " + {data});
+                console.log("Data del nivel 2 al editar: " + { data });
                 let combo = $('#nivel2');
                 combo.empty();
                 combo.append('<option value="">Seleccione</option>');
@@ -485,7 +509,7 @@
                 codiUbig: codiUbig
             },
             success: function (data) {
-                console.log("Data del nivel 3 al editar: " + {data});
+                console.log("Data del nivel 3 al editar: " + { data });
                 let combo = $('#nivel3');
                 combo.empty();
                 combo.append('<option value="">Seleccione</option>');
@@ -592,7 +616,7 @@
     $.ajax({
         url: 'ubigeoservlet',
         type: 'GET',
-        data: { nivel: 1},
+        data: { nivel: 1 },
         success: function (data) {
             let combo = $('#nivel1');
             combo.empty();
@@ -605,7 +629,7 @@
             alert('Error al cargar los datos del nivel 1.');
         }
     });
-    
+
 
     function cargarAFP() {
         const snp = $('#snpPers').val();
@@ -613,20 +637,20 @@
         if (snp === "false") {
             $('#codiAFP').prop('disabled', false);
             $.ajax({
-            url: 'afpservlet',
-            type: 'GET',
-            success: function (data) {
-            let combo = $('#codiAFP');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+                url: 'afpservlet',
+                type: 'GET',
+                success: function (data) {
+                    let combo = $('#codiAFP');
+                    combo.empty();
+                    combo.append('<option value="">Selecciona un código</option>');
+                    $.each(data, function (index, nombre) {
+                        combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Error al cargar los nombres.');
+                }
             });
-        },
-        error: function () {
-            alert('Error al cargar los nombres.');
-        }
-    });
         } else {
             $('#codiAFP').prop('disabled', true).empty().append('<option value="">Selecciona un código</option>');
             $.ajax({
@@ -660,7 +684,7 @@
             $.ajax({
                 url: 'ubigeoservlet',
                 type: 'GET',
-                data: { nivel: 2, codiUbig: codiUbig},
+                data: { nivel: 2, codiUbig: codiUbig },
                 success: function (data) {
                     let combo = $('#nivel2');
                     combo.empty();
@@ -687,7 +711,7 @@
             $.ajax({
                 url: 'ubigeoservlet',
                 type: 'GET',
-                data: { nivel: 3, codiUbig: codiUbig},
+                data: { nivel: 3, codiUbig: codiUbig },
                 success: function (data) {
                     let combo = $('#nivel3');
                     combo.empty();
@@ -756,4 +780,5 @@
 </script>
 
 </body>
+
 </html>

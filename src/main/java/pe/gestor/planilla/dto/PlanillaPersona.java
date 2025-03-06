@@ -231,7 +231,7 @@ public class PlanillaPersona implements Serializable {
     @NotNull
     @Column(name = "snpPers")
     private boolean snpPers;
-    @Column(name = "codiAFP")
+    @Column(name = "codiAFP", nullable = true)
     private Integer codiAFP;
     // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
     // consider using these annotations to enforce field validation

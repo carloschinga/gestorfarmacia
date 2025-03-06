@@ -74,6 +74,10 @@ public class PersonaServlet extends HttpServlet {
 
                     List<VistaPlanillaPersona> personaList = q.getResultList();
 
+                    for (VistaPlanillaPersona vistaPlanillaPersona : personaList) {
+                        System.out.println(vistaPlanillaPersona.getNombreCompleto());
+                    }
+
                     JSONArray jsonArray = new JSONArray();
                     for (VistaPlanillaPersona persona : personaList) {
                         JSONObject jsonObject = new JSONObject();
@@ -128,9 +132,9 @@ public class PersonaServlet extends HttpServlet {
                 jsonObject.put("nivel2", ubiNive2.getCodiUbig());
                 jsonObject.put("nivel3", vpm.getCodiUbig());
                 jsonObject.put("snpPers", vpm.getSnpPers());
+                jsonObject.put("codiAFP", vpm.getCodiAFP());
                 jsonObject.put("actiPers", vpm.getActiPers());
                 jsonObject.put("codiEntiBanc", vpm.getCodiEntiBanc());
-                jsonObject.put("codiAFP", vpm.getCodiAFP());
                 jsonObject.put("codiPlantilla", vpm.getCodiPlant());
 
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -168,7 +172,6 @@ public class PersonaServlet extends HttpServlet {
             boolean snpPers = Boolean.parseBoolean(request.getParameter("snpPers"));
             boolean actiPers = Boolean.parseBoolean(request.getParameter("actiPers"));
             String codiEntiBanc = request.getParameter("codiEntiBanc");
-            int codiAFP = Integer.parseInt(request.getParameter("codiAFP"));
             int codiPlant = Integer.parseInt(request.getParameter("codiPlantilla"));
 
             // Crear instancia de Persona
@@ -190,10 +193,19 @@ public class PersonaServlet extends HttpServlet {
             persona.setNumeVia(numeVia != null ? numeVia : "");
             persona.setDepaPers(depaPers != null ? depaPers : "");
             persona.setCodiUbig(codiUbig);
+            persona.setCodiEntiBanc(codiEntiBanc);
             persona.setSnpPers(snpPers);
-            persona.setCodiAFP(codiAFP);
             persona.setCodiPlant(codiPlant);
             persona.setActiPers(actiPers);
+
+            // Solo establecer codiAFP si snpPers es false
+            if (!snpPers) {
+                String strCodiAFP = request.getParameter("codiAFP");
+                if (strCodiAFP != null && !strCodiAFP.isEmpty()) {
+                    persona.setCodiAFP(Integer.parseInt(strCodiAFP));
+                }
+            }
+
             // Guardar persona
             personaDAO.create(persona);
 
@@ -256,6 +268,8 @@ public class PersonaServlet extends HttpServlet {
                 return;
             }
 
+            JSONObject jsonResponse = new JSONObject();
+
             // Actualizar los datos de la persona existente
             personaExistente.setCodiTipoDoc(parameters.get("codiTipoDoc"));
             personaExistente.setNumeDocu(parameters.get("numeDocu"));
@@ -276,18 +290,21 @@ public class PersonaServlet extends HttpServlet {
             personaExistente.setSnpPers(Boolean.parseBoolean(parameters.get("snpPers")));
             personaExistente.setActiPers(Boolean.parseBoolean(parameters.get("actiPers")));
             personaExistente.setCodiEntiBanc(parameters.get("codiEntiBanc"));
-            personaExistente.setCodiAFP(Integer.parseInt(parameters.get("codiAFP")));
             personaExistente.setCodiPlant(Integer.parseInt(parameters.get("codiPlantilla")));
 
-            // Log para verificar los datos antes de la actualización
-            System.out.println("Datos a actualizar: " + personaExistente);
+            // Solo actualizar codiAFP si snpPers es false
+            if (!personaExistente.getSnpPers()) {
+                personaExistente.setCodiAFP(Integer.parseInt(parameters.get("codiAFP")));
+                jsonResponse.put("codiAFP", personaExistente.getCodiAFP());
+            } else {
+                personaExistente.setCodiAFP(null);
+            }
 
             // Intentar actualizar la persona en la base de datos
             personaDAO.edit(personaExistente);
 
             // Responder con éxito
             response.setStatus(HttpServletResponse.SC_OK);
-            JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("success", true);
             jsonResponse.put("codiPers", personaExistente.getCodiPers());
             jsonResponse.put("codiTipoDoc", personaExistente.getCodiTipoDoc());
@@ -309,7 +326,6 @@ public class PersonaServlet extends HttpServlet {
             jsonResponse.put("snpPers", personaExistente.getSnpPers());
             jsonResponse.put("actiPers", personaExistente.getActiPers());
             jsonResponse.put("codiEntiBanc", personaExistente.getCodiEntiBanc());
-            jsonResponse.put("codiAFP", personaExistente.getCodiAFP());
             jsonResponse.put("codiPlantilla", personaExistente.getCodiPlant());
 
             response.getWriter().write(jsonResponse.toString());
