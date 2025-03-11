@@ -46,6 +46,93 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalSeleccionados" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Registrar Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            Documento:
+                        </div>
+                        <div class="col-2">
+                            <select id="cmbTipoComprobante" class="form-select form-control-sm"  disabled>
+                                <option value="1">Orden de Compra</option></select>
+                        </div>
+                        <div class="col-2">
+                            Proveedor
+                        </div>
+                        <div class="col-4">
+                            <select id="cmbProveedor" class="form-select form-control-sm" style="width: 100%;"></select>
+
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            Numero:
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="form-control form-control-sm"  value="Autogenerado" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            Fecha
+                        </div>
+                        <div class="col-2">
+
+                            <input type="date" class="form-control form-control-sm" id="fecha" name="fecha">
+                        </div>
+                    </div>
+                    <hr/>             
+                    <table class="table table-bordered" id="modalTable">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Categoría</th>
+                                <th>Laboratorio</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Precio Caja</th>
+                                <th>Subtotal</th>
+                                <th>IGV</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se insertarán los productos seleccionados -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-right">Total:</th>
+                                <th id="subtotalGeneral" class="text-right">0.00</th>
+                                <th id="igvGeneral" class="text-right">0.00</th>
+                                <th id="totalGeneral" class="text-right" style="color: #000000">0.00</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="9" id="totalGeneralTexto" >Total:</th>
+
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGenerarOC" type="button" class="btn btn-primary" data-bs-dismiss="modal">Generar OC</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('#comprasTable').DataTable({

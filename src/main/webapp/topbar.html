@@ -30,14 +30,14 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activar/Desactivar Usuario
                 </a>
-                <a id="asignarpermiso" class="dropdown-item" href="asignarpermiso.html">
+                <a class="dropdown-item" href="#" data-toggle="modal" id="mnuRoles">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Asignar Permiso
-                </a>
+                    Gestión de Roles
+                </a> 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Salir
+                    Salirssssss
                 </a>
             </div>
         </li>
@@ -147,11 +147,14 @@
             }
         });
 
+        $("#mnuRoles").click(function () {
+            $("#contenido").load("login/rol.html");
+        });
         $(document).on("click", "#menudinamico a", function (e) {
             e.preventDefault(); // Evita el comportamiento predeterminado del enlace
 
             let page = $(this).attr("data-page"); // Obtener la página a cargar desde un atributo personalizado
-            if (page!=="undefined") {
+            if (page !== "undefined") {
                 $("#contenido").load(page);
             }
         });
