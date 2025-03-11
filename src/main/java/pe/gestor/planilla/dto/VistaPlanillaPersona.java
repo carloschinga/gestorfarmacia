@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package pe.gestor.planilla.dto;
 
@@ -18,17 +19,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author USER
+ * @author Adria
  */
 @Entity
 @Table(name = "vista_planilla_persona")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "VistaPlanillaPersona.findAll", query = "SELECT v FROM VistaPlanillaPersona v"),
-    @NamedQuery(name = "VistaPlanillaPersona.findByCodiPers", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.codiPers = :codiPers"),
-    @NamedQuery(name = "VistaPlanillaPersona.findByNombTipoDoc", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.nombTipoDoc = :nombTipoDoc"),
-    @NamedQuery(name = "VistaPlanillaPersona.findByNumeDocu", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.numeDocu = :numeDocu"),
-    @NamedQuery(name = "VistaPlanillaPersona.findByNombreCompleto", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.nombreCompleto = :nombreCompleto")})
+        @NamedQuery(name = "VistaPlanillaPersona.findAll", query = "SELECT v FROM VistaPlanillaPersona v"),
+        @NamedQuery(name = "VistaPlanillaPersona.findByCodiPers", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.codiPers = :codiPers"),
+        @NamedQuery(name = "VistaPlanillaPersona.findByNombTipoDoc", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.nombTipoDoc = :nombTipoDoc"),
+        @NamedQuery(name = "VistaPlanillaPersona.findByNumeDocu", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.numeDocu = :numeDocu"),
+        @NamedQuery(name = "VistaPlanillaPersona.findByNombreCompleto", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.nombreCompleto = :nombreCompleto"),
+        @NamedQuery(name = "VistaPlanillaPersona.findByActiPers", query = "SELECT v FROM VistaPlanillaPersona v WHERE v.actiPers = :actiPers") })
 public class VistaPlanillaPersona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,9 +47,15 @@ public class VistaPlanillaPersona implements Serializable {
     @Size(min = 1, max = 15)
     @Column(name = "numeDocu")
     private String numeDocu;
-    @Size(max = 122)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 122)
     @Column(name = "nombre_completo")
     private String nombreCompleto;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "actiPers")
+    private boolean actiPers;
 
     public VistaPlanillaPersona() {
     }
@@ -83,5 +91,13 @@ public class VistaPlanillaPersona implements Serializable {
     public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
-    
+
+    public boolean getActiPers() {
+        return actiPers;
+    }
+
+    public void setActiPers(boolean actiPers) {
+        this.actiPers = actiPers;
+    }
+
 }

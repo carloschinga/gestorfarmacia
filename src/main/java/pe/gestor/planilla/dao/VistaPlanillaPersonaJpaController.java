@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package pe.gestor.planilla.dao;
 
@@ -10,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.planilla.dao.exceptions.NonexistentEntityException;
@@ -19,7 +19,7 @@ import pe.gestor.planilla.dto.VistaPlanillaPersona;
 
 /**
  *
- * @author USER
+ * @author Adria
  */
 public class VistaPlanillaPersonaJpaController implements Serializable {
 
@@ -59,8 +59,6 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             vistaPlanillaPersona = em.merge(vistaPlanillaPersona);
-            em.flush();
-            em.refresh(vistaPlanillaPersona);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -112,29 +110,16 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
     private List<VistaPlanillaPersona> findVistaPlanillaPersonaEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            // Limpiar caché antes de la consulta
-            em.getEntityManagerFactory().getCache().evictAll();
-
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(VistaPlanillaPersona.class));
             Query q = em.createQuery(cq);
-
-            // Configurar propiedades para forzar refresco
-            q.setHint("javax.persistence.cache.retrieveMode", "BYPASS");
-            q.setHint("javax.persistence.cache.storeMode", "REFRESH");
-
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
-
-            // No cerrar el EntityManager, permitir reutilización
-            List<VistaPlanillaPersona> resultList = q.getResultList();
-            return resultList;
+            return q.getResultList();
         } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
+            em.close();
         }
     }
 
@@ -157,14 +142,6 @@ public class VistaPlanillaPersonaJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
-        }
-    }
-
-    public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
-        List<VistaPlanillaPersona> list = new VistaPlanillaPersonaJpaController(emf).findVistaPlanillaPersonaEntities();
-        for (VistaPlanillaPersona p : list) {
-            System.out.println(p.getCodiPers() + " " + p.getNombreCompleto());
         }
     }
 

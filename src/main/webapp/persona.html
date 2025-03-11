@@ -1,804 +1,858 @@
-<div class="container mt-4">
-    <div class="card">
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión del Personal</title>
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+
+  <body>
+    <div class="container mt-4">
+      <div class="card">
         <div class="card-header">
-            <h5 class="h5 mb-0 text-gray-800">Gestión del Personal</h5>
+          <h5 class="h5 mb-0 text-gray-800">Gestión del Personal</h5>
         </div>
         <div class="card-body">
-            <nav class="navbar navbar-light bg-white p-2">
-                <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
-                    <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
+          <nav class="navbar navbar-light bg-white p-2">
+            <div
+              class="container-fluid d-flex align-items-center"
+              style="padding-left: 0; padding-right: 0"
+            >
+              <div class="btn-group ms-auto">
+                <button
+                  class="btn btn-primary btn-sm"
+                  id="btnFiltrar"
+                  value="true"
+                >
+                  Mostrar Inactivos
+                </button>
+                <button class="btn btn-primary btn-sm" id="btnAddPersona">
+                  <i class="fas fa-fw fa-plus"></i>
+                  <span>Nuevo</span>
+                </button>
+                <button class="btn btn-primary btn-sm" id="btnPDF">
+                  <i class="fas fa-fw fa-print"></i>
+                  <span>Imprimir</span>
+                </button>
+                <button class="btn btn-primary btn-sm" id="btnExportar">
+                  <i class="fas fa-fw fa-file-excel"></i>
+                  <span>Exportar</span>
+                </button>
+              </div>
+            </div>
+          </nav>
 
-                    <div class="btn-group ms-auto">
-                        <nav class="navbar navbar-light bg-white p-2">
-                            <div class="container-fluid d-flex align-items-center p-0">
-                                <div class="d-flex align-items-center me-3"></div>
-
-                                <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm" id="btnAddPersona">
-                                        <i class="fas fa-fw fa-plus"></i>
-                                        <span>Nuevo</span>
-                                    </button>
-                                    <button class="btn btn-primary btn-sm" id="btnPDF">
-                                        <i class="fas fa-fw fa-print"></i>
-                                        <span>Imprimir</span>
-                                    </button>
-                                    <button class="btn btn-primary btn-sm" id="btnExportar">
-                                        <i class="fas fa-fw fa-file-excel"></i>
-                                        <span>Exportar</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </nav>
-
-            <hr />
-            <table id="personaTable" class="table table-striped table-bordered w-100">
-                <thead>
-                    <tr>
-                        <th>Tipo Doc</th>
-                        <th>Documento</th>
-                        <th>Nombre Completo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Las filas de la tabla se llenarán dinámicamente -->
-                </tbody>
-            </table>
+          <hr />
+          <table
+            id="personaTable"
+            class="table table-striped table-bordered w-100"
+          >
+            <thead>
+              <tr>
+                <th>Tipo Doc</th>
+                <th>Documento</th>
+                <th>Nombre Completo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Las filas de la tabla se llenarán dinámicamente -->
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
-</div>
-<div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+
+    <!-- Modal de Persona -->
+    <div
+      class="modal fade"
+      id="personaModal"
+      tabindex="-1"
+      aria-labelledby="personaModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="personaForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="personaModalLabel">Agregar Persona</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="codiPers" name="codiPers">
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="codiTipoDoc" class="form-label">Tipo de Documento</label>
-                            <select class="form-select" id="codiTipoDoc" name="codiTipoDoc" required>
-                                <option value="">Selecciona un tipo de documento</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="numeDocu" class="form-label d-block mb-2">Documento</label>
-                            <input type="text" class="form-control" id="numeDocu" name="numeDocu" required>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="appaPers" class="form-label">Apellido Paterno</label>
-                            <input type="text" class="form-control" id="appaPers" name="appaPers" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="apmaPers" class="form-label">Apellido Materno</label>
-                            <input type="text" class="form-control" id="apmaPers" name="apmaPers" required>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="nombPers" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombPers" name="nombPers" required>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiNaci" class="form-label">Código de Nacionalidad</label>
-                            <select class="form-select" id="codiNaci" name="codiNaci" required>
-                                <option value="">Selecciona un código</option>
-                                <!-- Agregar más opciones según sea necesario -->
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="sexoPers" class="form-label">Sexo</label>
-                            <select class="form-select" id="sexoPers" name="sexoPers" required>
-                                <option value="">Selecciona un código</option>
-                                <option value="M">M</option>
-                                <option value="F">F</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiPaisEmis" class="form-label">País de Emisión</label>
-                            <select class="form-select" id="codiPaisEmis" name="codiPaisEmis" required>
-                                <option value="">Selecciona un país de emisión</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiCLDN" class="form-label">Código CLDN</label>
-                            <select class="form-select" id="codiCLDN" name="codiCLDN" required>
-                                <option value="">Selecciona un código</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="numeCelu" class="form-label">Número de Celular</label>
-                            <input type="text" class="form-control" id="numeCelu" name="numeCelu">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="mailPers" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="mailPers" name="mailPers">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiTipoVia" class="form-label">Tipo de Vía</label>
-                            <select class="form-select" id="codiTipoVia" name="codiTipoVia" required>
-                                <option value="">Selecciona un tipo de vía</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="nombVia" class="form-label">Nombre de la Vía</label>
-                            <input type="text" class="form-control" id="nombVia" name="nombVia">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="numeVia" class="form-label">Número de la Vía</label>
-                            <input type="text" class="form-control" id="numeVia" name="numeVia">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="depaPers" class="form-label">Departamento</label>
-                            <input type="text" class="form-control" id="depaPers" name="depaPers">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="nivel1" class="form-label">Departamento</label>
-                            <select class="form-select" id="nivel1" name="nivel1" required>
-                                <option value="">Selecciona un nivel 1</option>
-                            </select>
-                        </div>
+          <form id="personaForm">
+            <div class="modal-header">
+              <h5 class="modal-title" id="personaModalLabel">
+                Registro de Trabajador
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="codiPers" name="codiPers" />
 
-
-                        <div class="col-md-4 mb-4">
-                            <label for="nivel2" class="form-label">Provincia</label>
-                            <select class="form-select" id="nivel2" name="nivel2" required disabled>
-                                <option value="">Selecciona un nivel 2</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-md-4 mb-4">
-                            <label for="nivel3" class="form-label">Distrito</label>
-                            <select class="form-select" id="nivel3" name="nivel3" required disabled>
-                                <option value="">Selecciona un nivel 3</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="snpPers" class="form-label">SNP</label>
-                            <select class="form-select" id="snpPers" name="snpPers" required>
-                                <option value="">Selecciona un código</option>
-                                <option value="true">Sí</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Codigo AFP</label>
-                            <select class="form-select" id="codiAFP" name="codiAFP" disabled>
-                                <option value="0">Selecciona un código</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Entidad Bancaria</label>
-                            <select class="form-select" id="codiEntiBanc" name="codiEntiBanc" required>
-                                <option value="">Selecciona un código</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="codiEntiBanc" class="form-label">Codigo Plantilla</label>
-                            <select class="form-select" id="codiPlantilla" name="codiPlantilla" required>
-                                <option value="">Selecciona un código</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label for="actiPers" class="form-label">Activo</label>
-                            <select class="form-select" id="actiPers" name="actiPers" required>
-                                <option value="">Selecciona un código</option>
-                                <option value="true">Sí</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-fw fa-undo"></i>Cancelar
+              <!-- Acordeón para las secciones del formulario -->
+              <div class="accordion" id="formAccordion">
+                <!-- Sección 1: Datos Personales -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button
+                      class="accordion-button"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseOne"
+                      aria-expanded="true"
+                      aria-controls="collapseOne"
+                    >
+                      Datos Personales
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-fw fa-save"></i>Guardar
-                    </button>
+                  </h2>
+                  <div
+                    id="collapseOne"
+                    class="accordion-collapse collapse show"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#formAccordion"
+                  >
+                    <div class="accordion-body">
+                      <!-- Primera fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="codiTipoDoc" class="form-label"
+                            >Tipo de Documento</label
+                          >
+                          <select
+                            class="form-select"
+                            id="codiTipoDoc"
+                            name="codiTipoDoc"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="numeDocu" class="form-label"
+                            >Número de Documento</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="numeDocu"
+                            name="numeDocu"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <!-- Segunda fila -->
+                      <div class="row">
+                        <div class="col-md-4 mb-4">
+                          <label for="appaPers" class="form-label"
+                            >Apellido Paterno</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="appaPers"
+                            name="appaPers"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="apmaPers" class="form-label"
+                            >Apellido Materno</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="apmaPers"
+                            name="apmaPers"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="nombPers" class="form-label"
+                            >Nombre</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="nombPers"
+                            name="nombPers"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <!-- Tercera fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="fechNaci" class="form-label"
+                            >Fecha de Nacimiento</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="fechNaci"
+                            name="fechNaci"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="nombVia" class="form-label"
+                            >Dirección</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="nombVia"
+                            name="nombVia"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <!-- Cuarta fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="numeCelu" class="form-label"
+                            >Celular</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="numeCelu"
+                            name="numeCelu"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="mailPers" class="form-label"
+                            >Correo Electrónico</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="mailPers"
+                            name="mailPers"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <!-- Quinta fila -->
+                      <div class="row">
+                        <div class="col-md-4 mb-4">
+                          <label for="nivel1" class="form-label"
+                            >Departamento</label
+                          >
+                          <select
+                            name="nivel1"
+                            id="nivel1"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="nivel2" class="form-label"
+                            >Provincia</label
+                          >
+                          <select
+                            name="nivel2"
+                            id="nivel2"
+                            class="form-select"
+                            required
+                            disabled
+                          ></select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="nivel3" class="form-label"
+                            >Distrito</label
+                          >
+                          <select
+                            name="nivel3"
+                            id="nivel3"
+                            class="form-select"
+                            required
+                            disabled
+                          ></select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </form>
+
+                <!-- Sección 2: Información Laboral -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="collapseTwo"
+                    >
+                      Información Laboral
+                    </button>
+                  </h2>
+                  <div
+                    id="collapseTwo"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingTwo"
+                    data-bs-parent="#formAccordion"
+                  >
+                    <div class="accordion-body">
+                      <!-- Primera fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="codiArea" class="form-label">Área</label>
+                          <select
+                            name="codiArea"
+                            id="codiArea"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="codiCargo" class="form-label"
+                            >Cargo</label
+                          >
+                          <select
+                            name="codiCargo"
+                            id="codiCargo"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Segunda fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="codiTipoContrato" class="form-label"
+                            >Tipo de Contrato</label
+                          >
+                          <select
+                            name="codiTipoContrato"
+                            id="codiTipoContrato"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="tipoSituacion" class="form-label"
+                            >Situacion</label
+                          >
+                          <select
+                            name="tipoSituacion"
+                            id="tipoSituacion"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Tercera fila -->
+                      <div class="row">
+                        <div class="col-md-4 mb-4">
+                          <label for="fechaIngreso" class="form-label"
+                            >Fecha de Ingreso</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="fechaIngreso"
+                            name="fechaIngreso"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="remuneracion" class="form-label"
+                            >Remuneración</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="remuneracion"
+                            name="remuneracion"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="tipoPago" class="form-label"
+                            >Tipo de Pago</label
+                          >
+                          <select
+                            name="tipoPago"
+                            id="tipoPago"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Cuarta fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="bancoSueldo" class="form-label"
+                            >Banco de Sueldo</label
+                          >
+                          <select
+                            name="bancoSueldo"
+                            id="bancoSueldo"
+                            class="form-select"
+                            disabled
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="cuentaSueldo" class="form-label"
+                            >Cuenta de Sueldo</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="cuentaSueldo"
+                            name="cuentaSueldo"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sección 3: Información Adicional -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingThree">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseThree"
+                      aria-expanded="false"
+                      aria-controls="collapseThree"
+                    >
+                      Regimen y AFP
+                    </button>
+                  </h2>
+                  <div
+                    id="collapseThree"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingThree"
+                    data-bs-parent="#formAccordion"
+                  >
+                    <div class="accordion-body">
+                      <div class="row">
+                        <div class="col-md-4 mb-4">
+                          <label for="regimenLaboral" class="form-label"
+                            >Regimen Laboral</label
+                          >
+                          <select
+                            name="regimenLaboral"
+                            id="regimenLaboral"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="regimenSalud" class="form-label"
+                            >Regimen Salud</label
+                          >
+                          <select
+                            name="regimenSalud"
+                            id="regimenSalud"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <label for="regimnPensionario" class="form-label"
+                            >Regimen Pensionario</label
+                          >
+                          <select
+                            name="regimenPensionario"
+                            id="regimenPensionario"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="cuspp" class="form-label">CUSPP</label>
+                          <input
+                            name="cuspp"
+                            type="text"
+                            class="form-control"
+                            id="cuspp"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="calculaAFP" class="form-label"
+                            >Calcula AFP</label
+                          >
+                          <select
+                            name="calculaAFP"
+                            id="calculaAFP"
+                            class="form-select"
+                          ></select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sección 4: Información Adicional -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingFour">
+                    <button
+                      type="button"
+                      class="accordion-button collapsed"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseFour"
+                      aria-expanded="false"
+                      aria-controls="collapseFour"
+                    >
+                      Información Adicional
+                    </button>
+                  </h2>
+                  <div
+                    id="collapseFour"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingFour"
+                    data-bs-parent="#formAccordion"
+                  >
+                    <div class="accordion-body">
+                      <!-- Primera fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="nacionalidad" class="form-label"
+                            >Nacionalidad</label
+                          >
+                          <select
+                            name="nacionalidad"
+                            id="nacionalidad"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="estadoCivil" class="form-label"
+                            >Estado Civil</label
+                          >
+                          <select
+                            name="estadoCivil"
+                            id="estadoCivil"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Segunda fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="sexo" class="form-label">Sexo</label>
+                          <select
+                            class="form-select"
+                            id="sexo"
+                            name="sexo"
+                            required
+                          >
+                            <option value="" selected>Seleccione</option>
+                            <option value="M">MASCULINO</option>
+                            <option value="F">FEMENINO</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="nivelEducativo" class="form-label"
+                            >Nivel Educativo</label
+                          >
+                          <select
+                            name="nivelEducativo"
+                            id="nivelEducativo"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Tercera fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="ocupacion" class="form-label"
+                            >Ocupación</label
+                          >
+                          <select
+                            name="ocupacion"
+                            id="ocupacion"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="tipoTrabajador" class="form-label"
+                            >Tipo Trabajador</label
+                          >
+                          <select
+                            name="tipoTrabajador"
+                            id="tipoTrabajador"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Cuarta fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="categoriaOcupacion" class="form-label"
+                            >Categoría Ocupación</label
+                          >
+                          <select
+                            name="categoriaOcupacion"
+                            id="categoriaOcupacion"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="periodicidadIngreso" class="form-label"
+                            >Periodicidad Ingreso</label
+                          >
+                          <select
+                            name="periodicidadIngreso"
+                            id="periodicidadIngreso"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Quinta fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="bancoCts" class="form-label"
+                            >Banco CTS</label
+                          >
+                          <select
+                            name="bancoCts"
+                            id="bancoCts"
+                            class="form-select"
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="cuentaCts" class="form-label"
+                            >Cuenta CTS</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="cuentaCts"
+                            name="cuentaCts"
+                            placeholder="Ingrese número de cuenta"
+                          />
+                        </div>
+                      </div>
+                      <!-- Sexta fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="fechaCese" class="form-label"
+                            >Fecha Cese</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="fechaCese"
+                            name="fechaCese"
+                          />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="jornadaLaboral" class="form-label"
+                            >Jornada Laboral</label
+                          >
+                          <select
+                            name="jornadaLaboral"
+                            id="jornadaLaboral"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                      </div>
+                      <!-- Séptima fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="situacionEspecial" class="form-label"
+                            >Situación Especial</label
+                          >
+                          <select
+                            name="situacionEspecial"
+                            id="situacionEspecial"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="discapacidad" class="form-label"
+                            >Discapacidad</label
+                          >
+                          <select
+                            name="discapacidad"
+                            id="discapacidad"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Octava fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="sindicalizado" class="form-label"
+                            >Sindicalizado</label
+                          >
+                          <select
+                            name="sindicalizado"
+                            id="sindicalizado"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="statcExonerado" class="form-label"
+                            >STACAT Exonerado</label
+                          >
+                          <select
+                            name="statcExonerado"
+                            id="statcExonerado"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Novena fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="convenio" class="form-label"
+                            >Convenio</label
+                          >
+                          <select
+                            name="convenio"
+                            id="convenio"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="aportaSctr" class="form-label"
+                            >Aporta a SCTR</label
+                          >
+                          <select
+                            name="aportaSctr"
+                            id="aportaSctr"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Décima fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="polizaSeguro" class="form-label"
+                            >Póliza Seguro</label
+                          >
+                          <select
+                            name="polizaSeguro"
+                            id="polizaSeguro"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="asignacionFamiliar" class="form-label"
+                            >Asignación Familiar</label
+                          >
+                          <select
+                            name="asignacionFamiliar"
+                            id="asignacionFamiliar"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true">SI</option>
+                            <option value="false" selected>NO</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Última fila -->
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <label for="sucursal" class="form-label"
+                            >Sucursal</label
+                          >
+                          <select
+                            name="sucursal"
+                            id="sucursal"
+                            class="form-select"
+                            required
+                          ></select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <label for="actiPers">Estado</label>
+                          <select
+                            name="actiPers"
+                            id="actiPers"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Seleccione</option>
+                            <option value="true" selected>Activo</option>
+                            <option value="false">Inactivo</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                <i class="fas fa-fw fa-undo"></i> Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-fw fa-save"></i> Guardar
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-    $(document).ready(function () {
-
-        function mostrarAlerta(mensaje, icono) {
-            Swal.fire({
-                toast: true,
-                position: "top-end",
-                icon: icono,
-                title: mensaje,
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                customClass: {
-                    popup: "swal2-sm"
-                }
-            });
-        }
-
-
-
-        console.log("Document ready, initializing table...");
-
-        // Initialize the DataTable with proper error handling
-        try {
-            var tablePersona = $('#personaTable').DataTable({
-                "processing": true,
-                "ajax": {
-                    "url": "personaservlet",
-                    "type": "GET",
-                    "dataSrc": function (json) {
-                        console.log("Datos recibidos:", json);
-                        // Make sure to return an array even if the response is empty or malformed
-                        return Array.isArray(json) ? json : [];
-                    },
-                    "error": function (xhr, error, thrown) {
-                        mostrarAlerta("Error al cargar los datos de la tabla", "error");
-                    }
-                },
-                "columns": [
-                    { "data": "nombTipoDoc" },
-                    { "data": "numeDocu" },
-                    { "data": "nombre_completo" },
-                    {
-                        data: null,
-                        render: function (data, type, row) {
-                            if (row && row.codiPers) {
-                                return `<button class="btn btn-primary btnEdit" data-id="${row.codiPers}">
-                                <i class="fas fa-edit"></i>
-                            </button>`;
-                            }
-                            return '';
-                        }
-                    }
-                ],
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-                }
-            });
-
-            tablePersona.ajax.reload();
-
-            console.log("DataTable initialized successfully");
-        } catch (error) {
-            console.error("Error initializing DataTable:", error);
-        }
-
-
-        // Abrir modal para editar
-        $('#personaTable tbody').on('click', '.btnEdit', function () {
-            const id = $(this).data('id');
-
-            $.get(`personaservlet/${id}`, function (data) {
-
-                console.log({ data });
-
-                $('#codiPers').val(data.codiPers);
-                $('#codiTipoDoc').val(data.codiTipoDoc);
-                $('#numeDocu').val(data.numeDocu);
-                $('#appaPers').val(data.appaPers);
-                $('#apmaPers').val(data.apmaPers);
-                $('#nombPers').val(data.nombPers);
-                $('#codiNaci').val(data.codiNaci);
-                $('#sexoPers').val(data.sexoPers);
-                $('#codiPaisEmis').val(data.codiPaisEmis);
-                $('#codiCLDN').val(data.codiCLDN);
-                $('#numeCelu').val(data.numeCelu);
-                $('#mailPers').val(data.mailPers);
-                $('#codiTipoVia').val(data.codiTipoVia);
-                $('#nombVia').val(data.nombVia);
-                $('#numeVia').val(data.numeVia);
-                $('#depaPers').val(data.depaPers);
-
-                $('#snpPers').val(data.snpPers ? 'true' : 'false');
-                $('#actiPers').val(data.actiPers ? 'true' : 'false');
-                $('#codiEntiBanc').val(data.codiEntiBanc);
-                $('#codiPlantilla').val(data.codiPlantilla);
-
-                // Comparar data.codiAfp con null para verificar
-                if (data.codiAFP !== null) {
-                    $('#codiAFP').prop('disabled', false);
-                }
-                $('#codiAFP').val(data.codiAFP);
-
-
-                $('#nivel2').prop('disabled', false);
-                $('#nivel3').prop('disabled', false);
-
-                $('#nivel1').val(data.nivel1);
-                if (data.nivel1) {
-                    cargarNivel2(data.nivel1, data.nivel2, data.nivel3);
-                }
-
-                $('#personaModalLabel').text('Editar Persona');
-                $('#personaModal').modal('show');
-            });
-        });
-
-        // Agregar o Editar Persona
-        $('#personaForm').submit(function (e) {
-            e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
-            const formData = $(this).serialize(); // Serializar los datos del formulario
-            const id = $('#codiPers').val(); // Obtener el ID (si existe) del formulario
-            const url = id ? `personaservlet/${id}` : 'personaservlet'; // URL para la creación o edición
-            const method = id ? 'PUT' : 'POST'; // Si tiene ID, usamos PUT, sino POST
-
-            const init = id ? "actualizar" : "crear";
-            const mensaje = id ? "Actualizar" : "Crear";
-
-            if (!formData.codiAFP) {
-                formData.codiAFP = 0;
-            }
-
-            // console.log(formData);
-            $.ajax({
-                url: url,
-                type: method,
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        // Si la solicitud es exitosa, cerramos el modal y recargamos la tabla
-                        $('#personaModal').modal('hide');
-                        tablePersona.ajax.reload(null, false);
-                        mostrarAlerta(`${mensaje} exitoso`, "success");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    mostrarAlerta(`Error al ${init} la persona`, "error");
-                }
-            });
-        });
-
-        $('#btnAddPersona').click(function () {
-            // Limpiar los campos del formulario
-            $('#personaForm')[0].reset();
-            $('#codiPers').val(''); // Limpiar el ID de la persona (es nuevo)
-            $('#personaModalLabel').text('Agregar Persona'); // Cambiar el título del modal a "Agregar"
-            $('#personaModal').modal('show'); // Mostrar el modal
-        });
-
-        $('#btnPDF').click(function () {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Obtener la fecha y hora actual
-            const fechaActual = new Date();
-            const fecha = fechaActual.toLocaleDateString(); // Fecha en formato local
-            const hora = fechaActual.toLocaleTimeString(); // Hora en formato local
-            const fechaHora = `${fecha} ${hora}`;
-
-            // Configuración del nombre del sistema
-            const nombreSistema = 'Software de Planilla';
-
-            // Tamaño de página
-            const pageWidth = doc.internal.pageSize.getWidth();
-
-            // Agregar fecha y hora (esquina izquierda)
-            doc.setFontSize(8);
-            doc.text(fechaHora, 10, 10); // Posición (X: izquierda, Y: superior)
-
-            // Agregar nombre del sistema (esquina derecha)
-            const textWidthSistema = doc.getTextWidth(nombreSistema);
-            doc.text(nombreSistema, pageWidth - textWidthSistema - 10, 10); // Posición (X: derecha, Y: superior)
-
-            // Configuración del título centrado
-            const titulo = 'LISTADO DE PERSONAS';
-            const textWidthTitulo = doc.getTextWidth(titulo);
-            const textX = (pageWidth - textWidthTitulo) / 2;
-            doc.setFontSize(12); // Tamaño de fuente más grande para el título
-            doc.text(titulo, textX, 20);
-
-            // Obtener encabezados de la tabla
-            const headers = [];
-
-            $('#personaTable thead th').each(function (i, header) {
-                // Ignorar el último encabezado
-                if (i < $('#personaTable thead th').length - 1) {
-                    headers.push($(header).text());
-                }
-            });
-
-
-            // Obtener filas de la tabla
-            const rows = [];
-            $('#personaTable tbody tr').each(function () {
-                const row = [];
-                $(this).find('td').each(function (index) {
-                    // Omite la última columna
-                    if (index < $(this).parent().find('td').length - 1) {
-                        row.push($(this).text());
-                    }
-                });
-                rows.push(row);
-            });
-
-
-
-
-            // Generar la tabla en el PDF
-            doc.autoTable({
-                head: [headers],
-                body: rows,
-                startY: 30 // Comienza después del título
-            });
-
-            // Descargar el PDF
-            doc.save('Persona.pdf');
-        });
-
-        $('#btnExportar').click(function () {
-            // Crear un array para almacenar los datos de la tabla
-            var tableData = [];
-
-            // Agregar los encabezados de la tabla como la primera fila
-            var headers = [];
-            $('#personaTable thead th').each(function (i, header) {
-                // Ignorar el último encabezado
-                if (i < $('#personaTable thead th').length - 1) {
-                    headers.push($(header).text());
-                }
-            });
-            tableData.push(headers);
-
-            // Agregar las filas de datos de la tabla
-            $('#personaTable tbody tr').each(function () {
-                var rowData = [];
-                $(this).find('td').each(function (i, cell) {
-                    // Ignorar la última columna
-                    if (i < $(this).parent().find('td').length - 1) {
-                        rowData.push($(cell).text());
-                    }
-                });
-                tableData.push(rowData);
-            });
-
-            // Crear una hoja de trabajo de Excel a partir del array de datos
-            var ws = XLSX.utils.aoa_to_sheet(tableData);
-
-            // Crear un libro de trabajo (workbook)
-            var wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Persona');
-
-            // Guardar el archivo Excel
-            XLSX.writeFile(wb, 'persona.xlsx');
-        });
-        $(document).ready(function () {
-            $('#personaModal .btn-close, #personaModal .btn-secondary').click(function () {
-                $('#personaModal').modal('hide');
-            });
-        });
-
-    });
-
-    function cargarNivel2(codiUbig, nivel2Value, nivel3Value) {
-        $.ajax({
-            url: 'ubigeoservlet',
-            type: 'GET',
-            data: {
-                nivel: 2,
-                codiUbig: codiUbig
-            },
-            success: function (data) {
-                let combo = $('#nivel2');
-                combo.empty();
-                combo.append('<option value="">Seleccione</option>');
-                $.each(data, function (index, nombre) {
-                    combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
-                });
-
-                if (nivel2Value) {
-                    $('#nivel2').val(nivel2Value);
-                    cargarNivel3(nivel2Value, nivel3Value);
-                }
-            },
-            error: function () {
-                mostrarAlerta("Errro al cargar los datos del nivel 2.", "error");
-            }
-        })
-    }
-
-    function cargarNivel3(codiUbig, nivel3Value) {
-        $.ajax({
-            url: 'ubigeoservlet',
-            type: 'GET',
-            data: {
-                nivel: 3,
-                codiUbig: codiUbig
-            },
-            success: function (data) {
-                console.log("Data del nivel 3 al editar: " + { data });
-                let combo = $('#nivel3');
-                combo.empty();
-                combo.append('<option value="">Seleccione</option>');
-                $.each(data, function (index, nombre) {
-                    combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
-                });
-
-                if (nivel3Value) {
-                    $('#nivel3').val(nivel3Value);
-                }
-            },
-            error: function () {
-                mostrarAlerta("Errro al cargar los datos del nivel 3.", "error");
-            }
-        })
-    }
-
-    // tipo de documneto
-    $.ajax({
-        url: 'tipodocumentoservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiTipoDoc');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de tipo de documento.", "error");
-        }
-    });
-
-    //pais emisor
-    $.ajax({
-        url: 'paisemisorservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiPaisEmis');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiPaisEmis + '">' + nombre.nombPaisEmis + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de pais de emisión.", "error");
-        }
-    });
-
-    //cldn
-    $.ajax({
-        url: 'cldnservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiCLDN');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiCldn + '">' + nombre.nombCldn + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de CLDN.", "error");
-        }
-    });
-
-    //codinaci
-    $.ajax({
-        url: 'nacionalidadservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiNaci');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiNaci + '">' + nombre.nombNaci + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de nacionalidad.", "error");
-        }
-    });
-
-    //tipo via
-    $.ajax({
-        url: 'tipoviaservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiTipoVia');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiTipoVia + '">' + nombre.nombTipoVia + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de tipo de via.", "error");
-        }
-    });
-
-    //ubigeo
-    $.ajax({
-        url: 'ubigeoservlet',
-        type: 'GET',
-        data: { nivel: 1 },
-        success: function (data) {
-            let combo = $('#nivel1');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de nivel 1.", "error");
-        }
-    });
-
-
-    function cargarAFP() {
-        const snp = $('#snpPers').val();
-
-        if (snp === "false") {
-            $('#codiAFP').prop('disabled', false);
-            $.ajax({
-                url: 'afpservlet',
-                type: 'GET',
-                success: function (data) {
-                    let combo = $('#codiAFP');
-                    combo.empty();
-                    combo.append('<option value="">Selecciona un código</option>');
-                    $.each(data, function (index, nombre) {
-                        combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
-                    });
-                },
-                error: function () {
-                    mostrarAlerta("Errro al cargar los datos de AFP.", "error");
-                }
-            });
-        } else {
-            $('#codiAFP').prop('disabled', true).empty().append('<option value="">Selecciona un código</option>');
-            $.ajax({
-                url: 'afpservlet',
-                type: 'GET',
-                success: function (data) {
-                    let combo = $('#codiAFP');
-                    combo.empty();
-                    combo.append('<option value="">Selecciona un código</option>');
-                    $.each(data, function (index, nombre) {
-                        combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
-                    });
-                },
-                error: function () {
-                    mostrarAlerta("Errro al cargar los datos de AFP.", "error");
-                }
-            })
-        }
-    }
-
-    $('#snpPers').change(function () {
-        cargarAFP();
-    });
-
-
-    $('#nivel1').change(function () {
-        let codiUbig = $(this).val();
-
-        if (codiUbig) {
-            $('#nivel2').prop('disabled', false);
-            $.ajax({
-                url: 'ubigeoservlet',
-                type: 'GET',
-                data: { nivel: 2, codiUbig: codiUbig },
-                success: function (data) {
-                    let combo = $('#nivel2');
-                    combo.empty();
-                    combo.append('<option value="">Selecciona un código</option>');
-                    $.each(data, function (index, nombre) {
-                        combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
-                    });
-                },
-                error: function () {
-                    mostrarAlerta("Errro al cargar los datos de nivel 2.", "error");
-                }
-            });
-        } else {
-            $('#nivel2').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 2</option>');
-            $('#nivel3').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 3</option>');
-        }
-    });
-
-    $('#nivel2').change(function () {
-        let codiUbig = $(this).val();
-
-        if (codiUbig) {
-            $('#nivel3').prop('disabled', false);
-            $.ajax({
-                url: 'ubigeoservlet',
-                type: 'GET',
-                data: { nivel: 3, codiUbig: codiUbig },
-                success: function (data) {
-                    let combo = $('#nivel3');
-                    combo.empty();
-                    combo.append('<option value="">Selecciona un código</option>');
-                    $.each(data, function (index, nombre) {
-                        combo.append('<option value="' + nombre.codiUbig + '">' + nombre.nombUbig + '</option>');
-                    });
-                },
-                error: function () {
-                    mostrarAlerta("Errro al cargar los datos de nivel 3.", "error");
-                }
-            });
-        } else {
-            $('#nivel3').prop('disabled', true).empty().append('<option value="">Selecciona un nivel 3</option>');
-        }
-    });
-
-    $.ajax({
-        url: 'entidadbancariaservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiEntiBanc');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiEntiBanc + '">' + nombre.nombEntiBanc + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de entidad bancaria.", "error");
-        }
-    });
-
-    $.ajax({
-        url: 'afpservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiAFP');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiAfp + '">' + nombre.nombAfp + '</option>');
-            });
-        },
-        error: function () {
-            alert('Error al cargar los nombres.');
-        }
-    });
-
-    $.ajax({
-        url: 'plantillaservlet',
-        type: 'GET',
-        success: function (data) {
-            let combo = $('#codiPlantilla');
-            combo.empty();
-            combo.append('<option value="">Selecciona un código</option>');
-            $.each(data, function (index, nombre) {
-                combo.append('<option value="' + nombre.codiPlant + '">' + nombre.nombPlant + '</option>');
-            });
-        },
-        error: function () {
-            mostrarAlerta("Errro al cargar los datos de plantilla.", "error");
-        }
-    });
-
-</script>
-
-</body>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="js/persona.js"></script>
+  </body>
 </html>

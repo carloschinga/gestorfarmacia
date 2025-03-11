@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package pe.gestor.planilla.dao;
 
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.planilla.dao.exceptions.NonexistentEntityException;
@@ -17,7 +19,7 @@ import pe.gestor.planilla.dto.PlanillaPersona;
 
 /**
  *
- * @author USER
+ * @author Adria
  */
 public class PlanillaPersonaJpaController implements Serializable {
 
@@ -51,8 +53,6 @@ public class PlanillaPersonaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             planillaPersona = em.merge(planillaPersona);
-            em.flush();
-            em.refresh(planillaPersona);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();

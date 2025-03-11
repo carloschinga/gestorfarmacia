@@ -1,11 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package pe.gestor.planilla.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,13 +17,15 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author USER
+ * @author Adria
  */
 @Entity
 @Table(name = "planilla_persona")
@@ -79,7 +83,36 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "PlanillaPersona.findByCodiEntiBanc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiEntiBanc = :codiEntiBanc"),
         @NamedQuery(name = "PlanillaPersona.findByNumeCuen", query = "SELECT p FROM PlanillaPersona p WHERE p.numeCuen = :numeCuen"),
         @NamedQuery(name = "PlanillaPersona.findByCodiPlant", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPlant = :codiPlant"),
-        @NamedQuery(name = "PlanillaPersona.findByActiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.actiPers = :actiPers") })
+        @NamedQuery(name = "PlanillaPersona.findByActiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.actiPers = :actiPers"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiEstaCivil", query = "SELECT p FROM PlanillaPersona p WHERE p.codiEstaCivil = :codiEstaCivil"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiArea", query = "SELECT p FROM PlanillaPersona p WHERE p.codiArea = :codiArea"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiCargo", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCargo = :codiCargo"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiCateOcup", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCateOcup = :codiCateOcup"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiPeriRemu", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPeriRemu = :codiPeriRemu"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiRegiLab", query = "SELECT p FROM PlanillaPersona p WHERE p.codiRegiLab = :codiRegiLab"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiRegiPens", query = "SELECT p FROM PlanillaPersona p WHERE p.codiRegiPens = :codiRegiPens"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiRegiSal", query = "SELECT p FROM PlanillaPersona p WHERE p.codiRegiSal = :codiRegiSal"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiSituEdu", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSituEdu = :codiSituEdu"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiSituEspe", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSituEspe = :codiSituEspe"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoSitu", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoSitu = :codiTipoSitu"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoContrato", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoContrato = :codiTipoContrato"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoOcup", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoOcup = :codiTipoOcup"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoPago", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoPago = :codiTipoPago"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiTipoTrab", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoTrab = :codiTipoTrab"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiJornadLab", query = "SELECT p FROM PlanillaPersona p WHERE p.codiJornadLab = :codiJornadLab"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiSucurs", query = "SELECT p FROM PlanillaPersona p WHERE p.codiSucurs = :codiSucurs"),
+        @NamedQuery(name = "PlanillaPersona.findByFechNaci", query = "SELECT p FROM PlanillaPersona p WHERE p.fechNaci = :fechNaci"),
+        @NamedQuery(name = "PlanillaPersona.findByFechIngr", query = "SELECT p FROM PlanillaPersona p WHERE p.fechIngr = :fechIngr"),
+        @NamedQuery(name = "PlanillaPersona.findByCuentaCTS", query = "SELECT p FROM PlanillaPersona p WHERE p.cuentaCTS = :cuentaCTS"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiCuenCTS", query = "SELECT p FROM PlanillaPersona p WHERE p.codiCuenCTS = :codiCuenCTS"),
+        @NamedQuery(name = "PlanillaPersona.findByFechCese", query = "SELECT p FROM PlanillaPersona p WHERE p.fechCese = :fechCese"),
+        @NamedQuery(name = "PlanillaPersona.findByDiscapacidad", query = "SELECT p FROM PlanillaPersona p WHERE p.discapacidad = :discapacidad"),
+        @NamedQuery(name = "PlanillaPersona.findBySindicalizado", query = "SELECT p FROM PlanillaPersona p WHERE p.sindicalizado = :sindicalizado"),
+        @NamedQuery(name = "PlanillaPersona.findByStatcExonerado", query = "SELECT p FROM PlanillaPersona p WHERE p.statcExonerado = :statcExonerado"),
+        @NamedQuery(name = "PlanillaPersona.findByConvenio", query = "SELECT p FROM PlanillaPersona p WHERE p.convenio = :convenio"),
+        @NamedQuery(name = "PlanillaPersona.findByAportaSctr", query = "SELECT p FROM PlanillaPersona p WHERE p.aportaSctr = :aportaSctr"),
+        @NamedQuery(name = "PlanillaPersona.findByPolizaSeguro", query = "SELECT p FROM PlanillaPersona p WHERE p.polizaSeguro = :polizaSeguro"),
+        @NamedQuery(name = "PlanillaPersona.findByAsignacionFamiliar", query = "SELECT p FROM PlanillaPersona p WHERE p.asignacionFamiliar = :asignacionFamiliar") })
 public class PlanillaPersona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -98,9 +131,7 @@ public class PlanillaPersona implements Serializable {
     @Size(min = 1, max = 15)
     @Column(name = "numeDocu")
     private String numeDocu;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 3)
+    @Size(max = 3)
     @Column(name = "codiPaisEmis")
     private String codiPaisEmis;
     @Basic(optional = false)
@@ -231,7 +262,7 @@ public class PlanillaPersona implements Serializable {
     @NotNull
     @Column(name = "snpPers")
     private boolean snpPers;
-    @Column(name = "codiAFP", nullable = true)
+    @Column(name = "codiAFP")
     private Integer codiAFP;
     // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
     // consider using these annotations to enforce field validation
@@ -243,10 +274,10 @@ public class PlanillaPersona implements Serializable {
     @Column(name = "asigFamiPers")
     private Integer asigFamiPers;
     @Size(max = 3)
-    @Column(name = "codiEntiBanc")
+    @Column(name = "codiEntiBanc", nullable = true)
     private String codiEntiBanc;
     @Size(max = 20)
-    @Column(name = "numeCuen")
+    @Column(name = "numeCuen", nullable = true)
     private String numeCuen;
     @Column(name = "codiPlant")
     private Integer codiPlant;
@@ -254,6 +285,76 @@ public class PlanillaPersona implements Serializable {
     @NotNull
     @Column(name = "actiPers")
     private boolean actiPers;
+    @Column(name = "codiEstaCivil")
+    private Integer codiEstaCivil;
+    @Column(name = "codiArea")
+    private Integer codiArea;
+    @Column(name = "codiCargo")
+    private Integer codiCargo;
+    @Size(max = 2)
+    @Column(name = "codiCateOcup")
+    private String codiCateOcup;
+    @Column(name = "codiPeriRemu")
+    private Character codiPeriRemu;
+    @Size(max = 2)
+    @Column(name = "codiRegiLab")
+    private String codiRegiLab;
+    @Size(max = 2)
+    @Column(name = "codiRegiPens")
+    private String codiRegiPens;
+    @Size(max = 2)
+    @Column(name = "codiRegiSal")
+    private String codiRegiSal;
+    @Size(max = 2)
+    @Column(name = "codiSituEdu")
+    private String codiSituEdu;
+    @Column(name = "codiSituEspe")
+    private Character codiSituEspe;
+    @Column(name = "codiTipoSitu")
+    private Character codiTipoSitu;
+    @Size(max = 2)
+    @Column(name = "codiTipoContrato")
+    private String codiTipoContrato;
+    @Column(name = "codiTipoOcup")
+    private Character codiTipoOcup;
+    @Column(name = "codiTipoPago")
+    private Character codiTipoPago;
+    @Size(max = 2)
+    @Column(name = "codiTipoTrab")
+    private String codiTipoTrab;
+    @Column(name = "codiJornadLab")
+    private Integer codiJornadLab;
+    @Column(name = "codiSucurs")
+    private Integer codiSucurs;
+    @Column(name = "fechNaci")
+    @Temporal(TemporalType.DATE)
+    private Date fechNaci;
+    @Column(name = "fechIngr")
+    @Temporal(TemporalType.DATE)
+    private Date fechIngr;
+    @Size(max = 20)
+    @Column(name = "cuentaCTS", nullable = true)
+    private String cuentaCTS;
+    @Size(max = 3)
+    @Column(name = "codiCuenCTS", nullable = true)
+    private String codiCuenCTS;
+    @Column(name = "fechCese")
+    @Temporal(TemporalType.DATE)
+    private Date fechCese;
+    @Column(name = "discapacidad")
+    private Boolean discapacidad;
+    @Column(name = "sindicalizado")
+    private Boolean sindicalizado;
+    @Column(name = "statcExonerado")
+    private Boolean statcExonerado;
+    @Column(name = "convenio")
+    private Boolean convenio;
+    @Column(name = "aportaSctr")
+    private Boolean aportaSctr;
+    @Column(name = "polizaSeguro")
+    private Boolean polizaSeguro;
+    @Column(name = "asignacionFamiliar")
+    private Boolean asignacionFamiliar;
 
     public PlanillaPersona() {
     }
@@ -262,12 +363,11 @@ public class PlanillaPersona implements Serializable {
         this.codiPers = codiPers;
     }
 
-    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String codiPaisEmis, String appaPers,
-            String apmaPers, String nombPers, Character sexoPers, String codiNaci, boolean snpPers, boolean actiPers) {
+    public PlanillaPersona(Integer codiPers, String codiTipoDoc, String numeDocu, String appaPers, String apmaPers,
+            String nombPers, Character sexoPers, String codiNaci, boolean snpPers, boolean actiPers) {
         this.codiPers = codiPers;
         this.codiTipoDoc = codiTipoDoc;
         this.numeDocu = numeDocu;
-        this.codiPaisEmis = codiPaisEmis;
         this.appaPers = appaPers;
         this.apmaPers = apmaPers;
         this.nombPers = nombPers;
@@ -691,6 +791,238 @@ public class PlanillaPersona implements Serializable {
 
     public void setActiPers(boolean actiPers) {
         this.actiPers = actiPers;
+    }
+
+    public Integer getCodiEstaCivil() {
+        return codiEstaCivil;
+    }
+
+    public void setCodiEstaCivil(Integer codiEstaCivil) {
+        this.codiEstaCivil = codiEstaCivil;
+    }
+
+    public Integer getCodiArea() {
+        return codiArea;
+    }
+
+    public void setCodiArea(Integer codiArea) {
+        this.codiArea = codiArea;
+    }
+
+    public Integer getCodiCargo() {
+        return codiCargo;
+    }
+
+    public void setCodiCargo(Integer codiCargo) {
+        this.codiCargo = codiCargo;
+    }
+
+    public String getCodiCateOcup() {
+        return codiCateOcup;
+    }
+
+    public void setCodiCateOcup(String codiCateOcup) {
+        this.codiCateOcup = codiCateOcup;
+    }
+
+    public Character getCodiPeriRemu() {
+        return codiPeriRemu;
+    }
+
+    public void setCodiPeriRemu(Character codiPeriRemu) {
+        this.codiPeriRemu = codiPeriRemu;
+    }
+
+    public String getCodiRegiLab() {
+        return codiRegiLab;
+    }
+
+    public void setCodiRegiLab(String codiRegiLab) {
+        this.codiRegiLab = codiRegiLab;
+    }
+
+    public String getCodiRegiPens() {
+        return codiRegiPens;
+    }
+
+    public void setCodiRegiPens(String codiRegiPens) {
+        this.codiRegiPens = codiRegiPens;
+    }
+
+    public String getCodiRegiSal() {
+        return codiRegiSal;
+    }
+
+    public void setCodiRegiSal(String codiRegiSal) {
+        this.codiRegiSal = codiRegiSal;
+    }
+
+    public String getCodiSituEdu() {
+        return codiSituEdu;
+    }
+
+    public void setCodiSituEdu(String codiSituEdu) {
+        this.codiSituEdu = codiSituEdu;
+    }
+
+    public Character getCodiSituEspe() {
+        return codiSituEspe;
+    }
+
+    public void setCodiSituEspe(Character codiSituEspe) {
+        this.codiSituEspe = codiSituEspe;
+    }
+
+    public Character getCodiTipoSitu() {
+        return codiTipoSitu;
+    }
+
+    public void setCodiTipoSitu(Character codiTipoSitu) {
+        this.codiTipoSitu = codiTipoSitu;
+    }
+
+    public String getCodiTipoContrato() {
+        return codiTipoContrato;
+    }
+
+    public void setCodiTipoContrato(String codiTipoContrato) {
+        this.codiTipoContrato = codiTipoContrato;
+    }
+
+    public Character getCodiTipoOcup() {
+        return codiTipoOcup;
+    }
+
+    public void setCodiTipoOcup(Character codiTipoOcup) {
+        this.codiTipoOcup = codiTipoOcup;
+    }
+
+    public Character getCodiTipoPago() {
+        return codiTipoPago;
+    }
+
+    public void setCodiTipoPago(Character codiTipoPago) {
+        this.codiTipoPago = codiTipoPago;
+    }
+
+    public String getCodiTipoTrab() {
+        return codiTipoTrab;
+    }
+
+    public void setCodiTipoTrab(String codiTipoTrab) {
+        this.codiTipoTrab = codiTipoTrab;
+    }
+
+    public Integer getCodiJornadLab() {
+        return codiJornadLab;
+    }
+
+    public void setCodiJornadLab(Integer codiJornadLab) {
+        this.codiJornadLab = codiJornadLab;
+    }
+
+    public Integer getCodiSucurs() {
+        return codiSucurs;
+    }
+
+    public void setCodiSucurs(Integer codiSucurs) {
+        this.codiSucurs = codiSucurs;
+    }
+
+    public Date getFechNaci() {
+        return fechNaci;
+    }
+
+    public void setFechNaci(Date fechNaci) {
+        this.fechNaci = fechNaci;
+    }
+
+    public Date getFechIngr() {
+        return fechIngr;
+    }
+
+    public void setFechIngr(Date fechIngr) {
+        this.fechIngr = fechIngr;
+    }
+
+    public String getCuentaCTS() {
+        return cuentaCTS;
+    }
+
+    public void setCuentaCTS(String cuentaCTS) {
+        this.cuentaCTS = cuentaCTS;
+    }
+
+    public String getCodiCuenCTS() {
+        return codiCuenCTS;
+    }
+
+    public void setCodiCuenCTS(String codiCuenCTS) {
+        this.codiCuenCTS = codiCuenCTS;
+    }
+
+    public Date getFechCese() {
+        return fechCese;
+    }
+
+    public void setFechCese(Date fechCese) {
+        this.fechCese = fechCese;
+    }
+
+    public Boolean getDiscapacidad() {
+        return discapacidad;
+    }
+
+    public void setDiscapacidad(Boolean discapacidad) {
+        this.discapacidad = discapacidad;
+    }
+
+    public Boolean getSindicalizado() {
+        return sindicalizado;
+    }
+
+    public void setSindicalizado(Boolean sindicalizado) {
+        this.sindicalizado = sindicalizado;
+    }
+
+    public Boolean getStatcExonerado() {
+        return statcExonerado;
+    }
+
+    public void setStatcExonerado(Boolean statcExonerado) {
+        this.statcExonerado = statcExonerado;
+    }
+
+    public Boolean getConvenio() {
+        return convenio;
+    }
+
+    public void setConvenio(Boolean convenio) {
+        this.convenio = convenio;
+    }
+
+    public Boolean getAportaSctr() {
+        return aportaSctr;
+    }
+
+    public void setAportaSctr(Boolean aportaSctr) {
+        this.aportaSctr = aportaSctr;
+    }
+
+    public Boolean getPolizaSeguro() {
+        return polizaSeguro;
+    }
+
+    public void setPolizaSeguro(Boolean polizaSeguro) {
+        this.polizaSeguro = polizaSeguro;
+    }
+
+    public Boolean getAsignacionFamiliar() {
+        return asignacionFamiliar;
+    }
+
+    public void setAsignacionFamiliar(Boolean asignacionFamiliar) {
+        this.asignacionFamiliar = asignacionFamiliar;
     }
 
     @Override
