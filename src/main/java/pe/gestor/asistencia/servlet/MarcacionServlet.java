@@ -241,6 +241,11 @@ public class MarcacionServlet extends HttpServlet {
         LocalTime inicioRango = horaEntrada.minusMinutes(toleranciaMinutos);
         LocalTime finRango = horaEntrada.plusMinutes(toleranciaMinutos);
 
+        if (toleranciaMinutos > 59) {
+            sendErrorResponse(response, "La tolerancia no debe ser mayor a 59 minutos.");
+            return;
+        }
+
         if (horaActual.isAfter(finRango) || horaActual.isBefore(inicioRango)) {
             sendErrorResponse(response, "No esta dentro del rango para marcar la entrada en su asistencia");
             return;

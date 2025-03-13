@@ -154,6 +154,7 @@
         </button>
       </div>
       <div id="resultado"></div>
+      <div id="resulError" style="color: #ff0000"></div>
       <!-- Reloj digital que muestra la hora del servidor -->
     </div>
     <div class="container2">
@@ -219,18 +220,22 @@
           contentType: "application/json",
           data: JSON.stringify({ numeDocu, codiTipoDoc: tipoDocu }),
           success: function (result) {
-            let mensaje =
-              result.status === "success"
-                ? result.marcacion === "entrada"
+            if (result.status === "success") {
+              let mensaje =
+                result.marcacion === "entrada"
                   ? `${result.nombre} ha registrado su entrada el día ${result.hora}`
-                  : `${result.nombre} ha registrado su salida el día ${result.hora}`
-                : "Error: " + result.message;
-            $("#resultado").text(mensaje);
+                  : `${result.nombre} ha registrado su salida el día ${result.hora}`;
+              $("#resultado").text(mensaje);
+            }
+            if (result.status === "error") {
+              let mensajeError = `ERROR: ${result.message}`;
+              $("#resulError").text(mensajeError);
+            }
             setTimeout(() => $("#resultado").text(""), 3000);
             $("#numeDocu").val("");
           },
           error: function () {
-            $("#resultado").text("Error en la conexión");
+            $("#resulError").text("Error en la conexión");
           },
         });
       }
@@ -273,7 +278,7 @@
               setTimeout(() => $("#resultado").html(""), 3000);
               $("#numeDocu").val("");
             } else {
-              $("#resultado").text(
+              $("#resulError").text(
                 data.message || "Error desconocido al obtener las asistencias."
               );
             }
