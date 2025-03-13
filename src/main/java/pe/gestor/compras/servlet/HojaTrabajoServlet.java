@@ -23,7 +23,7 @@ import pe.gestor.compras.dto.VistaComprasHojaTrabajo;
  *
  * @author USER
  */
-@WebServlet(name = "HojaTrabajoServlet", urlPatterns = {"/hojatrabajoservlet"})
+@WebServlet(name = "HojaTrabajoServlet", urlPatterns = { "/hojatrabajoservlet" })
 public class HojaTrabajoServlet extends HttpServlet {
 
     private final VistaComprasHojaTrabajoDAO vistaComprasHojaTrabajoDAO;

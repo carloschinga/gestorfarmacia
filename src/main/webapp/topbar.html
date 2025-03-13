@@ -1,161 +1,230 @@
-<header class="navbar navbar-expand navbar-dark  bg-white flex-column flex-md-row bd-navbar">
+<header
+  class="navbar navbar-expand navbar-dark bg-white flex-column flex-md-row bd-navbar"
+>
+  <a
+    class="navbar-brand mr-0 mr-md-2 text-gray-600"
+    href="principal.html"
+    aria-label="Bootstrap"
+  >
+    <img src="img/logo3.png" class="img-rounded" alt="" height="50" />
+  </a>
 
-    <a class="navbar-brand mr-0 mr-md-2 text-gray-600" href="principal.html" aria-label="Bootstrap">
-        <img src="img/logo3.png" class="img-rounded" alt="" height="50"/>
-    </a>
+  <div class="navbar-nav-scroll">
+    <ul class="navbar-nav bd-navbar-nav flex-row" id="menudinamico"></ul>
+  </div>
 
-    <div class="navbar-nav-scroll">
-        <ul class="navbar-nav bd-navbar-nav flex-row" id="menudinamico">            
-
-        </ul>
-    </div>
-
-    <ul class="navbar-nav ml-auto">  
-        <li class="nav-item">
-            <div class="nav-link text-gray-900 " >USUARIO:</div>
-        </li>
-        <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle " href="#" id="userDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                
-                <div  class="text-gray-900" id="usuario"></div>
-            </a>
-            <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#passwordChangeModal">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Cambiar Contraseña
-                </a>                
-                <a id="resetar" class="dropdown-item" href="#" data-toggle="modal" data-target="#userModal">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activar/Desactivar Usuario
-                </a>
-                <a id="asignarpermiso" class="dropdown-item" href="asignarpermiso.html">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Asignar Permiso
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Salir
-                </a>
-            </div>
-        </li>
-
-    </ul>
-
-
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      <div class="nav-link text-gray-900">USUARIO:</div>
+    </li>
+    <li class="nav-item dropdown no-arrow">
+      <a
+        class="nav-link dropdown-toggle"
+        href="#"
+        id="userDropdown"
+        role="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <div class="text-gray-900" id="usuario"></div>
+      </a>
+      <!-- Dropdown - User Information -->
+      <div
+        class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+        aria-labelledby="userDropdown"
+      >
+        <a
+          class="dropdown-item"
+          href="#"
+          data-toggle="modal"
+          data-target="#passwordChangeModal"
+        >
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Cambiar Contraseña
+        </a>
+        <a
+          id="resetar"
+          class="dropdown-item"
+          href="#"
+          data-toggle="modal"
+          data-target="#userModal"
+        >
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Activar/Desactivar Usuario
+        </a>
+        <a id="asignarpermiso" class="dropdown-item" href="asignarpermiso.html">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Asignar Permiso
+        </a>
+        <div class="dropdown-divider"></div>
+        <a
+          class="dropdown-item"
+          href="#"
+          data-toggle="modal"
+          data-target="#logoutModal"
+        >
+          <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+          Salir
+        </a>
+      </div>
+    </li>
+  </ul>
 </header>
 <!-- Logout Modal-->
-<div class="modal fade" id="passwordChangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="usuariologueado"></div> <br/>
-                <form class="user">
-                    <div class="form-group">
-                        <input type="password" class="form-control form-control-user"
-                               id="txtClaveActual" 
-                               placeholder="Ingrese contraseña actual..." >
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control form-control-user"
-                               id="txtNuevaClave" 
-                               placeholder="Nueva contraseña" >
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control form-control-user"
-                               id="txtConfirmaClave" 
-                               placeholder="Confirma contraseña">
-                    </div>
-                    <div class="text-center">
-                        <div id="alertaCambiarClave" class="alert alert-danger" role="alert" style="visibility:hidden" >                            
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-primary" id="GrabarCambiarClave">Grabar</a>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="passwordChangeModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+        <button
+          class="close"
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="usuariologueado"></div>
+        <br />
+        <form class="user">
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control form-control-user"
+              id="txtClaveActual"
+              placeholder="Ingrese contraseña actual..."
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control form-control-user"
+              id="txtNuevaClave"
+              placeholder="Nueva contraseña"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control form-control-user"
+              id="txtConfirmaClave"
+              placeholder="Confirma contraseña"
+            />
+          </div>
+          <div class="text-center">
+            <div
+              id="alertaCambiarClave"
+              class="alert alert-danger"
+              role="alert"
+              style="visibility: hidden"
+            ></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">
+          Cancelar
+        </button>
+        <a class="btn btn-primary" id="GrabarCambiarClave">Grabar</a>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Activar/Desactivar Usuario</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>                
-            </div>
-            <div class="modal-body">
-
-                <table id="example"  class="table table-bordered table-hover" style="width: 100%; margin-top: 0px !important; table-layout:fixed;" >
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Usuario</th>
-                            <th>Clave</th>
-                        </tr>
-                    </thead>                  
-                </table>
-                <div class="text-center">
-                    <div id="alerta" class="alert alert-danger" role="alert" style="visibility:hidden" >
-                        ¡El usuario o la clave es erronea!
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-
-            </div>
+<div
+  class="modal fade"
+  id="userModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Activar/Desactivar Usuario
+        </h5>
+        <button
+          class="close"
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table
+          id="example"
+          class="table table-bordered table-hover"
+          style="width: 100%; margin-top: 0px !important; table-layout: fixed"
+        >
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Clave</th>
+            </tr>
+          </thead>
+        </table>
+        <div class="text-center">
+          <div
+            id="alerta"
+            class="alert alert-danger"
+            role="alert"
+            style="visibility: hidden"
+          >
+            ¡El usuario o la clave es erronea!
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">
+          Cancelar
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
-
 <script>
-    $(document).ready(function () {
-        $.getJSON("validarsesion", function (data) {
-            if (data.resultado === "ok") {
-                $.get("menu", function (data) {
-                    $("#menudinamico").append(data);
-                });
-                if (data.nivel !== "1") {
-                    $("#resetar").remove();
-                    $("#asignarpermiso").remove();
-                }
-
-                $("#usuario").text(data.nombre);
-                $("#usuariologueado").text("Bienvenido, " + data.nombre);
-
-
-            } else {
-                $(location).attr('href', "index.html");
-            }
+  $(document).ready(function () {
+    $.getJSON("validarsesion", function (data) {
+      if (data.resultado === "ok") {
+        $.get("menu", function (data) {
+          $("#menudinamico").append(data);
         });
+        if (data.nivel !== "1") {
+          $("#resetar").remove();
+          $("#asignarpermiso").remove();
+        }
 
-        $(document).on("click", "#menudinamico a", function (e) {
-            e.preventDefault(); // Evita el comportamiento predeterminado del enlace
-
-            let page = $(this).attr("data-page"); // Obtener la página a cargar desde un atributo personalizado
-            if (page!=="undefined") {
-                $("#contenido").load(page);
-            }
-        });
-
+        $("#usuario").text(data.nombre);
+        $("#usuariologueado").text("Bienvenido, " + data.nombre);
+      } else {
+        $(location).attr("href", "index.html");
+      }
     });
 
+    $(document).on("click", "#menudinamico a", function (e) {
+      e.preventDefault(); // Evita el comportamiento predeterminado del enlace
+
+      let page = $(this).attr("data-page"); // Obtener la página a cargar desde un atributo personalizado
+      if (page !== "undefined") {
+        $("#contenido").load(page);
+      }
+    });
+  });
 </script>

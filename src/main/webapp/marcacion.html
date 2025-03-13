@@ -1,192 +1,300 @@
 <div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h5 class="h5 mb-0 text-gray-800">Marcaciones del Personal</h5>
-        </div>
-        <div class="card-body">
-            <nav class="navbar navbar-light bg-white p-2">  
-                <div class="container-fluid d-flex align-items-center" style="padding-left: 0; padding-right: 0;">
-                    <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
-
-                    <div class="btn-group ms-auto">
-                        <div class="d-flex align-items-center">
-                            <!-- Campo de Fecha de Inicio -->
-                            <span class="mx-2 fw-bold">A:</span>
-                            <input type="date" class="form-control form-control-sm" id="fechaInicio" name="fechaInicio">
-                            <!-- Campo de Fecha de Fin -->
-                            <span class="mx-2 fw-bold">DE:</span>
-                            <input type="date" class="form-control form-control-sm" id="fechaFin" name="fechaFin" >
-                        </div>
-                        <button class="btn btn-primary btn-sm" id="btnPDF">
-                            <i class="fas fa-fw fa-print"></i>
-                            <span>Imprimir</span>
-                        </button>
-                        <button class="btn btn-primary btn-sm" id="btnExportar">
-                            <i class="fas fa-fw fa-file-excel"></i>
-                            <span>Exportar</span>
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            <hr/>
-
-            <table id="personaMarcacionTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>CÓDIGO </th>
-                        <th>NOMBRE </th>
-                        <th>FECHA </th>
-
-                        <th>INGRESÓ</th>
-                        <th>SALIÓ</th>
-                        <!--<th>Acciones</th>-->
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="h5 mb-0 text-gray-800">Marcaciones del Personal</h5>
     </div>
+    <div class="card-body">
+      <nav class="navbar navbar-light bg-white p-2">
+        <div
+          class="container-fluid d-flex align-items-center"
+          style="padding-left: 0; padding-right: 0"
+        >
+          <!-- Grupo de Botones: Nuevo, Imprimir, Exportar -->
+
+          <div class="btn-group ms-auto">
+            <div class="d-flex align-items-center">
+              <!-- Campo de Fecha de Inicio -->
+              <span class="mx-2 fw-bold">A:</span>
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                id="fechaInicio"
+                name="fechaInicio"
+              />
+              <!-- Campo de Fecha de Fin -->
+              <span class="mx-2 fw-bold">DE:</span>
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                id="fechaFin"
+                name="fechaFin"
+              />
+            </div>
+            <button class="btn btn-primary btn-sm" id="btnPDF">
+              <i class="fas fa-fw fa-print"></i>
+              <span>Imprimir</span>
+            </button>
+            <button class="btn btn-primary btn-sm" id="btnExportar">
+              <i class="fas fa-fw fa-file-excel"></i>
+              <span>Exportar</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <hr />
+
+      <table
+        id="personaMarcacionTable"
+        class="table table-striped table-bordered"
+        style="width: 100%"
+      >
+        <thead>
+          <tr>
+            <th>CÓDIGO</th>
+            <th>NOMBRE</th>
+            <th>FECHA</th>
+
+            <th>INGRESÓ</th>
+            <th>SALIÓ</th>
+            <!--<th>Acciones</th>-->
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Modal para Agregar/Editar Marcación de Persona -->
-<div class="modal fade" id="personaMarcacionModal" tabindex="-1" aria-labelledby="personaMarcacionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="personaMarcacionForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="personaMarcacionModalLabel">Agregar Marcación de Persona</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Se asume que se utiliza codiMarc como identificador -->
-                    <input type="hidden" id="codiMarc" name="codiMarc">
-                    <div class="mb-4">
-                        <label for="codiPers" class="form-label d-block mb-2">Código Persona</label>
-                        <input type="number" class="form-control" id="codiPers" name="codiPers" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="nombPers" class="form-label d-block mb-2">Nombre Persona</label>
-                        <input type="text" class="form-control" id="nombPers" name="nombPers" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="fechMarc" class="form-label d-block mb-2">Fecha Marcación</label>
-                        <input type="date" class="form-control" id="fechMarc" name="fechMarc" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="codiHoraDeta" class="form-label d-block mb-2">Código Hora Detalle</label>
-                        <input type="number" class="form-control" id="codiHoraDeta" name="codiHoraDeta" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="marcIngr" class="form-label d-block mb-2">Hora Ingreso</label>
-                        <input type="time" class="form-control" id="marcIngr" name="marcIngr">
-                    </div>
-                    <div class="mb-4">
-                        <label for="marcSald" class="form-label d-block mb-2">Hora Salida</label>
-                        <input type="time" class="form-control" id="marcSald" name="marcSald">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-fw fa-undo"></i>Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-fw fa-save"></i>Guardar
-                    </button>
-                </div>
-            </form>
+<div
+  class="modal fade"
+  id="personaMarcacionModal"
+  tabindex="-1"
+  aria-labelledby="personaMarcacionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="personaMarcacionForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="personaMarcacionModalLabel">
+            Agregar Marcación de Persona
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
+        <div class="modal-body">
+          <!-- Se asume que se utiliza codiMarc como identificador -->
+          <input type="hidden" id="codiMarc" name="codiMarc" />
+          <div class="mb-4">
+            <label for="codiPers" class="form-label d-block mb-2"
+              >Código Persona</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="codiPers"
+              name="codiPers"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="nombPers" class="form-label d-block mb-2"
+              >Nombre Persona</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="nombPers"
+              name="nombPers"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="fechMarc" class="form-label d-block mb-2"
+              >Fecha Marcación</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="fechMarc"
+              name="fechMarc"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="codiHoraDeta" class="form-label d-block mb-2"
+              >Código Hora Detalle</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="codiHoraDeta"
+              name="codiHoraDeta"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="marcIngr" class="form-label d-block mb-2"
+              >Hora Ingreso</label
+            >
+            <input
+              type="time"
+              class="form-control"
+              id="marcIngr"
+              name="marcIngr"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="marcSald" class="form-label d-block mb-2"
+              >Hora Salida</label
+            >
+            <input
+              type="time"
+              class="form-control"
+              id="marcSald"
+              name="marcSald"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            <i class="fas fa-fw fa-undo"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-fw fa-save"></i>Guardar
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <!-- Script para inicializar DataTable y manejar acciones -->
 
 <script>
-    $(document).ready(function () {
-        let marcacionTable;
-        const today = moment().format('YYYY-MM-DD');
+  $(document).ready(function () {
+    let marcacionTable;
+    const today = moment().format("YYYY-MM-DD");
 
-        // Inicializa los campos de fecha con el valor de hoy
-        $('#fechaInicio, #fechaFin').val(today);
+    // Inicializa los campos de fecha con el valor de hoy
+    $("#fechaInicio, #fechaFin").val(today);
 
-        // Función para inicializar DataTable con AJAX dinámico
-        function initMarcacionTable() {
-            marcacionTable = $('#personaMarcacionTable').DataTable({
-                ajax: {
-                    url: 'marcacionpersonalservlet',
-                    type: 'GET',
-                    data: function (d) {
-                        d.fechaInicio = $('#fechaInicio').val();
-                        d.fechaFin = $('#fechaFin').val();
-                    },
-                    dataSrc: ''
-                },
-                columns: [
-                    {data: 'codiPers'},
-                    {data: 'nombPers'},
-                    {data: 'fechMarc', render: data => data || ''},
-                    {data: 'marcIngr', render: data => data || ''},
-                    {data: 'marcSald', render: data => data || ''}
-                ],
-                pageLength: 100,
-                language: {url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'}
-            });
-        }
+    // Función para inicializar DataTable con AJAX dinámico
+    function initMarcacionTable() {
+      marcacionTable = $("#personaMarcacionTable").DataTable({
+        ajax: {
+          url: "marcacionpersonalservlet",
+          type: "GET",
+          data: function (d) {
+            d.fechaInicio = $("#fechaInicio").val();
+            d.fechaFin = $("#fechaFin").val();
+          },
+          dataSrc: "",
+        },
+        columns: [
+          { data: "codiPers" },
+          { data: "nombPers" },
+          { data: "fechMarc", render: (data) => data || "" },
+          { data: "marcIngr", render: (data) => data || "" },
+          { data: "marcSald", render: (data) => data || "" },
+        ],
+        pageLength: 100,
+        language: {
+          url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        },
+      });
+    }
 
-        // Llamar a la función para inicializar la tabla
-        initMarcacionTable();
+    // Llamar a la función para inicializar la tabla
+    initMarcacionTable();
 
-        // Manejo de cambios en el filtro de fechas
-        $('#fechaInicio').change(function () {
-            let fechaInicio = $(this).val();
-            let maxFechaFin = moment(fechaInicio).add(31, 'days').format('YYYY-MM-DD');
-            $('#fechaFin').val(fechaInicio).attr('max', maxFechaFin);
-            marcacionTable.ajax.reload();
-        });
-
-        $('#fechaFin').change(function () {
-            marcacionTable.ajax.reload();
-        });
-
-        // Función para verificar si hay datos visibles en la tabla
-        function hasVisibleData() {
-            return marcacionTable.rows({filter: 'applied'}).data().length > 0;
-        }
-
-        // Exportar a Excel
-        $('#btnExportar').click(function () {
-            if (!hasVisibleData())
-                return alert('No hay datos disponibles para exportar.');
-
-            let tableData = [$('#personaMarcacionTable thead th').map((_, th) => $(th).text()).get()];
-            $('#personaMarcacionTable tbody tr').each((_, tr) => {
-                tableData.push($(tr).find('td').map((_, td) => $(td).text()).get());
-            });
-
-            let ws = XLSX.utils.aoa_to_sheet(tableData);
-            let wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'MarcacionPersona');
-            XLSX.writeFile(wb, 'marcacion_persona.xlsx');
-        });
-
-        // Exportar a PDF
-
-
-        $('#btnPDF').click(function () {
-            if (!hasVisibleData())
-                return alert('No hay datos disponibles para imprimir.');
-
-            let doc = new jsPDF();
-            doc.setFontSize(18).text('Marcaciones de Personal', 15, 20);
-            doc.setFontSize(12).text(`Fecha: ${moment().format('DD/MM/YYYY')}`, 150, 20);
-
-            let tableData = [$('#personaMarcacionTable thead th').map((_, th) => $(th).text()).get()];
-            let tableRows = $('#personaMarcacionTable tbody tr').map((_, tr) =>
-                $(tr).find('td').map((_, td) => $(td).text()).get()
-            ).get();
-
-            doc.autoTable({head: [tableData], body: tableRows, startY: 30, theme: 'striped'});
-            doc.save('marcacion_persona.pdf');
-        });
+    // Manejo de cambios en el filtro de fechas
+    $("#fechaInicio").change(function () {
+      let fechaInicio = $(this).val();
+      let maxFechaFin = moment(fechaInicio)
+        .add(31, "days")
+        .format("YYYY-MM-DD");
+      $("#fechaFin").val(fechaInicio).attr("max", maxFechaFin);
+      marcacionTable.ajax.reload();
     });
+
+    $("#fechaFin").change(function () {
+      marcacionTable.ajax.reload();
+    });
+
+    // Función para verificar si hay datos visibles en la tabla
+    function hasVisibleData() {
+      return marcacionTable.rows({ filter: "applied" }).data().length > 0;
+    }
+
+    // Exportar a Excel
+    $("#btnExportar").click(function () {
+      if (!hasVisibleData())
+        return alert("No hay datos disponibles para exportar.");
+
+      let tableData = [
+        $("#personaMarcacionTable thead th")
+          .map((_, th) => $(th).text())
+          .get(),
+      ];
+      $("#personaMarcacionTable tbody tr").each((_, tr) => {
+        tableData.push(
+          $(tr)
+            .find("td")
+            .map((_, td) => $(td).text())
+            .get()
+        );
+      });
+
+      let ws = XLSX.utils.aoa_to_sheet(tableData);
+      let wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "MarcacionPersona");
+      XLSX.writeFile(wb, "marcacion_persona.xlsx");
+    });
+
+    // Exportar a PDF
+
+    $("#btnPDF").click(function () {
+      if (!hasVisibleData())
+        return alert("No hay datos disponibles para imprimir.");
+
+      let doc = new jsPDF();
+      doc.setFontSize(18).text("Marcaciones de Personal", 15, 20);
+      doc
+        .setFontSize(12)
+        .text(`Fecha: ${moment().format("DD/MM/YYYY")}`, 150, 20);
+
+      let tableData = [
+        $("#personaMarcacionTable thead th")
+          .map((_, th) => $(th).text())
+          .get(),
+      ];
+      let tableRows = $("#personaMarcacionTable tbody tr")
+        .map((_, tr) =>
+          $(tr)
+            .find("td")
+            .map((_, td) => $(td).text())
+            .get()
+        )
+        .get();
+
+      doc.autoTable({
+        head: [tableData],
+        body: tableRows,
+        startY: 30,
+        theme: "striped",
+      });
+      doc.save("marcacion_persona.pdf");
+    });
+  });
 </script>

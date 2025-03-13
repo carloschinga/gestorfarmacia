@@ -7,6 +7,7 @@ package pe.gestor.planilla.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import pe.gestor.planilla.dto.PlanillaPersona;
 
@@ -30,4 +31,5 @@ public class PlanillaPersonaDAO extends PlanillaPersonaJpaController {
             em.close();
         }
     }
+
 }

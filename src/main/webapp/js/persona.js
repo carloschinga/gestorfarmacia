@@ -372,6 +372,7 @@ function loadCombos() {
     { url: "estadocivil", selector: "#estadoCivil" },
     { url: "jornadalaboral", selector: "#jornadaLaboral" },
     { url: "sucursalservlet", selector: "#sucursal" },
+    { url: "horariocargo", selector: "#codiHora" },
   ];
 
   combos.forEach((combo) => loadCombo(combo.url, combo.selector, combo.data));
@@ -419,7 +420,8 @@ function loadCombo(
             item.codiCargo ||
             item.codiArea ||
             item.codiSucurs ||
-            item.codiJornadLab
+            item.codiJornadLab ||
+            item.codihora
           }">${
             item.nombUbig ||
             item.nombTipoDoc ||
@@ -446,7 +448,8 @@ function loadCombo(
             item.nombCargo ||
             item.nombArea ||
             item.nombSucurs ||
-            item.nombJornadLab
+            item.nombJornadLab ||
+            item.nombhora
           }</option>`
         );
       });

@@ -191,6 +191,7 @@ public class PersonaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
 
         try {
             // Leer el cuerpo de la solicitud como un JSON

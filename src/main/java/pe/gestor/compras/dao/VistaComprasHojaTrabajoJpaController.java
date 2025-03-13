@@ -25,6 +25,7 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
     public VistaComprasHojaTrabajoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -40,7 +41,8 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findVistaComprasHojaTrabajo(vistaComprasHojaTrabajo.getCodigo()) != null) {
-                throw new PreexistingEntityException("VistaComprasHojaTrabajo " + vistaComprasHojaTrabajo + " already exists.", ex);
+                throw new PreexistingEntityException(
+                        "VistaComprasHojaTrabajo " + vistaComprasHojaTrabajo + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -62,7 +64,8 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 String id = vistaComprasHojaTrabajo.getCodigo();
                 if (findVistaComprasHojaTrabajo(id) == null) {
-                    throw new NonexistentEntityException("The vistaComprasHojaTrabajo with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException(
+                            "The vistaComprasHojaTrabajo with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -83,7 +86,8 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
                 vistaComprasHojaTrabajo = em.getReference(VistaComprasHojaTrabajo.class, id);
                 vistaComprasHojaTrabajo.getCodigo();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The vistaComprasHojaTrabajo with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The vistaComprasHojaTrabajo with id " + id + " no longer exists.",
+                        enfe);
             }
             em.remove(vistaComprasHojaTrabajo);
             em.getTransaction().commit();
@@ -102,7 +106,8 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
         return findVistaComprasHojaTrabajoEntities(false, maxResults, firstResult);
     }
 
-    private List<VistaComprasHojaTrabajo> findVistaComprasHojaTrabajoEntities(boolean all, int maxResults, int firstResult) {
+    private List<VistaComprasHojaTrabajo> findVistaComprasHojaTrabajoEntities(boolean all, int maxResults,
+            int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -139,5 +144,5 @@ public class VistaComprasHojaTrabajoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

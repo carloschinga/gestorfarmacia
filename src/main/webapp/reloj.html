@@ -1,289 +1,336 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Reloj Marcador de Asistencia</title>
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: #f8f9fa;
-                margin: 0;
-                padding: 20px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-            .container {
-                background: #ffffff;
-                padding: 30px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                width: 100%;
-                max-width: 400px;
-                text-align: center;
-            }
-            h1 {
-                margin-bottom: 20px;
-                color: #333;
-            }
-            label {
-                font-weight: bold;
-                margin-bottom: 5px;
-                display: block;
-                text-align: left;
-                color: #555;
-            }
-            input[type="text"], select {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 15px;
-                border: 1px solid #ced4da;
-                border-radius: 4px;
-                font-size: 16px;
-            }
-            button {
-                width: 100%;
-                padding: 10px;
-                background: #007bff;
-                border: none;
-                color: #fff;
-                font-size: 16px;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background 0.3s ease;
-            }
-            button:hover {
-                background: #0056b3;
-            }
-            #resultado {
-                margin-top: 15px;
-                font-weight: bold;
-                color: #333;
-            }
-            #reloj {
-                font-size: 16px;
-                margin-top: 20px;
-                font-family: monospace;
-                color:#2D8B59;
-            }
-            .btn-success {
-                background-color: #39B674;
-                border: none;
-                border-radius: 8px;
-                padding: 10px;
-                font-size: 16px;
-                width: 100%;
-                transition: 0.3s;
-            }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reloj Marcador de Asistencia</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+        text-align: left;
+        color: #555;
+      }
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      #resultado {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+      }
+      #reloj {
+        font-size: 16px;
+        margin-top: 20px;
+        font-family: monospace;
+        color: #2d8b59;
+      }
+      .btn-success {
+        background-color: #39b674;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        transition: 0.3s;
+      }
 
-            .btn-success:hover {
-                background-color: #2e8f5c;
-            }
-            .btn-info {
-                background-color: #1D3C6A; /* Azul similar al del botón */
-                border: none;
-                border-radius: 4px;
-                padding: 10px;
-                font-size: 16px;
-                width: 100%;
-                transition: 0.3s;
-            }
+      .btn-success:hover {
+        background-color: #2e8f5c;
+      }
+      .btn-info {
+        background-color: #1d3c6a; /* Azul similar al del botón */
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        transition: 0.3s;
+      }
 
-            .btn-info:hover {
-                background-color: #0e2b48; /* Azul más oscuro para el hover */
-            }
-            /* Contenedor para los botones "Marcar Asistencia" y "Ver Asistencias" */
-            .button-group {
-                display: flex;
-                justify-content: space-between; /* Distribuye los botones a los extremos */
-                margin-top: 20px;
-            }
+      .btn-info:hover {
+        background-color: #0e2b48; /* Azul más oscuro para el hover */
+      }
+      /* Contenedor para los botones "Marcar Asistencia" y "Ver Asistencias" */
+      .button-group {
+        display: flex;
+        justify-content: space-between; /* Distribuye los botones a los extremos */
+        margin-top: 20px;
+      }
 
-            /* Estilo de los botones */
-            .button-group .btn {
-                width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
-                padding: 10px;
-                font-size: 16px;
-            }
+      /* Estilo de los botones */
+      .button-group .btn {
+        width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
+        padding: 10px;
+        font-size: 16px;
+      }
 
-            .button-group .btn:hover {
-                opacity: 0.9; /* Efecto hover para los botones */
-            }
-            /* Estilo de los botones */
-            .button-group .btn {
-                width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
-                padding: 10px;
-                font-size: 16px;
-                border-radius: 8px; /* Aplica el border-radius a ambos botones */
-            }
+      .button-group .btn:hover {
+        opacity: 0.9; /* Efecto hover para los botones */
+      }
+      /* Estilo de los botones */
+      .button-group .btn {
+        width: 48%; /* Ajusta el tamaño de los botones para que no se desborden */
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px; /* Aplica el border-radius a ambos botones */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <small class="text-sm-center" id="reloj"></small>
+      <h1>Marcador de Asistencia</h1>
+      <div>
+        <label for="tipoDocCombo">Tipo de Documento:</label>
+        <select id="tipoDocCombo" name="tipoDocCombo">
+          <option value="">Selecciona un tipo de documento</option>
+          <!-- Las opciones se cargarán aquí desde el servidor -->
+        </select>
+      </div>
+      <div>
+        <label for="numeDocu">Número de Documento:</label>
+        <input
+          type="text"
+          id="numeDocu"
+          name="numeDocu"
+          placeholder="Ingresa tu número de documento"
+        />
+      </div>
+      <div class="button-group">
+        <button
+          class="btn btn-info"
+          onclick="verAsistencias()"
+          id="verAsistenciasBtn"
+        >
+          Ver Asistencias
+        </button>
+        <button class="btn btn-success" id="registrarBtn">
+          Marcar Asistencia
+        </button>
+      </div>
+      <div id="resultado"></div>
+      <!-- Reloj digital que muestra la hora del servidor -->
+    </div>
+    <div class="container2">
+      <h1>Marcador de Asistencia</h1>
+      <div>¡Esta PC no esta habilitada para marcar asistencia!</div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/es.min.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $(".container").hide();
+      $(".container2").hide();
+      if (!Cookies.get("habilitado")) {
+        $(".container").hide();
+        $(".container2").show();
+      } else {
+        $(".container").show();
+        $(".container2").hide();
+      }
 
+      function cargarTiposDoc() {
+        $.ajax({
+          url: "tipodocumentoservlet",
+          type: "GET",
+          success: function (data) {
+            let combo = $("#tipoDocCombo");
+            combo.empty();
+            $.each(data, function (index, nombre) {
+              combo.append(
+                '<option value="' +
+                  nombre.codiTipoDoc +
+                  '">' +
+                  nombre.nombTipoDoc +
+                  "</option>"
+              );
+            });
+          },
+          error: function () {
+            alert("Error al cargar los nombres.");
+          },
+        });
+      }
 
-        </style>
+      $("#registrarBtn").click(registrarAsistencia);
 
-    </head>
-    <body>
+      function registrarAsistencia() {
+        let tipoDocu = $("#tipoDocCombo").val();
+        let numeDocu = $("#numeDocu").val().trim();
+        if (!numeDocu || !tipoDocu) {
+          $("#resultado").html(
+            '<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>'
+          );
+          setTimeout(() => $("#resultado").text(""), 3000);
+          return;
+        }
 
-        <div class="container">
-            <small class="text-sm-center" id="reloj"></small>
-            <h1>Marcador de Asistencia</h1>
-            <div>
-                <label for="tipoDocCombo">Tipo de Documento:</label>
-                <select id="tipoDocCombo" name="tipoDocCombo">
-                    <option value="">Selecciona un tipo de documento</option>
-                    <!-- Las opciones se cargarán aquí desde el servidor -->
-                </select>
-            </div>
-            <div>
-                <label for="numeDocu">Número de Documento:</label>
-                <input type="text" id="numeDocu" name="numeDocu" placeholder="Ingresa tu número de documento">
-            </div>
-            <div class="button-group">
-                <button class="btn btn-info" onclick="verAsistencias()" id="verAsistenciasBtn">Ver Asistencias</button>
-                <button class="btn btn-success" onclick="registrarAsistencia()" id="registrarBtn">Marcar Asistencia</button>
-            </div>
-            <div id="resultado"></div>
-            <!-- Reloj digital que muestra la hora del servidor -->
+        $.ajax({
+          url: "marcacion",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ numeDocu, codiTipoDoc: tipoDocu }),
+          success: function (result) {
+            let mensaje =
+              result.status === "success"
+                ? result.marcacion === "entrada"
+                  ? `${result.nombre} ha registrado su entrada el día ${result.hora}`
+                  : `${result.nombre} ha registrado su salida el día ${result.hora}`
+                : "Error: " + result.message;
+            $("#resultado").text(mensaje);
+            setTimeout(() => $("#resultado").text(""), 3000);
+            $("#numeDocu").val("");
+          },
+          error: function () {
+            $("#resultado").text("Error en la conexión");
+          },
+        });
+      }
 
-        </div>
-        <div class="container2">
-            <h1>Marcador de Asistencia</h1>
-            <div>
-                ¡Esta PC no esta habilitada para marcar asistencia!
-            </div>
-        </div>
-    </body>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/es.min.js"></script>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script>
-                    $(document).ready(function () {
-                        $(".container").hide();
-                        $(".container2").hide();
-                        if (!Cookies.get('habilitado')) {
-                            $(".container").hide();
-                            $(".container2").show();
-                        } else {
-                            $(".container").show();
-                            $(".container2").hide();
-                        }
+      function verAsistencias() {
+        let numeDocu = $("#numeDocu").val().trim();
+        let tipoDocu = $("#tipoDocCombo").val().trim();
+        if (!numeDocu || !tipoDocu) {
+          $("#resultado").html(
+            '<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>'
+          );
+          setTimeout(() => $("#resultado").text(""), 3000);
+          return;
+        }
 
-                        function cargarTiposDoc() {
-                            $.ajax({
-                                url: 'tipodocumentoservlet',
-                                type: 'GET',
-                                success: function (data) {
-                                    let combo = $('#tipoDocCombo');
-                                    combo.empty();
-                                    $.each(data, function (index, nombre) {
-                                        combo.append('<option value="' + nombre.codiTipoDoc + '">' + nombre.nombTipoDoc + '</option>');
-                                    });
-                                },
-                                error: function () {
-                                    alert('Error al cargar los nombres.');
-                                }
-                            });
-                        }
-
-                        function registrarAsistencia() {
-                            let tipoDocu = $('#tipoDocCombo').val();
-                            let numeDocu = $('#numeDocu').val().trim();
-                            if (!numeDocu || !tipoDocu) {
-                                $('#resultado').html('<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>');
-                                setTimeout(() => $('#resultado').text(''), 3000);
-                                return;
-                            }
-
-                            $.ajax({
-                                url: 'marcacion',
-                                type: 'POST',
-                                contentType: 'application/json',
-                                data: JSON.stringify({numeDocu, codiTipoDoc: tipoDocu}),
-                                success: function (result) {
-                                    let mensaje = result.status === 'success' ?
-                                            (result.marcacion === 'entrada' ? `${result.nombre} ha registrado su entrada el día ${result.hora}` :
-                                                    `${result.nombre} ha registrado su salida el día ${result.hora}`) :
-                                            'Error: ' + result.message;
-                                    $('#resultado').text(mensaje);
-                                    setTimeout(() => $('#resultado').text(''), 3000);
-                                    $('#numeDocu').val('');
-                                },
-                                error: function () {
-                                    $('#resultado').text('Error en la conexión');
-                                }
-                            });
-                        }
-
-                        function verAsistencias() {
-                            let numeDocu = $('#numeDocu').val().trim();
-                            let tipoDocu = $('#tipoDocCombo').val().trim();
-                            if (!numeDocu || !tipoDocu) {
-                               $('#resultado').html('<p style="color:#FF0000";>Por favor, ingresa un número de documento y selecciona el tipo de documento</p>');
-                                setTimeout(() => $('#resultado').text(''), 3000);
-                                return;
-                            }
-
-                            $.getJSON(`verAsistencias?numeDocu=${encodeURIComponent(numeDocu)}&codiTipoDoc=${encodeURIComponent(tipoDocu)}`, function (data) {
-                                if (data.status === 'success') {
-                                    let asistencias = data.asistencias;
-                                    let resultadoHTML = '<h3>Asistencias de Hoy</h3>';
-                                    if (asistencias.length > 0) {
-                                        resultadoHTML += `<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+        $.getJSON(
+          `verAsistencias?numeDocu=${encodeURIComponent(
+            numeDocu
+          )}&codiTipoDoc=${encodeURIComponent(tipoDocu)}`,
+          function (data) {
+            if (data.status === "success") {
+              let asistencias = data.asistencias;
+              let resultadoHTML = "<h3>Asistencias de Hoy</h3>";
+              if (asistencias.length > 0) {
+                resultadoHTML += `<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr><th>Fecha</th><th>Entrada</th><th>Salida</th></tr>
                         </thead>
                         <tbody>`;
-                                        $.each(asistencias, function (index, asistencia) {
-                                            resultadoHTML += `<tr><td>${asistencia.fecha}</td><td>${asistencia.entrada}</td><td>${asistencia.salida}</td></tr>`;
-                                        });
-                                        resultadoHTML += '</tbody></table>';
-                                    } else {
-                                        resultadoHTML += '<p>No se encontraron asistencias para hoy.</p>';
-                                    }
+                $.each(asistencias, function (index, asistencia) {
+                  resultadoHTML += `<tr><td>${asistencia.fecha}</td><td>${asistencia.entrada}</td><td>${asistencia.salida}</td></tr>`;
+                });
+                resultadoHTML += "</tbody></table>";
+              } else {
+                resultadoHTML +=
+                  "<p>No se encontraron asistencias para hoy.</p>";
+              }
 
-                                    $('#resultado').html(resultadoHTML);
-                                    setTimeout(() => $('#resultado').html(''), 3000);
-                                    $('#numeDocu').val('');
-                                } else {
-                                    $('#resultado').text(data.message || 'Error desconocido al obtener las asistencias.');
-                                }
-                            }).fail(function () {
-                                $('#resultado').text('Error al realizar la solicitud.');
-                            });
-                        }
+              $("#resultado").html(resultadoHTML);
+              setTimeout(() => $("#resultado").html(""), 3000);
+              $("#numeDocu").val("");
+            } else {
+              $("#resultado").text(
+                data.message || "Error desconocido al obtener las asistencias."
+              );
+            }
+          }
+        ).fail(function () {
+          $("#resultado").text("Error al realizar la solicitud.");
+        });
+      }
 
-                        function actualizarRelojServidor() {
-                            $.getJSON('horaServidor')
-                                    .done(data => {
-                                        if (!data.hora) {
-                                            console.error('Hora no proporcionada por el servidor.');
-                                            return;
-                                        }
+      $.ajax({
+        url: "getdatetime",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+          const initialDateTime = data.datetime;
+          updateDateTime(initialDateTime);
+        },
+        error: function (error) {
+          $("#datetime").text("Error al cargar la fecha y hora");
+        },
+      });
 
-                                        let fechaUTC = moment.utc(data.hora);
-                                        if (!fechaUTC.isValid()) {
-                                            console.error('Fecha inválida:', data.hora);
-                                            return;
-                                        }
+      function updateDateTime(initialDateTime) {
+        let dateTime = new Date(initialDateTime.replace(" ", "T"));
 
-                                        let fechaHoraFormateada = fechaUTC.local().format('dddd, DD/MM/YYYY - HH:mm:ss');
-                                        fechaHoraFormateada = fechaHoraFormateada.charAt(0).toUpperCase() + fechaHoraFormateada.slice(1);
+        if (isNaN(dateTime.getTime())) {
+          $("#reloj").text("Error: Fecha y hora no válidas");
+          return;
+        }
 
-                                        $('#reloj').text(fechaHoraFormateada);
-                                    })
-                                    .fail(() => console.error('Error al obtener la hora del servidor.'));
-                        }
+        const formattedDateTime = dateTime.toLocaleString("es-ES", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
 
+        $("#reloj").text(formattedDateTime);
 
-                        setInterval(actualizarRelojServidor, 1000);
-                        cargarTiposDoc();
-                        actualizarRelojServidor();
-                        $('#registrarBtn').click(registrarAsistencia);
-                        $('#verAsistenciasBtn').click(verAsistencias);
-                    });
+        setInterval(function () {
+          dateTime.setSeconds(dateTime.getSeconds() + 1);
+          const formattedDateTime = dateTime.toLocaleString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          $("#reloj").text(formattedDateTime); // Mostrar en el HTML
+        }, 1000);
+      }
 
-
-    </script>
+      cargarTiposDoc();
+      $("#verAsistenciasBtn").click(verAsistencias);
+    });
+  </script>
 </html>

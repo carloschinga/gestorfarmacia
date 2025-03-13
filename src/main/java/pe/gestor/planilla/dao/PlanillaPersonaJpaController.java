@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -135,6 +136,28 @@ public class PlanillaPersonaJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+
+    public PlanillaPersona findPlanillaPersonaByNumeDocu(String numeDocu, String codiTipoDocu) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("PlanillaPersona.findByNumeDocu");
+            q.setParameter("numeDocu", numeDocu);
+            q.setParameter("codiTipoDoc", codiTipoDocu);
+            return (PlanillaPersona) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
+        PlanillaPersonaJpaController dao = new PlanillaPersonaJpaController(emf);
+
+        PlanillaPersona persona = dao.findPlanillaPersonaByNumeDocu("87126354", "01");
+        System.out.println(persona.getNombPers());
     }
 
 }

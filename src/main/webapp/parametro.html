@@ -1,69 +1,163 @@
 <div class="container mt-4">
-    <div class="card">
+  <div class="row">
+    <!-- Primer Card: Opciones de Marcación -->
+    <div class="col-md-6">
+      <div class="card">
         <div class="card-header">
-            <h5 class="h5 mb-0 text-gray-800">Opciones de Marcación</h5>
+          <h5 class="h5 mb-0 text-gray-800">Opciones de Marcación</h5>
         </div>
-
         <div class="card-body">
-
-            <div class="row">
-                <div class="col-4">                    
-                    <button class="btn btn-primary btn-sm" id="btnCrear">
-                        <i class="fas fa-fw fa-plus"></i>
-                        <span>Agregar Marcador a PC</span>
-                    </button>
-
-
-                </div></div> <br/>
-            <div class="row">
-                <div class="col-4">
-                    <button class="btn btn-primary btn-sm" id="btnQuitar">
-                        <i class="fas fa-fw fa-minus"></i>
-                        <span>Quitar Marcador de PC</span>
-                    </button></div>
-            </div>
-            <hr/>   
-            <div id="alertaCreacion" class="alert alert-success alert-dismissible fade show" role="alert" style="display:none;">
-                ¡La cookie ha sido creada correctamente!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div id="alertaEliminacion" class="alert alert-warning alert-dismissible fade show" role="alert" style="display:none;">
-                ¡La cookie ha sido eliminada!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-primary btn-sm" id="btnCrear">
+              <i class="fas fa-fw fa-plus"></i>
+              <span>Agregar Marcador a PC</span>
+            </button>
+            <button class="btn btn-primary btn-sm" id="btnQuitar">
+              <i class="fas fa-fw fa-minus"></i>
+              <span>Quitar Marcador de PC</span>
+            </button>
+          </div>
+          <hr />
+          <div
+            id="alertaCreacion"
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+            style="display: none"
+          >
+            ¡La cookie ha sido creada correctamente!
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Cerrar"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div
+            id="alertaEliminacion"
+            class="alert alert-warning alert-dismissible fade show"
+            role="alert"
+            style="display: none"
+          >
+            ¡La cookie ha sido eliminada!
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Cerrar"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- Segundo Card: Minutos de Marcación -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="h5 mb-0 text-gray-800">Minutos de Marcación</h5>
+        </div>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-6">
+              Minutos:
+              <span id="minMarca">...</span>
+            </div>
+            <div class="col-6">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="minMarcaEdit"
+                  class="form-control form-control-sm"
+                />
+                <div class="input-group-append">
+                  <button
+                    type="button"
+                    id="editMin"
+                    class="btn btn-info btn-sm"
+                  >
+                    Editar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#btnCrear").click(function () {
-            // Crear la cookie con una expiración de 100 años
-            Cookies.set('habilitado', 'si', {expires: 36500, path: '/'});
+  $(document).ready(function () {
+    renderizarMinuts();
+    function mostrarAlerta(mensaje, icono) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: icono,
+        title: mensaje,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-sm" },
+      });
+    }
 
-            // Mostrar la alerta de creación
-            $("#alertaCreacion").fadeIn();
-            // Desvanecer la alerta después de 2 segundos de espera y 2 segundos de fadeOut
-            setTimeout(function () {
-                $("#alertaCreacion").fadeOut(2000);
-            }, 2000);
-        });
-
-        $("#btnQuitar").click(function () {
-            // Eliminar la cookie (estableciendo un tiempo negativo)
-            Cookies.remove('habilitado', {path: '/'});
-
-            // Mostrar la alerta de eliminación
-            $("#alertaEliminacion").fadeIn();
-            // Desvanecer la alerta después de 2 segundos de espera y 2 segundos de fadeOut
-            setTimeout(function () {
-                $("#alertaEliminacion").fadeOut(2000);
-            }, 2000);
-        });
+    $("#editMin").click(function () {
+      const minutos = $("#minMarcaEdit").val();
+      console.log(`Conteo de minutos: ${minutos}`);
+      $.ajax({
+        type: "PUT",
+        url: "asistenciaparametros",
+        data: JSON.stringify({ minutos }),
+        contentType: "application/json",
+        success: function (response) {
+          if (response.status === "success") {
+            mostrarAlerta(response.message, "success");
+            renderizarMinuts();
+            $("#minMarcaEdit").empty();
+          }
+        },
+      });
     });
+
+    function renderizarMinuts() {
+      $.ajax({
+        type: "GET",
+        url: "asistenciaparametros",
+        data: { opcion: "1" },
+        success: function (response) {
+          $("#minMarca").text(response.minutos);
+        },
+      });
+    }
+
+    $("#btnCrear").click(function () {
+      // Crear la cookie con una expiración de 100 años
+      Cookies.set("habilitado", "si", { expires: 36500, path: "/" });
+
+      // Mostrar la alerta de creación
+      $("#alertaCreacion").fadeIn();
+      // Desvanecer la alerta después de 2 segundos de espera y 2 segundos de fadeOut
+      setTimeout(function () {
+        $("#alertaCreacion").fadeOut(2000);
+      }, 2000);
+    });
+
+    $("#btnQuitar").click(function () {
+      // Eliminar la cookie (estableciendo un tiempo negativo)
+      Cookies.remove("habilitado", { path: "/" });
+
+      // Mostrar la alerta de eliminación
+      $("#alertaEliminacion").fadeIn();
+      // Desvanecer la alerta después de 2 segundos de espera y 2 segundos de fadeOut
+      setTimeout(function () {
+        $("#alertaEliminacion").fadeOut(2000);
+      }, 2000);
+    });
+  });
 </script>

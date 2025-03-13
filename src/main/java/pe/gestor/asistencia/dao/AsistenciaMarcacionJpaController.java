@@ -5,11 +5,17 @@
 package pe.gestor.asistencia.dao;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import pe.gestor.asistencia.dao.exceptions.NonexistentEntityException;
@@ -24,6 +30,7 @@ public class AsistenciaMarcacionJpaController implements Serializable {
     public AsistenciaMarcacionJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -56,7 +63,8 @@ public class AsistenciaMarcacionJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = asistenciaMarcacion.getCodiMarc();
                 if (findAsistenciaMarcacion(id) == null) {
-                    throw new NonexistentEntityException("The asistenciaMarcacion with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException(
+                            "The asistenciaMarcacion with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -77,7 +85,8 @@ public class AsistenciaMarcacionJpaController implements Serializable {
                 asistenciaMarcacion = em.getReference(AsistenciaMarcacion.class, id);
                 asistenciaMarcacion.getCodiMarc();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asistenciaMarcacion with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asistenciaMarcacion with id " + id + " no longer exists.",
+                        enfe);
             }
             em.remove(asistenciaMarcacion);
             em.getTransaction().commit();
@@ -133,5 +142,61 @@ public class AsistenciaMarcacionJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<AsistenciaMarcacion> findMarcacionIncompleta(int codiPers, Date fechaInicio, Date fechDateFin) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT m FROM AsistenciaMarcacion m " +
+                    "WHERE m.codiPers = :codiPers " +
+                    "AND m.marcIngr IS NOT NULL " +
+                    "AND m.marcSald IS NULL " +
+                    "AND m.fechMarc BETWEEN :fechaInicio AND :fechaFin " +
+                    "ORDER BY m.fechMarc ASC";
+
+            TypedQuery<AsistenciaMarcacion> query = em.createQuery(jpql, AsistenciaMarcacion.class);
+            query.setParameter("codiPers", codiPers);
+            query.setParameter("fechaInicio", fechaInicio);
+            query.setParameter("fechaFin", fechDateFin);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<AsistenciaMarcacion> findMarcacionListaConPersonayFecha(int codiPers, Date fechaInicio) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery(
+                    "SELECT m FROM AsistenciaMarcacion m " +
+                            "WHERE m.codiPers = :codiPers " +
+                            "AND m.marcIngr IS NOT NULL " +
+                            "AND m.marcSald IS NOT NULL " +
+                            "AND m.fechMarc = :fechaInicio");
+            query.setParameter("codiPers", codiPers);
+            query.setParameter("fechaInicio", fechaInicio);
+            return query.getResultList();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
+        AsistenciaMarcacionJpaController pc = new AsistenciaMarcacionJpaController(emf);
+        List<AsistenciaMarcacion> lista = pc.findMarcacionListaConPersonayFecha(28, new Date());
+        if (lista == null) {
+            System.out.println("No existe");
+        } else {
+            System.out.println(lista.size());
+            for (AsistenciaMarcacion asistenciaMarcacion : lista) {
+                System.out.println("Codi marcacion: " + asistenciaMarcacion.getCodiMarc());
+            }
+        }
+    }
+
 }

@@ -53,6 +53,11 @@
     <class>pe.gestor.planilla.dto.PlanillaEstadocivil</class>
     <class>pe.gestor.planilla.dto.PlanillaJornadalaboral</class>
     <class>pe.gestor.planilla.dto.PlanillaSucursal</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaParametros</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaHorario</class>
+    <class>pe.gestor.planilla.dto.PlanillaDia</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaTurno</class>
+    <class>pe.gestor.asistencia.dto.AsistenciaHorariodetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!--<property
@@ -60,7 +65,7 @@
             <property name="hibernate.cache.use_query_cache" value="false" />
             <property name="hibernate.cache.region.factory_class"
                       value="org.hibernate.cache.internal.NoCachingRegionFactory" />-->
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3333/gestor?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3333/gestor18?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value="root"/>
