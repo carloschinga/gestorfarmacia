@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LoginRol.findAll", query = "SELECT l FROM LoginRol l"),
     @NamedQuery(name = "LoginRol.findByCodiRol", query = "SELECT l FROM LoginRol l WHERE l.codiRol = :codiRol"),
     @NamedQuery(name = "LoginRol.findByNombRol", query = "SELECT l FROM LoginRol l WHERE l.nombRol = :nombRol"),
+    @NamedQuery(name = "LoginRol.findByActiRol", query = "SELECT l FROM LoginRol l WHERE l.actiRol = :actiRol"),
     @NamedQuery(name = "LoginRol.findByAdmiRol", query = "SELECT l FROM LoginRol l WHERE l.admiRol = :admiRol")})
 public class LoginRol implements Serializable {
 
@@ -40,6 +42,10 @@ public class LoginRol implements Serializable {
     @Size(max = 10)
     @Column(name = "nombRol")
     private String nombRol;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "actiRol")
+    private short actiRol;
     @Column(name = "admiRol")
     private Boolean admiRol;
 
@@ -48,6 +54,11 @@ public class LoginRol implements Serializable {
 
     public LoginRol(Integer codiRol) {
         this.codiRol = codiRol;
+    }
+
+    public LoginRol(Integer codiRol, short actiRol) {
+        this.codiRol = codiRol;
+        this.actiRol = actiRol;
     }
 
     public Integer getCodiRol() {
@@ -64,6 +75,14 @@ public class LoginRol implements Serializable {
 
     public void setNombRol(String nombRol) {
         this.nombRol = nombRol;
+    }
+
+    public short getActiRol() {
+        return actiRol;
+    }
+
+    public void setActiRol(short actiRol) {
+        this.actiRol = actiRol;
     }
 
     public Boolean getAdmiRol() {

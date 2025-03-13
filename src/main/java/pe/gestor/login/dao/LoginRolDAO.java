@@ -16,4 +16,5 @@ public class LoginRolDAO extends LoginRolJpaController{
         super(emf);
     }
     
+    
 }
