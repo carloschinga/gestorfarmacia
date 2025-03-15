@@ -1,216 +1,283 @@
 <div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h3 class="h4 mb-0 text-gray-800">Cargar archivos de Pharma</h3>
-        </div>
-        <div class="card-body p-4">
-            <div class="row g-4">
-                <div class="col-md-6 border-end pe-4">
-                    <p class="fw-bold text-secondary">📊 Cargar Ventas </p>
-
-                    <label for="sede" class="form-label">Seleccionar Sede:</label>
-                    <select id="sede" class="form-select mb-3">
-                        <option value="">Seleccione una sede</option>
-                    </select>
-                    <br/>
-                    <br/>
-                    <div class="mb-3">
-                        <label for="fileVentas" class="form-label">Seleccionar archivo de Ventas:</label>
-                        <input type="file" class="form-control" id="fileVentas" name="file" required>
-                    </div><br/>
-
-
-                    <button class="btn btn-primary w-100 upload-btn" id="btnUploadVentas" data-input="#fileVentas" data-url="uploadventaspharmacsvservlet">
-                        <i class="fas fa-fw fa-folder"></i> Subir Ventas
-                    </button>
-
-
-                </div>
-
-                <div class="col-md-6 ps-4">
-                    <p class="fw-bold text-secondary">📦 Cargar Stock y Productos</p>
-
-                    <div class="mb-3 mt-3">
-                        <label for="fileStock" class="form-label">Seleccionar archivo de Stock:</label>
-                        <input type="file" class="form-control" id="fileStock" name="file" required>
-                    </div>
-                    <br/>
-                    <button class="btn btn-primary w-100 upload-btn" id="btnUploadStock" data-input="#fileStock" data-url="uploadproductosstockcsvservlet">
-                        <i class="fas fa-fw fa-folder"></i> Subir Stock
-                    </button>
-                    <br/>
-                    <br/>
-                    <div class="mb-3">
-                        <label for="fileProveedor" class="form-label">Seleccionar archivo de Producto:</label>
-                        <input type="file" class="form-control" id="fileProveedor" name="file" required>
-                    </div>
-                    <br/>
-                    <button class="btn btn-primary w-100 upload-btn" id="btnUploadProducto" data-input="#fileProveedor" data-url="uploadproductospharmacsvservlet">
-                        <i class="fas fa-fw fa-folder"></i> Subir Producto
-                    </button>
-                </div>
-            </div>
-        </div>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="h4 mb-0 text-gray-800">Cargar archivos de Pharma</h3>
     </div>
+    <div class="card-body p-4">
+      <div class="row g-4">
+        <div class="col-md-6 border-end pe-4">
+          <p class="fw-bold text-secondary">📊 Cargar Ventas</p>
+
+          <label for="sede" class="form-label">Seleccionar Sede:</label>
+          <select id="sede" class="form-select mb-3">
+            <option value="">Seleccione una sede</option>
+          </select>
+          <br />
+          <br />
+          <div class="mb-3">
+            <label for="fileVentas" class="form-label"
+              >Seleccionar archivo de Ventas:</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="fileVentas"
+              name="file"
+              required
+            />
+          </div>
+          <br />
+
+          <button
+            class="btn btn-primary w-100 upload-btn"
+            id="btnUploadVentas"
+            data-input="#fileVentas"
+            data-url="uploadventaspharmacsvservlet"
+          >
+            <i class="fas fa-fw fa-folder"></i> Subir Ventas
+          </button>
+        </div>
+
+        <div class="col-md-6 ps-4">
+          <p class="fw-bold text-secondary">📦 Cargar Stock y Productos</p>
+
+          <div class="mb-3 mt-3">
+            <label for="fileStock" class="form-label"
+              >Seleccionar archivo de Stock:</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="fileStock"
+              name="file"
+              required
+            />
+          </div>
+          <br />
+          <button
+            class="btn btn-primary w-100 upload-btn"
+            id="btnUploadStock"
+            data-input="#fileStock"
+            data-url="uploadproductosstockcsvservlet"
+          >
+            <i class="fas fa-fw fa-folder"></i> Subir Stock
+          </button>
+          <br />
+          <br />
+          <div class="mb-3">
+            <label for="fileProveedor" class="form-label"
+              >Seleccionar archivo de Producto:</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="fileProveedor"
+              name="file"
+              required
+            />
+          </div>
+          <br />
+          <button
+            class="btn btn-primary w-100 upload-btn"
+            id="btnUploadProducto"
+            data-input="#fileProveedor"
+            data-url="uploadproductospharmaexcelservlet"
+          >
+            <i class="fas fa-fw fa-folder"></i> Subir Producto
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-    $(document).ready(function () {
-        function cargarSedes() {
-            $.ajax({
-                url: 'sedeservlet',
-                type: 'GET',
-                success: function (response) {
-                    var sedeSelect = $('#sede');
-                    sedeSelect.empty().append('<option value="">Seleccione una sede</option>');
-                    response.forEach(function (sede) {
-                        sedeSelect.append('<option value="' + sede.codiSede + '">' + sede.nombSede + '</option>');
-                    });
-                }
-            });
-        }
+  $(document).ready(function () {
+    function cargarSedes() {
+      $.ajax({
+        url: "sedeservlet",
+        type: "GET",
+        success: function (response) {
+          var sedeSelect = $("#sede");
+          sedeSelect
+            .empty()
+            .append('<option value="">Seleccione una sede</option>');
+          response.forEach(function (sede) {
+            sedeSelect.append(
+              '<option value="' +
+                sede.codiSede +
+                '">' +
+                sede.nombSede +
+                "</option>"
+            );
+          });
+        },
+      });
+    }
 
-        cargarSedes();
+    cargarSedes();
 
-        function subirArchivo(btn) {
-            var fileInput = $(btn.data("input"))[0].files[0];
-            var url = btn.data("url");
+    function subirArchivo(btn) {
+      var fileInput = $(btn.data("input"))[0].files[0];
+      var url = btn.data("url");
 
-            if (!fileInput) {
-                alert("❌ Seleccione un archivo antes de subir.");
-                return;
-            }
+      if (!fileInput) {
+        alert("❌ Seleccione un archivo antes de subir.");
+        return;
+      }
 
-            var sede = $('#sede').val();
-            if (!sede) {
-                alert("❌ Debe seleccionar una sede.");
-                return;
-            }
+      var sede = $("#sede").val();
+      if (!sede) {
+        alert("❌ Debe seleccionar una sede.");
+        return;
+      }
 
-            var formData = new FormData();
-            formData.append("csvFile", fileInput);
-            formData.append("sede", sede);
+      var formData = new FormData();
+      formData.append("csvFile", fileInput);
+      formData.append("sede", sede);
 
-            // Deshabilitar el botón y mostrar "Cargando..."
-            btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
+      // Deshabilitar el botón y mostrar "Cargando..."
+      btn
+        .prop("disabled", true)
+        .html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                      // Muestra el mensaje según la respuesta del servidor
-                    if (response.includes("Archivo CSV importado correctamente")) {
-                        alert("✅ Archivo CSV importado correctamente.");
-                    } else {
-                        alert("❌ Error al procesar el archivo CSV.");
-                    }
-                },
-                error: function () {
-                    alert("❌ Error al subir el archivo.");
-                },
-                complete: function () {
-                    // Restaurar botón al terminar
-                    btn.prop("disabled", false).html('<i class="fas fa-fw fa-folder"></i> Subir');
-                }
-            });
-        }
-      
-        function subirArchivoProductosCSV(btn) {
-            // Obtiene el archivo CSV que se seleccionó en el input
-            var fileInput = $(btn.data("input"))[0].files[0];
-            var url = btn.data("url");  // URL del servlet que recibirá el archivo
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          // Muestra el mensaje según la respuesta del servidor
+          if (response.includes("Archivo CSV importado correctamente")) {
+            alert("✅ Archivo CSV importado correctamente.");
+          } else {
+            alert("❌ Error al procesar el archivo CSV.");
+          }
+        },
+        error: function () {
+          alert("❌ Error al subir el archivo.");
+        },
+        complete: function () {
+          // Restaurar botón al terminar
+          btn
+            .prop("disabled", false)
+            .html('<i class="fas fa-fw fa-folder"></i> Subir');
+        },
+      });
+    }
 
-            // Verifica si se ha seleccionado un archivo
-            if (!fileInput) {
-                alert("❌ Seleccione un archivo antes de subir.");
-                return;
-            }
+    function subirArchivoProductosStockExcel(btn) {
+      // Obtiene el archivo Excel que se seleccionó en el input
+      var fileInput = $(btn.data("input"))[0].files[0];
+      var url = btn.data("url"); // URL del servlet que recibirá el archivo
 
-            // Prepara los datos del formulario para enviarlos
-            var formData = new FormData();
-            formData.append("csvFile", fileInput);  // "csvFile" es el nombre del campo de archivo en el servlet
+      // Verifica si se ha seleccionado un archivo
+      if (!fileInput) {
+        alert("❌ Seleccione un archivo antes de subir.");
+        return;
+      }
 
-            // Deshabilita el botón y cambia el texto a "Cargando..."
-            btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
+      // Verifica que el archivo sea Excel
+      if (
+        !fileInput.name.endsWith(".xls") &&
+        !fileInput.name.endsWith(".xlsx")
+      ) {
+        alert(
+          "❌ Formato de archivo no soportado. Solo se permiten archivos .xls y .xlsx."
+        );
+        return;
+      }
 
-            // Envia el archivo CSV al servlet mediante AJAX
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    // Muestra el mensaje según la respuesta del servidor
-                    if (response.includes("Archivo CSV importado correctamente")) {
-                        alert("✅ Archivo CSV importado correctamente.");
-                    } else {
-                        alert("❌ Error al procesar el archivo CSV.");
-                    }
-                },
-                error: function () {
-                    alert("❌ Error al procesar el archivo CSV.");
-                },
-                complete: function () {
-                    // Restaura el estado del botón
-                    btn.prop("disabled", false).html('<i class="fas fa-fw fa-folder"></i> Subir');
-                }
-            });
-        }
-        function subirArchivoProductosStockCSV(btn) {
-            // Obtiene el archivo CSV que se seleccionó en el input
-            var fileInput = $(btn.data("input"))[0].files[0];
-            var url = btn.data("url");  // URL del servlet que recibirá el archivo
+      // Prepara los datos del formulario para enviarlos
+      var formData = new FormData();
+      formData.append("excelFile", fileInput); // "excelFile" es el nombre del campo de archivo en el servlet
 
-            // Verifica si se ha seleccionado un archivo
-            if (!fileInput) {
-                alert("❌ Seleccione un archivo antes de subir.");
-                return;
-            }
+      // Deshabilita el botón y cambia el texto a "Cargando..."
+      btn
+        .prop("disabled", true)
+        .html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
 
-            // Prepara los datos del formulario para enviarlos
-            var formData = new FormData();
-            formData.append("csvFile", fileInput);  // "csvFile" es el nombre del campo de archivo en el servlet
+      // Envia el archivo Excel al servlet mediante AJAX
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          // Muestra el mensaje según la respuesta del servidor
+          if (response.includes("Archivo Excel importado correctamente")) {
+            alert("✅ Archivo Excel importado correctamente.");
+          } else {
+            alert("❌ Error al procesar el archivo Excel.");
+          }
+        },
+        error: function () {
+          alert("❌ Error al procesar el archivo Excel.");
+        },
+        complete: function () {
+          // Restaura el estado del botón
+          btn
+            .prop("disabled", false)
+            .html('<i class="fas fa-fw fa-folder"></i> Subir');
+        },
+      });
+    }
+    function subirArchivoProductosStockCSV(btn) {
+      // Obtiene el archivo CSV que se seleccionó en el input
+      var fileInput = $(btn.data("input"))[0].files[0];
+      var url = btn.data("url"); // URL del servlet que recibirá el archivo
 
-            // Deshabilita el botón y cambia el texto a "Cargando..."
-            btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
+      // Verifica si se ha seleccionado un archivo
+      if (!fileInput) {
+        alert("❌ Seleccione un archivo antes de subir.");
+        return;
+      }
 
-            // Envia el archivo CSV al servlet mediante AJAX
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    // Muestra el mensaje según la respuesta del servidor
-                    if (response.includes("Archivo CSV importado correctamente")) {
-                        alert("✅ Archivo CSV importado correctamente.");
-                    } else {
-                        alert("❌ Error al procesar el archivo CSV.");
-                    }
-                },
-                error: function () {
-                    alert("❌ Error al procesar el archivo CSV.");
-                },
-                complete: function () {
-                    // Restaura el estado del botón
-                    btn.prop("disabled", false).html('<i class="fas fa-fw fa-folder"></i> Subir');
-                }
-            });
-        }
-        $("#btnUploadVentas").on("click", function () {
-            subirArchivo($(this));
-        });
-        $("#btnUploadStock").on("click", function () {
-            subirArchivoProductosStockCSV($(this));
-        });
-         $("#btnUploadProducto").on("click", function () {
-            subirArchivoProductosCSV($(this));
-        });
+      // Prepara los datos del formulario para enviarlos
+      var formData = new FormData();
+      formData.append("csvFile", fileInput); // "csvFile" es el nombre del campo de archivo en el servlet
 
+      // Deshabilita el botón y cambia el texto a "Cargando..."
+      btn
+        .prop("disabled", true)
+        .html('<i class="fas fa-spinner fa-spin"></i> Cargando...');
+
+      // Envia el archivo CSV al servlet mediante AJAX
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          // Muestra el mensaje según la respuesta del servidor
+          if (response.includes("Archivo CSV importado correctamente")) {
+            alert("✅ Archivo CSV importado correctamente.");
+          } else {
+            alert("❌ Error al procesar el archivo CSV.");
+          }
+        },
+        error: function () {
+          alert("❌ Error al procesar el archivo CSV.");
+        },
+        complete: function () {
+          // Restaura el estado del botón
+          btn
+            .prop("disabled", false)
+            .html('<i class="fas fa-fw fa-folder"></i> Subir');
+        },
+      });
+    }
+    $("#btnUploadVentas").on("click", function () {
+      subirArchivo($(this));
     });
+    $("#btnUploadStock").on("click", function () {
+      subirArchivoProductosStockCSV($(this));
+    });
+    $("#btnUploadProducto").on("click", function () {
+      subirArchivoProductosStockExcel($(this));
+    });
+  });
 </script>
