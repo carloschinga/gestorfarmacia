@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package pe.gestor.planilla.dto;
 
 import java.io.Serializable;
@@ -27,9 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "PlanillaPersona.findAll", query = "SELECT p FROM PlanillaPersona p"),
+        @NamedQuery(name = "PlanillaPersona.activos", query = "SELECT p FROM PlanillaPersona p WHERE p.actiPers = true"),
         @NamedQuery(name = "PlanillaPersona.findByCodiPers", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPers = :codiPers"),
         @NamedQuery(name = "PlanillaPersona.findByCodiTipoDoc", query = "SELECT p FROM PlanillaPersona p WHERE p.codiTipoDoc = :codiTipoDoc"),
-        @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu and p.codiTipoDoc=:codiTipoDoc"),
+        @NamedQuery(name = "PlanillaPersona.findByNumeDocu", query = "SELECT p FROM PlanillaPersona p WHERE p.numeDocu = :numeDocu AND p.codiTipoDoc = :codiTipoDoc"),
         @NamedQuery(name = "PlanillaPersona.findByCodiPaisEmis", query = "SELECT p FROM PlanillaPersona p WHERE p.codiPaisEmis = :codiPaisEmis"),
         @NamedQuery(name = "PlanillaPersona.findByAppaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.appaPers = :appaPers"),
         @NamedQuery(name = "PlanillaPersona.findByApmaPers", query = "SELECT p FROM PlanillaPersona p WHERE p.apmaPers = :apmaPers"),
@@ -107,7 +113,8 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "PlanillaPersona.findByConvenio", query = "SELECT p FROM PlanillaPersona p WHERE p.convenio = :convenio"),
         @NamedQuery(name = "PlanillaPersona.findByAportaSctr", query = "SELECT p FROM PlanillaPersona p WHERE p.aportaSctr = :aportaSctr"),
         @NamedQuery(name = "PlanillaPersona.findByPolizaSeguro", query = "SELECT p FROM PlanillaPersona p WHERE p.polizaSeguro = :polizaSeguro"),
-        @NamedQuery(name = "PlanillaPersona.findByAsignacionFamiliar", query = "SELECT p FROM PlanillaPersona p WHERE p.asignacionFamiliar = :asignacionFamiliar") })
+        @NamedQuery(name = "PlanillaPersona.findByAsignacionFamiliar", query = "SELECT p FROM PlanillaPersona p WHERE p.asignacionFamiliar = :asignacionFamiliar"),
+        @NamedQuery(name = "PlanillaPersona.findByCodiHora", query = "SELECT p FROM PlanillaPersona p WHERE p.codiHora = :codiHora") })
 public class PlanillaPersona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -269,10 +276,10 @@ public class PlanillaPersona implements Serializable {
     @Column(name = "asigFamiPers")
     private Integer asigFamiPers;
     @Size(max = 3)
-    @Column(name = "codiEntiBanc", nullable = true)
+    @Column(name = "codiEntiBanc")
     private String codiEntiBanc;
     @Size(max = 20)
-    @Column(name = "numeCuen", nullable = true)
+    @Column(name = "numeCuen")
     private String numeCuen;
     @Column(name = "codiPlant")
     private Integer codiPlant;
@@ -328,10 +335,10 @@ public class PlanillaPersona implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechIngr;
     @Size(max = 20)
-    @Column(name = "cuentaCTS", nullable = true)
+    @Column(name = "cuentaCTS")
     private String cuentaCTS;
     @Size(max = 3)
-    @Column(name = "codiCuenCTS", nullable = true)
+    @Column(name = "codiCuenCTS")
     private String codiCuenCTS;
     @Column(name = "fechCese")
     @Temporal(TemporalType.DATE)
@@ -350,6 +357,8 @@ public class PlanillaPersona implements Serializable {
     private Boolean polizaSeguro;
     @Column(name = "asignacionFamiliar")
     private Boolean asignacionFamiliar;
+    @Column(name = "codiHora")
+    private Integer codiHora;
 
     public PlanillaPersona() {
     }
@@ -1018,6 +1027,14 @@ public class PlanillaPersona implements Serializable {
 
     public void setAsignacionFamiliar(Boolean asignacionFamiliar) {
         this.asignacionFamiliar = asignacionFamiliar;
+    }
+
+    public Integer getCodiHora() {
+        return codiHora;
+    }
+
+    public void setCodiHora(Integer codiHora) {
+        this.codiHora = codiHora;
     }
 
     @Override

@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "AsistenciaHorariodetalle.findByCodiHora", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiHora = :codiHora"),
         @NamedQuery(name = "AsistenciaHorariodetalle.findByCodiDia", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiDia = :codiDia"),
         @NamedQuery(name = "AsistenciaHorariodetalle.findByCodiTurn", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiTurn = :codiTurn"),
-        @NamedQuery(name = "AsistenciaHorariodetalle.findByHoraYDia", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiHora = :codiHora AND a.codiDia = :codiDia") })
+        @NamedQuery(name = "AsistenciaHorariodetalle.findByHoraYDia", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiHora = :codiHora AND a.codiDia = :codiDia"),
+        @NamedQuery(name = "AsistenciaHorariodetalle.findByDiaAndHora", query = "SELECT a FROM AsistenciaHorariodetalle a WHERE a.codiDia = :codiDia AND a.codiHora = :codiHora")
+})
 public class AsistenciaHorariodetalle implements Serializable {
 
     private static final long serialVersionUID = 1L;

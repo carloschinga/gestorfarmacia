@@ -152,12 +152,23 @@ public class PlanillaPersonaJpaController implements Serializable {
         }
     }
 
+    public List<PlanillaPersona> findActivos() {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("PlanillaPersona.activos");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
-        PlanillaPersonaJpaController dao = new PlanillaPersonaJpaController(emf);
-
-        PlanillaPersona persona = dao.findPlanillaPersonaByNumeDocu("87126354", "01");
-        System.out.println(persona.getNombPers());
+        PlanillaPersonaJpaController plaPersoDAO = new PlanillaPersonaJpaController(emf);
+        List<PlanillaPersona> lista = plaPersoDAO.findActivos();
+        System.out.println(lista.size());
     }
 
 }

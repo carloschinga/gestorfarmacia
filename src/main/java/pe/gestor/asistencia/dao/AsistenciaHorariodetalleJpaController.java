@@ -154,12 +154,30 @@ public class AsistenciaHorariodetalleJpaController implements Serializable {
         }
     }
 
+    public List<AsistenciaHorariodetalle> allMarcacionesByCargo(int codiDia, int codiHora) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query q = em.createNamedQuery("AsistenciaHorariodetalle.findByDiaAndHora");
+            q.setParameter("codiDia", codiDia);
+            q.setParameter("codiHora", codiHora);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestorFarmacia");
         AsistenciaHorariodetalleJpaController pc = new AsistenciaHorariodetalleJpaController(emf);
-        List<AsistenciaHorariodetalle> lista = pc.findAllByCodiHora(1, 3);
-        for (AsistenciaHorariodetalle ah : lista) {
-            System.out.println(ah.getCodiHoraDeta());
+        List<AsistenciaHorariodetalle> lista = pc.allMarcacionesByCargo(1, 1);
+        if (lista == null) {
+            System.out.println("No existe");
+        } else {
+            for (AsistenciaHorariodetalle asistenciaHorariodetalle : lista) {
+                System.out.println(asistenciaHorariodetalle.getCodiHoraDeta());
+            }
         }
     }
 
