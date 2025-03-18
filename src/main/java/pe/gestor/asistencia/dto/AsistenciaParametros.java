@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AsistenciaParametros.findAll", query = "SELECT a FROM AsistenciaParametros a"),
     @NamedQuery(name = "AsistenciaParametros.findByCodiPara", query = "SELECT a FROM AsistenciaParametros a WHERE a.codiPara = :codiPara"),
-    @NamedQuery(name = "AsistenciaParametros.findByValuTareoPara", query = "SELECT a FROM AsistenciaParametros a WHERE a.valuTareoPara = :valuTareoPara")})
+    @NamedQuery(name = "AsistenciaParametros.findByValuTareoPara", query = "SELECT a FROM AsistenciaParametros a WHERE a.valuTareoPara = :valuTareoPara"),
+    @NamedQuery(name = "AsistenciaParametros.findByDescripcion", query = "SELECT a FROM AsistenciaParametros a WHERE a.descripcion = :descripcion")})
 public class AsistenciaParametros implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +44,11 @@ public class AsistenciaParametros implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "valuTareoPara")
     private String valuTareoPara;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(name = "descripcion")
+    private String descripcion;
 
     public AsistenciaParametros() {
     }
@@ -51,9 +57,10 @@ public class AsistenciaParametros implements Serializable {
         this.codiPara = codiPara;
     }
 
-    public AsistenciaParametros(Integer codiPara, String valuTareoPara) {
+    public AsistenciaParametros(Integer codiPara, String valuTareoPara, String descripcion) {
         this.codiPara = codiPara;
         this.valuTareoPara = valuTareoPara;
+        this.descripcion = descripcion;
     }
 
     public Integer getCodiPara() {
@@ -70,6 +77,14 @@ public class AsistenciaParametros implements Serializable {
 
     public void setValuTareoPara(String valuTareoPara) {
         this.valuTareoPara = valuTareoPara;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

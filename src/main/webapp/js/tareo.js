@@ -1,13 +1,17 @@
 $(document).ready(function () {
   $("#btnProcesar").click(function () {
     const codiPeriodo = $("#comboPeriodos").val();
-    console.log(codiPeriodo);
     if (codiPeriodo === "") {
       mostrarAlerta("Seleccione un periodo");
       return;
     }
+    limpiarTable();
     const tableTareo = initializeDataTable(codiPeriodo);
   });
+
+  function limpiarTable() {
+    $("#tableTareo").DataTable().clear().draw();
+  }
 
   function initializeDataTable(codiPeriodo) {
     return $("#tableTareo").DataTable({

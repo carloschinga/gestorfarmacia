@@ -46,20 +46,28 @@ public class HojaTrabajoServlet extends HttpServlet {
 
             for (VistaComprasHojaTrabajo compra : compras) {
                 JSONObject jsonCompra = new JSONObject();
-                jsonCompra.put("codigo", compra.getCodigo());
-                jsonCompra.put("categoria", compra.getCategoria());
-                jsonCompra.put("laboratorio", compra.getLaboratorio());
-                jsonCompra.put("nombre", compra.getNombre());
-                jsonCompra.put("precioCaja", compra.getPrecioCaja());
-                jsonCompra.put("pvp1", compra.getPvp1());
-                jsonCompra.put("pvp2", compra.getPvp2());
-                jsonCompra.put("precioCostoUnitario", compra.getPrecioCostoUnitario());
-                jsonCompra.put("precioBlister", compra.getPrecioBlister());
-                jsonCompra.put("margenGanancia", compra.getMargenGanancia());
-                jsonCompra.put("stockTotal", compra.getStockTotal());
-                jsonCompra.put("ventas", compra.getVentas());
-                jsonCompra.put("mes1", compra.getMes1());
-                jsonCompra.put("mes2", compra.getMes2());
+                putSafely(jsonCompra, "codigo", compra.getCodigo(), "");
+                putSafely(jsonCompra, "nombre", compra.getNombreProducto(), "");
+                putSafely(jsonCompra, "cateId", compra.getCodiCate(), 0);
+                putSafely(jsonCompra, "categoria", compra.getCategoria(), "");
+                putSafely(jsonCompra, "laboId", compra.getCodiLabo(), 0);
+                putSafely(jsonCompra, "laboratorio", compra.getLaboratorio(), "");
+                putSafely(jsonCompra, "unidxcaja", compra.getUnidxcaja(), 0);
+                putSafely(jsonCompra, "pvc", compra.getPvc(), 0);
+                putSafely(jsonCompra, "pcc", compra.getPcc(), 0);
+                putSafely(jsonCompra, "pvu", compra.getPvu(), 0);
+                putSafely(jsonCompra, "pcu", compra.getPcu(), 0);
+                putSafely(jsonCompra, "ventas30ultmdias", compra.getVentas30ultmdias(), 0);
+                putSafely(jsonCompra, "ventas", compra.getVentas(), 0);
+                putSafely(jsonCompra, "mes1", compra.getMes1(), 0);
+                putSafely(jsonCompra, "mes2", compra.getMes2(), 0);
+                putSafely(jsonCompra, "mes3", compra.getMes3(), 0);
+                putSafely(jsonCompra, "stock", compra.getStock(), 0);
+                putSafely(jsonCompra, "gananciacaja", compra.getGananciacaja(), 0);
+                putSafely(jsonCompra, "gananciauni", compra.getGananciauni(), 0);
+                putSafely(jsonCompra, "stockmin", compra.getStockmin(), 0);
+                putSafely(jsonCompra, "indiinve", compra.getIndiinve(), 0);
+                putSafely(jsonCompra, "indirota", compra.getIndirota(), 0);
                 jsonArray.put(jsonCompra);
             }
 
@@ -70,4 +78,7 @@ public class HojaTrabajoServlet extends HttpServlet {
         }
     }
 
+    private void putSafely(JSONObject json, String key, Object value, Object defaultValue) {
+        json.put(key, value != null ? value : defaultValue);
+    }
 }

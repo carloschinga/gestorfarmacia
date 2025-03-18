@@ -10,7 +10,6 @@ $(document).ready(function () {
         url: "personaservlet",
         type: "GET",
         dataSrc: function (json) {
-          console.log("Datos recibidos:", json);
           originalData.length = 0; // Limpiar el array
           originalData.push(...(Array.isArray(json) ? json : []));
           return originalData.filter((persona) => persona.actiPers === true);
@@ -78,7 +77,6 @@ $(document).ready(function () {
     const id = $(this).data("id");
     $.get(`personaservlet/${id}`, function (data) {
       populateModal(data);
-      console.log(data);
       $("#personaModalLabel").text("Editar Persona");
       $("#personaModal").modal("show");
     }).fail(handleAjaxError("Error al cargar los datos de la persona"));
@@ -235,15 +233,11 @@ $(document).ready(function () {
     const method = id ? "PUT" : "POST";
     const action = id ? "actualizar" : "crear";
 
-    console.log(formData);
-
     const jsonData = {};
 
     formData.forEach((field) => {
       jsonData[field.name] = field.value;
     });
-
-    console.log({ jsonData });
 
     $.ajax({
       url: url,

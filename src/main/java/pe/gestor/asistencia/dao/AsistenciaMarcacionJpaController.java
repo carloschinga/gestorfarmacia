@@ -170,6 +170,28 @@ public class AsistenciaMarcacionJpaController implements Serializable {
         }
     }
 
+    public AsistenciaMarcacion findMarcacionIncompletaOne(int codiPers, Date fechaInicio, Date fechDateFin) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT m FROM AsistenciaMarcacion m "
+                    + "WHERE m.codiPers = :codiPers "
+                    + "AND m.marcIngr IS NOT NULL "
+                    + "AND m.marcSald IS NULL "
+                    + "AND m.fechMarc BETWEEN :fechaInicio AND :fechaFin ";
+
+            TypedQuery<AsistenciaMarcacion> query = em.createQuery(jpql, AsistenciaMarcacion.class);
+            query.setParameter("codiPers", codiPers);
+            query.setParameter("fechaInicio", fechaInicio);
+            query.setParameter("fechaFin", fechDateFin);
+
+            return (AsistenciaMarcacion) query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public List<AsistenciaMarcacion> findAllMarcacionCompletaByRange(Date fechaInicio, Date fechaFin) {
         EntityManager em = getEntityManager();
         try {
@@ -210,17 +232,25 @@ public class AsistenciaMarcacionJpaController implements Serializable {
         AsistenciaMarcacionJpaController pc = new AsistenciaMarcacionJpaController(emf);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaInicio = null;
-        Date fechaFin = null;
-        fechaInicio = sdf.parse("2025-03-12"); // Fecha de inicio: 2025-03-01
-        List<AsistenciaMarcacion> lista = pc.listarXdia(fechaInicio);
-        if (lista == null) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date fechaInicio = calendar.getTime();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        Date fechaFin = calendar.getTime();
+
+        AsistenciaMarcacion marca = pc.findMarcacionIncompletaOne(5, fechaInicio, fechaFin);
+        if (marca == null) {
             System.out.println("No existe");
         } else {
-            System.out.println(lista.size() + " marcaciones");
-            for (AsistenciaMarcacion item : lista) {
-                System.out.println(item.getCodiHoraDeta());
-            }
+            System.out.println(marca.getCodiMarc());
         }
     }
 
@@ -229,10 +259,10 @@ public class AsistenciaMarcacionJpaController implements Serializable {
         try {
             Query query = em.createQuery(
                     "SELECT m FROM AsistenciaMarcacion m "
-                    + "WHERE m.codiPers = :codiPers "
-                    + "AND m.marcIngr IS NOT NULL "
-                    + "AND m.marcSald IS NOT NULL "
-                    + "AND m.fechMarc = :fechaInicio");
+                            + "WHERE m.codiPers = :codiPers "
+                            + "AND m.marcIngr IS NOT NULL "
+                            + "AND m.marcSald IS NOT NULL "
+                            + "AND m.fechMarc = :fechaInicio");
             query.setParameter("codiPers", codiPers);
             query.setParameter("fechaInicio", fechaInicio);
             return query.getResultList();

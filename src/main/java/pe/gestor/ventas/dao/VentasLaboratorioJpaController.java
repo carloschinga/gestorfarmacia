@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.gestor.asistencia.dao;
+package pe.gestor.ventas.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,16 +13,17 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import pe.gestor.asistencia.dao.exceptions.NonexistentEntityException;
-import pe.gestor.asistencia.dto.AsistenciaParametros;
+import pe.gestor.ventas.dao.exceptions.NonexistentEntityException;
+import pe.gestor.ventas.dao.exceptions.PreexistingEntityException;
+import pe.gestor.ventas.dto.VentasLaboratorio;
 
 /**
  *
  * @author Adria
  */
-public class AsistenciaParametrosJpaController implements Serializable {
+public class VentasLaboratorioJpaController implements Serializable {
 
-    public AsistenciaParametrosJpaController(EntityManagerFactory emf) {
+    public VentasLaboratorioJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,13 +32,18 @@ public class AsistenciaParametrosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(AsistenciaParametros asistenciaParametros) {
+    public void create(VentasLaboratorio ventasLaboratorio) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(asistenciaParametros);
+            em.persist(ventasLaboratorio);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findVentasLaboratorio(ventasLaboratorio.getCodiLabo()) != null) {
+                throw new PreexistingEntityException("VentasLaboratorio " + ventasLaboratorio + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -45,19 +51,19 @@ public class AsistenciaParametrosJpaController implements Serializable {
         }
     }
 
-    public void edit(AsistenciaParametros asistenciaParametros) throws NonexistentEntityException, Exception {
+    public void edit(VentasLaboratorio ventasLaboratorio) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            asistenciaParametros = em.merge(asistenciaParametros);
+            ventasLaboratorio = em.merge(ventasLaboratorio);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = asistenciaParametros.getCodiPara();
-                if (findAsistenciaParametros(id) == null) {
-                    throw new NonexistentEntityException("The asistenciaParametros with id " + id + " no longer exists.");
+                Integer id = ventasLaboratorio.getCodiLabo();
+                if (findVentasLaboratorio(id) == null) {
+                    throw new NonexistentEntityException("The ventasLaboratorio with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +79,14 @@ public class AsistenciaParametrosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AsistenciaParametros asistenciaParametros;
+            VentasLaboratorio ventasLaboratorio;
             try {
-                asistenciaParametros = em.getReference(AsistenciaParametros.class, id);
-                asistenciaParametros.getCodiPara();
+                ventasLaboratorio = em.getReference(VentasLaboratorio.class, id);
+                ventasLaboratorio.getCodiLabo();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asistenciaParametros with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The ventasLaboratorio with id " + id + " no longer exists.", enfe);
             }
-            em.remove(asistenciaParametros);
+            em.remove(ventasLaboratorio);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,19 +95,19 @@ public class AsistenciaParametrosJpaController implements Serializable {
         }
     }
 
-    public List<AsistenciaParametros> findAsistenciaParametrosEntities() {
-        return findAsistenciaParametrosEntities(true, -1, -1);
+    public List<VentasLaboratorio> findVentasLaboratorioEntities() {
+        return findVentasLaboratorioEntities(true, -1, -1);
     }
 
-    public List<AsistenciaParametros> findAsistenciaParametrosEntities(int maxResults, int firstResult) {
-        return findAsistenciaParametrosEntities(false, maxResults, firstResult);
+    public List<VentasLaboratorio> findVentasLaboratorioEntities(int maxResults, int firstResult) {
+        return findVentasLaboratorioEntities(false, maxResults, firstResult);
     }
 
-    private List<AsistenciaParametros> findAsistenciaParametrosEntities(boolean all, int maxResults, int firstResult) {
+    private List<VentasLaboratorio> findVentasLaboratorioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(AsistenciaParametros.class));
+            cq.select(cq.from(VentasLaboratorio.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,20 +119,20 @@ public class AsistenciaParametrosJpaController implements Serializable {
         }
     }
 
-    public AsistenciaParametros findAsistenciaParametros(Integer id) {
+    public VentasLaboratorio findVentasLaboratorio(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(AsistenciaParametros.class, id);
+            return em.find(VentasLaboratorio.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getAsistenciaParametrosCount() {
+    public int getVentasLaboratorioCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<AsistenciaParametros> rt = cq.from(AsistenciaParametros.class);
+            Root<VentasLaboratorio> rt = cq.from(VentasLaboratorio.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

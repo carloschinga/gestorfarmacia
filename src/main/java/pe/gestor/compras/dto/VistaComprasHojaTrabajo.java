@@ -1,24 +1,27 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package pe.gestor.compras.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author USER
+ * @author Adria
  */
 @Entity
 @Table(name = "vista_compras_hoja_trabajo")
@@ -26,56 +29,88 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "VistaComprasHojaTrabajo.findAll", query = "SELECT v FROM VistaComprasHojaTrabajo v"),
     @NamedQuery(name = "VistaComprasHojaTrabajo.findByCodigo", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.codigo = :codigo"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByNombreProducto", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.nombreProducto = :nombreProducto"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByCodiCate", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.codiCate = :codiCate"),
     @NamedQuery(name = "VistaComprasHojaTrabajo.findByCategoria", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.categoria = :categoria"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByCodiLabo", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.codiLabo = :codiLabo"),
     @NamedQuery(name = "VistaComprasHojaTrabajo.findByLaboratorio", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.laboratorio = :laboratorio"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByNombre", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.nombre = :nombre"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPrecioCaja", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.precioCaja = :precioCaja"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPvp1", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pvp1 = :pvp1"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPvp2", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pvp2 = :pvp2"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPrecioCostoUnitario", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.precioCostoUnitario = :precioCostoUnitario"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPrecioBlister", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.precioBlister = :precioBlister"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByMargenGanancia", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.margenGanancia = :margenGanancia"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByStockTotal", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.stockTotal = :stockTotal"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByUnidxcaja", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.unidxcaja = :unidxcaja"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPvc", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pvc = :pvc"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPcc", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pcc = :pcc"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPvu", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pvu = :pvu"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByPcu", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.pcu = :pcu"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByVentas30ultmdias", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.ventas30ultmdias = :ventas30ultmdias"),
     @NamedQuery(name = "VistaComprasHojaTrabajo.findByVentas", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.ventas = :ventas"),
     @NamedQuery(name = "VistaComprasHojaTrabajo.findByMes1", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.mes1 = :mes1"),
-    @NamedQuery(name = "VistaComprasHojaTrabajo.findByMes2", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.mes2 = :mes2")})
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByMes2", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.mes2 = :mes2"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByMes3", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.mes3 = :mes3"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByStock", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.stock = :stock"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByGananciacaja", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.gananciacaja = :gananciacaja"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByGananciauni", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.gananciauni = :gananciauni"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByStockmin", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.stockmin = :stockmin"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByIndiinve", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.indiinve = :indiinve"),
+    @NamedQuery(name = "VistaComprasHojaTrabajo.findByIndirota", query = "SELECT v FROM VistaComprasHojaTrabajo v WHERE v.indirota = :indirota")})
 public class VistaComprasHojaTrabajo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
     @Size(max = 15)
+    @Id
     @Column(name = "codigo")
     private String codigo;
     @Size(max = 255)
+    @Column(name = "nombre_producto")
+    private String nombreProducto;
+    @Column(name = "codiCate")
+    private Integer codiCate;
+    @Size(max = 255)
     @Column(name = "categoria")
     private String categoria;
+    @Column(name = "codiLabo")
+    private Integer codiLabo;
     @Size(max = 255)
     @Column(name = "laboratorio")
     private String laboratorio;
-    @Size(max = 255)
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "unidxcaja")
+    private Integer unidxcaja;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "precio_caja")
-    private BigDecimal precioCaja;
-    @Column(name = "pvp1")
-    private BigDecimal pvp1;
-    @Column(name = "pvp2")
-    private BigDecimal pvp2;
-    @Column(name = "precio_costo_unitario")
-    private BigDecimal precioCostoUnitario;
-    @Column(name = "precio_blister")
-    private BigDecimal precioBlister;
-    @Column(name = "margen_ganancia")
-    private BigDecimal margenGanancia;
-    @Column(name = "stock_total")
-    private Integer stockTotal;
+    @Column(name = "pvc")
+    private BigDecimal pvc;
+    @Column(name = "pcc")
+    private BigDecimal pcc;
+    @Column(name = "pvu")
+    private BigDecimal pvu;
+    @Column(name = "pcu")
+    private BigDecimal pcu;
+    @Column(name = "ventas30ultmdias")
+    private BigInteger ventas30ultmdias;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "Ventas")
     private BigInteger ventas;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "Mes1")
     private BigInteger mes1;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "Mes2")
     private BigInteger mes2;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Mes3")
+    private BigInteger mes3;
+    @Column(name = "stock")
+    private Integer stock;
+    @Column(name = "gananciacaja")
+    private BigDecimal gananciacaja;
+    @Column(name = "gananciauni")
+    private BigDecimal gananciauni;
+    @Column(name = "stockmin")
+    private BigDecimal stockmin;
+    @Column(name = "indiinve")
+    private BigDecimal indiinve;
+    @Column(name = "indirota")
+    private BigDecimal indirota;
 
     public VistaComprasHojaTrabajo() {
     }
@@ -88,12 +123,36 @@ public class VistaComprasHojaTrabajo implements Serializable {
         this.codigo = codigo;
     }
 
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public Integer getCodiCate() {
+        return codiCate;
+    }
+
+    public void setCodiCate(Integer codiCate) {
+        this.codiCate = codiCate;
+    }
+
     public String getCategoria() {
         return categoria;
     }
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public Integer getCodiLabo() {
+        return codiLabo;
+    }
+
+    public void setCodiLabo(Integer codiLabo) {
+        this.codiLabo = codiLabo;
     }
 
     public String getLaboratorio() {
@@ -104,68 +163,52 @@ public class VistaComprasHojaTrabajo implements Serializable {
         this.laboratorio = laboratorio;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Integer getUnidxcaja() {
+        return unidxcaja;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUnidxcaja(Integer unidxcaja) {
+        this.unidxcaja = unidxcaja;
     }
 
-    public BigDecimal getPrecioCaja() {
-        return precioCaja;
+    public BigDecimal getPvc() {
+        return pvc;
     }
 
-    public void setPrecioCaja(BigDecimal precioCaja) {
-        this.precioCaja = precioCaja;
+    public void setPvc(BigDecimal pvc) {
+        this.pvc = pvc;
     }
 
-    public BigDecimal getPvp1() {
-        return pvp1;
+    public BigDecimal getPcc() {
+        return pcc;
     }
 
-    public void setPvp1(BigDecimal pvp1) {
-        this.pvp1 = pvp1;
+    public void setPcc(BigDecimal pcc) {
+        this.pcc = pcc;
     }
 
-    public BigDecimal getPvp2() {
-        return pvp2;
+    public BigDecimal getPvu() {
+        return pvu;
     }
 
-    public void setPvp2(BigDecimal pvp2) {
-        this.pvp2 = pvp2;
+    public void setPvu(BigDecimal pvu) {
+        this.pvu = pvu;
     }
 
-    public BigDecimal getPrecioCostoUnitario() {
-        return precioCostoUnitario;
+    public BigDecimal getPcu() {
+        return pcu;
     }
 
-    public void setPrecioCostoUnitario(BigDecimal precioCostoUnitario) {
-        this.precioCostoUnitario = precioCostoUnitario;
+    public void setPcu(BigDecimal pcu) {
+        this.pcu = pcu;
     }
 
-    public BigDecimal getPrecioBlister() {
-        return precioBlister;
+    public BigInteger getVentas30ultmdias() {
+        return ventas30ultmdias;
     }
 
-    public void setPrecioBlister(BigDecimal precioBlister) {
-        this.precioBlister = precioBlister;
-    }
-
-    public BigDecimal getMargenGanancia() {
-        return margenGanancia;
-    }
-
-    public void setMargenGanancia(BigDecimal margenGanancia) {
-        this.margenGanancia = margenGanancia;
-    }
-
-    public Integer getStockTotal() {
-        return stockTotal;
-    }
-
-    public void setStockTotal(Integer stockTotal) {
-        this.stockTotal = stockTotal;
+    public void setVentas30ultmdias(BigInteger ventas30ultmdias) {
+        this.ventas30ultmdias = ventas30ultmdias;
     }
 
     public BigInteger getVentas() {
@@ -190,6 +233,62 @@ public class VistaComprasHojaTrabajo implements Serializable {
 
     public void setMes2(BigInteger mes2) {
         this.mes2 = mes2;
+    }
+
+    public BigInteger getMes3() {
+        return mes3;
+    }
+
+    public void setMes3(BigInteger mes3) {
+        this.mes3 = mes3;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public BigDecimal getGananciacaja() {
+        return gananciacaja;
+    }
+
+    public void setGananciacaja(BigDecimal gananciacaja) {
+        this.gananciacaja = gananciacaja;
+    }
+
+    public BigDecimal getGananciauni() {
+        return gananciauni;
+    }
+
+    public void setGananciauni(BigDecimal gananciauni) {
+        this.gananciauni = gananciauni;
+    }
+
+    public BigDecimal getStockmin() {
+        return stockmin;
+    }
+
+    public void setStockmin(BigDecimal stockmin) {
+        this.stockmin = stockmin;
+    }
+
+    public BigDecimal getIndiinve() {
+        return indiinve;
+    }
+
+    public void setIndiinve(BigDecimal indiinve) {
+        this.indiinve = indiinve;
+    }
+
+    public BigDecimal getIndirota() {
+        return indirota;
+    }
+
+    public void setIndirota(BigDecimal indirota) {
+        this.indirota = indirota;
     }
     
 }

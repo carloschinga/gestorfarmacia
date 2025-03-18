@@ -1,4 +1,4 @@
--- Active: 1737403269267@@localhost@3333@gestor18
+-- Active: 1737403269267@@localhost@3333@gestor
 CREATE TABLE contable_periodo (
     codiPeri INT PRIMARY KEY AUTO_INCREMENT,
     nombPeri VARCHAR(100) NOT NULL,
@@ -53,57 +53,129 @@ BEGIN
     VALUES (NEW.codiPeri, NEW.codiPeri);
 END;
 
-INSERT INTO asistencia_marcacion (codiPers, fechMarc, codihoraDeta, marcIngr, marcSald) VALUES
--- Persona 28 (VENTAS, Turno MAÑANA)
-(28, '2024-03-01', 11 , '08:10:00', '12:10:00'),
-(28, '2024-03-03', 1 , '08:10:00', '12:50:00'),
-(28, '2024-03-04',  3, '08:10:00', '13:05:00'),
-(28, '2024-03-05',  5, '08:10:00', '13:00:00'),
-(28, '2024-03-06',  7, '08:10:00', '13:00:00'),
-(28, '2024-03-07',  9, '08:10:00', '13:00:00'),
-(28, '2024-03-08',  11, '08:10:00', '11:55:00'),
-(28, '2024-03-11',  1, '08:10:00', '13:00:00'),
-(28, '2024-03-12',  3, '08:10:00', '13:00:00'),
-(28, '2024-03-13',  5, '08:10:00', '13:00:00'),
-(28, '2024-03-14',  7, '08:10:00', '13:00:00'),
-(28, '2024-03-03', 2, '15:02:00', '20:01:00'),
-(28, '2024-03-04', 4, '15:10:00', '20:03:00'),
-(28, '2024-03-05', 6, '15:10:00', '20:03:00'),
-(28, '2024-03-06', 8, '15:10:00', '20:03:00'),
-(28, '2024-03-07', 10, '15:10:00', '20:03:00');
+SELECT
+    COALESCE(vp.codigo, v.codigo) AS codigo,
+    vpro.nombre_producto AS nombre_producto,
+    cat.codiCate AS codiCate,
+    vps.categoria AS categoria,
+    lab.codiLabo AS codiLabo,
+    vps.laboratorio AS laboratorio,
+    vpro.unidades_por_caja AS unidxcaja,
+    vpro.precio_venta_caja AS pvc,
+    vpro.costo_caja AS pcc,
+    vpro.precio_venta_unitario_1 AS pvu,
+    vpro.costo_unitario AS pcu,
+    vlol.venta_30_ult_dias AS ventas30ultmdias,
+    COALESCE(v.Mes1, 0) + COALESCE(v.Mes2, 0) + COALESCE(v.Mes3, 0) AS Ventas,
+    COALESCE(v.Mes1, 0) AS Mes1,
+    COALESCE(v.Mes2, 0) AS Mes2,
+    COALESCE(v.Mes3, 0) AS Mes3,
+    vps.stock_total AS stock,
+    ROUND(
+        (
+            vpro.precio_venta_caja - vpro.costo_caja
+        ) / vpro.precio_venta_caja * 100,
+        2
+    ) AS gananciacaja,
+    ROUND(
+        (
+            vpro.precio_venta_unitario_1 - vpro.costo_unitario
+        ) / vpro.precio_venta_unitario_1 * 100,
+        2
+    ) AS gananciauni,
+    ROUND(
+        (
+            COALESCE(vlol.venta_30_ult_dias, 0) / 30
+        ) * 3.5,
+        2
+    ) AS stockmin,
+    ROUND(
+        vps.stock_total / NULLIF(
+            vlol.venta_30_ult_dias / 30,
+            0
+        ),
+        2
+    ) AS indiinve,
+    ROUND(
+        vlol.venta_30_ult_dias / NULLIF(vps.stock_total, 0),
+        2
+    ) AS indirota
+FROM
+    ventas_pharma vp
+    LEFT JOIN vista_ventas_productos_ultimos_meses v ON vp.codigo = v.codigo
+    LEFT JOIN ventas_producto vpro ON vp.codigo = vpro.codigo
+    LEFT JOIN ventas_categoria cat on vpro.categoria_id = cat.codiCate
+    LEFT JOIN ventas_laboratorio lab on vpro.laboratorio_id = lab.codiLabo
+    LEFT JOIN ventas_productos_stock vps ON vpro.codigo = vps.codigo
+    LEFT JOIN (
+        SELECT codigo, SUM(cantidad_vendida) AS venta_30_ult_dias
+        FROM ventas_pharma
+        WHERE
+            fecha_venta >= (CURDATE() - INTERVAL 31 DAY)
+        GROUP BY
+            codigo
+    ) vlol ON vp.codigo = vlol.codigo;
 
--- Persona 29 (ADMINISTRATIVO, Turno TARDE)
-(29, '2024-03-01', '15:00:00', '20:00:00'),
-(29, '2024-03-04', '15:00:00', '20:00:00'),
-(29, '2024-03-05', '15:00:00', '20:00:00'),
-(29, '2024-03-06', '15:00:00', '20:00:00'),
-(29, '2024-03-07', '15:00:00', '20:00:00'),
-(29, '2024-03-08', '15:00:00', '20:00:00'),
-(29, '2024-03-11', '15:00:00', '20:00:00'),
-(29, '2024-03-12', '15:00:00', '20:00:00'),
-(29, '2024-03-13', '15:00:00', '20:00:00'),
-(29, '2024-03-14', '15:00:00', '20:00:00'),
-
--- Persona 30 (ADMINISTRATIVO, Turno TARDE)
-(30, '2024-03-01', '15:00:00', '20:00:00'),
-(30, '2024-03-04', '15:00:00', '20:00:00'),
-(30, '2024-03-05', '15:00:00', '20:00:00'),
-(30, '2024-03-06', '15:00:00', '20:00:00'),
-(30, '2024-03-07', '15:00:00', '20:00:00'),
-(30, '2024-03-08', '15:00:00', '20:00:00'),
-(30, '2024-03-11', '15:00:00', '20:00:00'),
-(30, '2024-03-12', '15:00:00', '20:00:00'),
-(30, '2024-03-13', '15:00:00', '20:00:00'),
-(30, '2024-03-14', '15:00:00', '20:00:00'),
-
--- Persona 31 (VENTAS, Turno MAÑANA)
-(31, '2024-03-01', '08:10:00', '13:00:00'),
-(31, '2024-03-04', '08:10:00', '13:00:00'),
-(31, '2024-03-05', '08:10:00', '13:00:00'),
-(31, '2024-03-06', '08:10:00', '13:00:00'),
-(31, '2024-03-07', '08:10:00', '13:00:00'),
-(31, '2024-03-08', '08:10:00', '13:00:00'),
-(31, '2024-03-11', '08:10:00', '13:00:00'),
-(31, '2024-03-12', '08:10:00', '13:00:00'),
-(31, '2024-03-13', '08:10:00', '13:00:00'),
-(31, '2024-03-14', '08:10:00', '13:00:00');
+CREATE VIEW vista_compras_hoja_trabajo AS
+SELECT
+    COALESCE(vp.codigo, v.codigo) AS codigo,
+    vpro.nombre_producto AS nombre_producto,
+    cat.codiCate AS codiCate,
+    vps.categoria AS categoria,
+    lab.codiLabo AS codiLabo,
+    vps.laboratorio AS laboratorio,
+    vpro.unidades_por_caja AS unidxcaja,
+    vpro.precio_venta_caja AS pvc,
+    vpro.costo_caja AS pcc,
+    vpro.precio_venta_unitario_1 AS pvu,
+    vpro.costo_unitario AS pcu,
+    vlol.venta_30_ult_dias AS ventas30ultmdias,
+    COALESCE(v.Mes1, 0) + COALESCE(v.Mes2, 0) + COALESCE(v.Mes3, 0) AS Ventas,
+    COALESCE(v.Mes1, 0) AS Mes1,
+    COALESCE(v.Mes2, 0) AS Mes2,
+    COALESCE(v.Mes3, 0) AS Mes3,
+    vps.stock_total AS stock,
+    ROUND(
+        (
+            vpro.precio_venta_caja - vpro.costo_caja
+        ) / vpro.precio_venta_caja * 100,
+        2
+    ) AS gananciacaja,
+    ROUND(
+        (
+            vpro.precio_venta_unitario_1 - vpro.costo_unitario
+        ) / vpro.precio_venta_unitario_1 * 100,
+        2
+    ) AS gananciauni,
+    ROUND(
+        (
+            COALESCE(vlol.venta_30_ult_dias, 0) / 30
+        ) * 3.5,
+        2
+    ) AS stockmin,
+    ROUND(
+        vps.stock_total / NULLIF(
+            vlol.venta_30_ult_dias / 30,
+            0
+        ),
+        2
+    ) AS indiinve,
+    ROUND(
+        vlol.venta_30_ult_dias / NULLIF(vps.stock_total, 0),
+        2
+    ) AS indirota
+FROM
+    (SELECT DISTINCT codigo FROM ventas_pharma) vp
+    LEFT JOIN vista_ventas_productos_ultimos_meses v ON vp.codigo = v.codigo
+    LEFT JOIN ventas_producto vpro ON vp.codigo = vpro.codigo
+    LEFT JOIN ventas_categoria cat ON vpro.categoria_id = cat.codiCate
+    LEFT JOIN ventas_laboratorio lab ON vpro.laboratorio_id = lab.codiLabo
+    LEFT JOIN ventas_productos_stock vps ON vpro.codigo = vps.codigo
+    LEFT JOIN (
+        SELECT codigo, SUM(cantidad_vendida) AS venta_30_ult_dias
+        FROM ventas_pharma
+        WHERE
+            fecha_venta >= (CURDATE() - INTERVAL 31 DAY)
+        GROUP BY
+            codigo
+    ) vlol ON vp.codigo = vlol.codigo;

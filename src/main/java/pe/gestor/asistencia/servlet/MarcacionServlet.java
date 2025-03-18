@@ -85,27 +85,62 @@ public class MarcacionServlet extends HttpServlet {
                 return;
             }
 
+            AsistenciaParametros param = parametrosDAO.findAsistenciaParametros(3);
+            System.out.println(param.getValuTareoPara());
+            int opc = Integer.parseInt(param.getValuTareoPara());
+
             // Configurar fechas para el día actual
             DateRange dateRange = getDateRangeForToday();
 
-            // Buscar marcaciones existentes
-            List<AsistenciaMarcacion> marcaciones = marcacionDAO.findMarcacionIncompleta(
-                    persona.getCodiPers(), dateRange.getStart(), dateRange.getEnd());
+            switch (opc) {
+                case 1:
+                    System.out.println("Sin validaciones");
+                    // Traer
+                    AsistenciaMarcacion listaMarcaciones = marcacionDAO.findMarcacionIncompletaOne(
+                            persona.getCodiPers(),
+                            dateRange.getStart(), dateRange.getEnd());
 
-            // Obtener información de horario y turno
-            LocalDateTime now = LocalDateTime.now();
-            HorarioInfo horarioInfo = getHorarioInfo(now, persona);
+                    // Validar salida
+                    if (listaMarcaciones != null) {
+                        listaMarcaciones.setMarcSald(new Date());
+                        marcacionDAO.edit(listaMarcaciones);
+                        enviarRespuestaSuccess(response, persona.getNombPers(), listaMarcaciones.getMarcSald(),
+                                "Salida registrada", "salida");
+                    } else {
+                        AsistenciaMarcacion nuevaMarcacion = new AsistenciaMarcacion();
+                        nuevaMarcacion.setMarcIngr(new Date());
+                        nuevaMarcacion.setFechMarc(new Date());
+                        nuevaMarcacion.setCodiPers(persona.getCodiPers());
+                        marcacionDAO.create(nuevaMarcacion);
+                        enviarRespuestaSuccess(response, persona.getNombPers(), nuevaMarcacion.getMarcIngr(),
+                                "Entrada registrada", "entrada");
+                    }
+                    break;
+                case 2:
+                    System.out.println("Con validaciones");
+                    // Buscar marcaciones existentes
+                    List<AsistenciaMarcacion> marcaciones = marcacionDAO.findMarcacionIncompleta(
+                            persona.getCodiPers(), dateRange.getStart(), dateRange.getEnd());
 
-            if (horarioInfo.getDetalleHorario() == null) {
-                sendErrorResponse(response, "Lo sentimos pero no hay turnos disponibles a esta hora");
-                return;
-            }
+                    // Obtener información de horario y turno
+                    LocalDateTime now = LocalDateTime.now();
+                    HorarioInfo horarioInfo = getHorarioInfo(now, persona);
 
-            // Procesar marcación (entrada o salida)
-            if (marcaciones.isEmpty()) {
-                procesarMarcacionEntrada(response, persona, horarioInfo, now);
-            } else {
-                procesarMarcacionSalida(response, persona, horarioInfo, marcaciones.get(0), now);
+                    if (horarioInfo.getDetalleHorario() == null) {
+                        sendErrorResponse(response, "Lo sentimos pero no hay turnos disponibles a esta hora");
+                        return;
+                    }
+
+                    // Procesar marcación (entrada o salida)
+                    if (marcaciones.isEmpty()) {
+                        procesarMarcacionEntrada(response, persona, horarioInfo, now);
+                    } else {
+                        procesarMarcacionSalida(response, persona, horarioInfo, marcaciones.get(0), now);
+                    }
+                    break;
+                default:
+                    sendErrorResponse(response, "Opcion no valida");
+                    break;
             }
 
         } catch (Exception ex) {
@@ -332,6 +367,26 @@ public class MarcacionServlet extends HttpServlet {
                 .put("status", "success")
                 .put("message", mensaje)
                 .put("codiMarc", codiMarc)
+                .put("nombre", nombre)
+                .put("hora", sdf.format(hora))
+                .put("marcacion", tipoMarcacion);
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write(jsonResponse.toString());
+    }
+
+    private void enviarRespuestaSuccess(
+            HttpServletResponse response,
+            String nombre,
+            Date hora,
+            String mensaje,
+            String tipoMarcacion) throws IOException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", LOCALE_PE);
+
+        JSONObject jsonResponse = new JSONObject()
+                .put("status", "success")
+                .put("message", mensaje)
                 .put("nombre", nombre)
                 .put("hora", sdf.format(hora))
                 .put("marcacion", tipoMarcacion);
