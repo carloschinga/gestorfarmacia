@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link
@@ -20,11 +19,50 @@
       type="text/css"
       href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css"
     />
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    /> -->
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css"
     />
     <style>
+      /* Estilos para la leyenda de colores */
+      .leyenda-colores {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-right: 20px; /* Espacio entre la leyenda y los botones */
+      }
+
+      .leyenda-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+      }
+
+      .color-box {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+      }
+      .bg-amber {
+        background-color: #ffc107 !important; /* Ámbar */
+        color: #000 !important; /* Texto negro para mejor contraste */
+      }
+
+      .bg-green {
+        background-color: #28a745 !important; /* Verde */
+        color: #fff !important; /* Texto blanco para mejor contraste */
+      }
+
+      .bg-red {
+        background-color: #dc3545 !important; /* Rojo */
+        color: #fff !important; /* Texto blanco para mejor contraste */
+      }
       /* Estilos adicionales para mejorar el comportamiento del combo y el botón */
       .flex-container {
         display: flex;
@@ -63,7 +101,67 @@
                   class="form-select form-select-sm"
                   id="comboLaboratorios"
                 ></select>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radiosButton"
+                    id="rdRotacionNone"
+                    value=""
+                    checked
+                  />
+                  <label class="form-check-label" for="rdRotacionNone"
+                    >Ninguno</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radiosButton"
+                    id="rdRotacionStock"
+                    value="stock"
+                  />
+                  <label class="form-check-label" for="rdRotacionNone"
+                    >Stock</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radiosButton"
+                    id="rdRotacionInventario"
+                    value="inventario"
+                  />
+                  <label class="form-check-label" for="rdRotacionNone"
+                    >Inventario</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radiosButton"
+                    id="rdRotacionRotacion"
+                    value="rotacion"
+                  />
+                  <label class="form-check-label" for="rdRotacionNone"
+                    >Rotacion</label
+                  >
+                </div>
                 <div class="ms-auto d-flex align-items-center gap-2">
+                  <div class="leyenda-colores">
+                    <span class="leyenda-item">
+                      <span class="color-box bg-amber"></span> Índice Bajo
+                    </span>
+                    <span class="leyenda-item">
+                      <span class="color-box bg-green"></span> Índice Óptimo
+                    </span>
+                    <span class="leyenda-item">
+                      <span class="color-box bg-red"></span> Índice Alto
+                    </span>
+                  </div>
                   <button class="btn btn-primary btn-sm" id="btnOrdenCompra">
                     <i class="fas fa-cogs"></i> <span>Generar OC</span>
                   </button>
@@ -89,27 +187,29 @@
           <table id="comprasTable" class="display" style="width: 100%">
             <thead>
               <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <!-- <th>Categoria</th> -->
-                <!-- <th>Laboratorio</th> -->
-                <th>UPC</th>
-                <th>PVC</th>
-                <th>PCC</th>
-                <th>PVU</th>
-                <th>PCU</th>
-                <th>Mes</th>
-                <th>Ventas</th>
-                <th>Mes1</th>
-                <th>Mes2</th>
-                <th>Mes3</th>
-                <th>Stock</th>
-                <th>Ganancia Caja</th>
-                <th>Ganancia Unidad</th>
-                <th>Stock Min</th>
-                <th>Indi Inventario</th>
-                <th>Indi Rotacion</th>
-                <th>Acción</th>
+                <th title="Código único del producto">Código</th>
+                <th title="Nombre completo del producto">Nombre</th>
+                <th title="Unidades por caja">UPC</th>
+                <th title="Precio de venta de caja">PVC</th>
+                <th title="Precio de costo de caja">PCC</th>
+                <th title="Precio de venta unitario">PVU</th>
+                <th title="Precio de costo unitario">PCU</th>
+                <th title="Ventas en los últimos 30 días">Mes</th>
+                <th title="Total de ventas">Ventas</th>
+                <th title="Ventas del mes 1">Mes1</th>
+                <th title="Ventas del mes 2">Mes2</th>
+                <th title="Ventas del mes 3">Mes3</th>
+                <th title="Stock Total">Stock</th>
+                <th title="((PVC - PCC) / PVC ) * 100">Ganancia Caja</th>
+                <th title="((PVU - PCU) / PVU ) * 100">Ganancia Unidad</th>
+                <th
+                  title="(Mes / 30) * 3.5 -> Periodo que toma en llegar el producto a huacho"
+                >
+                  Stock Min
+                </th>
+                <th title="Stock / Stock Min">Indi Inventario</th>
+                <th title="Mes / Stock">Indi Rotacion</th>
+                <th title="Cantidad a pedir">Acción</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -118,7 +218,6 @@
       </div>
     </div>
     <!-- Modal para mostrar los seleccionados -->
-    <!-- Modal -->
     <div
       class="modal fade"
       id="modalSeleccionados"
@@ -262,6 +361,7 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.3.1/js/dataTables.fixedHeader.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>

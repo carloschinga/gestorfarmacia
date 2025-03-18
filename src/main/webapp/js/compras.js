@@ -6,6 +6,11 @@ $(document).ready(function () {
 
   loadCombos();
 
+  $("#comprasTable thead th").tooltip({
+    placement: "top",
+    trigger: "hover",
+  });
+
   $("#fecha").val(fechaActual);
   cargarProveedores();
   $("#cmbProveedor").select2({
@@ -26,6 +31,71 @@ $(document).ready(function () {
 
     filtrarTabla(cateId, laboratorioId);
   });
+
+  $('input[name="radiosButton"]').on("change", function () {
+    colorearFilas();
+  });
+
+  tableHojaTrabajo.on("draw", function () {
+    colorearFilas();
+  });
+
+  function colorearFilas() {
+    const radioValue = $('input[name="radiosButton"]:checked').val();
+
+    // Eliminar clases de colores previas
+    $("#comprasTable tbody tr").removeClass("bg-red bg-amber bg-green");
+
+    if (!radioValue) return; // Si no hay radio seleccionado, no hacemos nada
+
+    $("#comprasTable tbody tr").each(function () {
+      const $row = $(this);
+      let valor;
+
+      // Determinar qué campo evaluar según el radio button seleccionado
+      switch (radioValue) {
+        case "stock":
+          // Comparar stock con stock mínimo (columna 12 vs columna 15)
+          const stock = parseFloat($row.find("td:eq(12)").text()) || 0;
+          const stockMin = parseFloat($row.find("td:eq(15)").text()) || 0;
+
+          if (stock < stockMin) {
+            $row.addClass("bg-red");
+          } else if (stock > stockMin * 1.3) {
+            $row.addClass("bg-amber");
+          } else {
+            $row.addClass("bg-green");
+          }
+          break;
+
+        case "inventario":
+          // Evaluar indicador de inventario (columna 16)
+          const indiInve = parseFloat($row.find("td:eq(16)").text()) || 0;
+
+          if (indiInve < 15) {
+            $row.addClass("bg-red");
+          } else if (indiInve > 30) {
+            $row.addClass("bg-amber");
+          } else {
+            $row.addClass("bg-green");
+          }
+          break;
+
+        case "rotacion":
+          // Evaluar indicador de rotación (columna 17)
+          const indiRota = parseFloat($row.find("td:eq(17)").text()) || 0;
+
+          if (indiRota > 3) {
+            $row.addClass("bg-red");
+          } else if (indiRota < 1) {
+            $row.addClass("bg-amber");
+          } else {
+            $row.addClass("bg-green");
+          }
+          break;
+      }
+    });
+  }
 
   function filtrarTabla(categoriaId, laboratorioId) {
     let dataFiltrada = originalData;
@@ -426,6 +496,10 @@ $(document).ready(function () {
       $("#modalSeleccionados").modal("hide");
     }
   );
+
+  $("#modalFiltros").on("click", ".btn-close, .btn-secondary", function () {
+    $("#modalFiltros").modal("hide");
+  });
 
   $("#btnGenerarOC").click(function () {
     let proveedorId = $("#cmbProveedor").val();
