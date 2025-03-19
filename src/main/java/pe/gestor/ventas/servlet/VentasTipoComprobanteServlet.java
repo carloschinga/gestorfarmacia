@@ -96,7 +96,6 @@ public class VentasTipoComprobanteServlet extends HttpServlet {
 
             // Validar y obtener los campos del JSON
             String descripcion = json.getString("descripcion");
-            String actiTipoComp = json.getString("actiTipoComp");
 
             // Crear instancia de VentasTipoComprobante
             VentasTipoComprobante tipoComprobante = new VentasTipoComprobante();
@@ -124,14 +123,6 @@ public class VentasTipoComprobanteServlet extends HttpServlet {
         response.setCharacterEncoding(CHARACTER_ENCONDING);
 
         try {
-            // Obtener la información de la solicitud
-            String pathInfo = request.getPathInfo();
-            if (pathInfo == null || pathInfo.length() <= 1) {
-                throw new IllegalArgumentException("El ID del tipo de comprobante no está presente en la URL.");
-            }
-
-            // Obtener el ID del tipo de comprobante de la URL
-            String idTipoComprobante = pathInfo.substring(1);
 
             // Leer el cuerpo de la solicitud como un JSON
             StringBuilder sb = new StringBuilder();
@@ -143,7 +134,7 @@ public class VentasTipoComprobanteServlet extends HttpServlet {
 
             // Verificar si el tipo de comprobante existe en la base de datos
             VentasTipoComprobante tipoComprobanteExistente = tipoComprobanteDAO
-                    .findVentasTipoComprobante(Integer.parseInt(idTipoComprobante));
+                    .findVentasTipoComprobante(json.getInt("id_tipo_comprobante"));
 
             if (tipoComprobanteExistente == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -154,7 +145,6 @@ public class VentasTipoComprobanteServlet extends HttpServlet {
 
             // Actualizar los datos del tipo de comprobante existente
             tipoComprobanteExistente.setDescTipoComp(json.getString("descripcion"));
-            tipoComprobanteExistente.setActiTipoComp(json.getBoolean("active"));
 
             // Intentar actualizar el tipo de comprobante en la base de datos
             tipoComprobanteDAO.edit(tipoComprobanteExistente);

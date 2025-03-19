@@ -127,3 +127,10 @@ CREATE TABLE ventas_cliente (
     direClie TEXT NOT NULL,
     actiClie BOOLEAN NOT NULL
 );
+
+CREATE TABLE ventas_tipo_movimiento (
+    codiTipoMovi INT(11) PRIMARY KEY AUTO_INCREMENT,
+    nombTipoMovi VARCHAR(100) NOT NULL,
+    signTipoMovi BOOLEAN NOT NULL,
+    actiTipoMovi BOOLEAN NOT NULL
+);

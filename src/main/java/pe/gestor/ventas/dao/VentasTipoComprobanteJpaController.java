@@ -142,7 +142,7 @@ public class VentasTipoComprobanteJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery("VentasTipoComprobante.findByActiTipoComp");
-            q.setParameter("actiTipoComp", 1);
+            q.setParameter("actiTipoComp", true);
             return q.getResultList();
         } catch (Exception e) {
             return null;
