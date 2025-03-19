@@ -66,6 +66,8 @@
     <class>pe.gestor.ventas.dto.VentasLaboratorio</class>
     <class>pe.gestor.ventas.dto.VentasTipoComprobante</class>
     <class>pe.gestor.ventas.dto.VentasCliente</class>
+    <class>pe.gestor.ventas.dto.VentasTipoMovimiento</class>
+    <class>pe.gestor.ventas.dto.VentasMovimientoCabecera</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!--<property

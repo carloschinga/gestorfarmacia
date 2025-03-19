@@ -134,3 +134,19 @@ CREATE TABLE ventas_tipo_movimiento (
     signTipoMovi BOOLEAN NOT NULL,
     actiTipoMovi BOOLEAN NOT NULL
 );
+
+CREATE TABLE ventas_movimiento_cabecera (
+    codiMoviCabe INT(11) PRIMARY KEY AUTO_INCREMENT,
+    codiVentCabe INT(11) NOT NULL,
+    codiTipoMovi INT(11) NOT NULL,
+    codiAlmcOrign INT(11) NOT NULL,
+    codiAlmcDest INT(11) NOT NULL,
+    fechMovi DATETIME NOT NULL,
+    codiEstd INT(11) NOT NULL,
+    obsvMovi TEXT NOT NULL,
+    actiMovi BOOLEAN NOT NULL,
+    codiUsuaCrea INT(11) NOT NULL,
+    fechUsuaCrea DATETIME NOT NULL,
+    codiModiCrea INT(11) NOT NULL,
+    fechModiCrea DATETIME NOT NULL
+);
