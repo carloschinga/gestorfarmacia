@@ -50,7 +50,6 @@ $(document).ready(function () {
 
     $("#comprasTable tbody tr").each(function () {
       const $row = $(this);
-      let valor;
 
       // Determinar qué campo evaluar según el radio button seleccionado
       switch (radioValue) {

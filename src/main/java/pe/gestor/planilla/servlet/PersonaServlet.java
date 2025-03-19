@@ -359,8 +359,7 @@ public class PersonaServlet extends HttpServlet {
 
             if (personaExistente == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().write(new JSONObject().put("error",
-                        "Persona no encontrada").toString());
+                response.getWriter().write(new JSONObject().put("error", "Persona no encontrada").toString());
                 return;
             }
 
@@ -448,15 +447,13 @@ public class PersonaServlet extends HttpServlet {
             // Captura errores relacionados con parámetros inválidos
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter()
-                    .write(new JSONObject().put("error", "Error en los parámetros: "
-                            + e.getMessage()).toString());
+                    .write(new JSONObject().put("error", "Error en los parámetros: " + e.getMessage()).toString());
             System.err.println("Error en los parámetros: " + e.getMessage());
         } catch (Exception e) {
             // Captura cualquier otro error inesperado
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write(
-                    new JSONObject().put("error", "Error al procesar la solicitud: "
-                            + e.getMessage()).toString());
+                    new JSONObject().put("error", "Error al procesar la solicitud: " + e.getMessage()).toString());
             System.err.println("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }
