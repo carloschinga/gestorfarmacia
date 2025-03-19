@@ -65,6 +65,7 @@
     <class>pe.gestor.ventas.dto.VentasCategoria</class>
     <class>pe.gestor.ventas.dto.VentasLaboratorio</class>
     <class>pe.gestor.ventas.dto.VentasTipoComprobante</class>
+    <class>pe.gestor.ventas.dto.VentasCliente</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!--<property
