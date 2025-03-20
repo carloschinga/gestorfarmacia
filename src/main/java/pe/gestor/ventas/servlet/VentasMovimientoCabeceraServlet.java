@@ -182,7 +182,7 @@ public class VentasMovimientoCabeceraServlet extends HttpServlet {
             int codiMoviCabe = json.getInt("codiMoviCabe");
 
             // Verificar si el movimiento de cabecera existe en la base de datos
-            VentasMovimientoCabecera movimientoCabeceraExistente = movimientoCabeceraDAO.find(codiMoviCabe);
+            VentasMovimientoCabecera movimientoCabeceraExistente = movimientoCabeceraDAO.findVentasMovimientoCabecera(codiMoviCabe);
 
             if (movimientoCabeceraExistente == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -200,7 +200,6 @@ public class VentasMovimientoCabeceraServlet extends HttpServlet {
                     .setFechMovi(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(json.getString("fechMovi")));
             movimientoCabeceraExistente.setCodiEstd(json.getInt("codiEstd"));
             movimientoCabeceraExistente.setObsvMovi(json.getString("obsvMovi"));
-            movimientoCabeceraExistente.setActiMovi((short) json.getInt("actiMovi"));
             movimientoCabeceraExistente.setCodiUsuaCrea(json.getInt("codiUsuaCrea"));
             movimientoCabeceraExistente
                     .setFechUsuaCrea(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(json.getString("fechUsuaCrea")));
@@ -237,9 +236,9 @@ public class VentasMovimientoCabeceraServlet extends HttpServlet {
                 int id = Integer.parseInt(pathInfo.substring(1));
 
                 // Realizar un borrado lógico (desactivar el movimiento de cabecera)
-                VentasMovimientoCabecera movimientoCabecera = movimientoCabeceraDAO.find(id);
+                VentasMovimientoCabecera movimientoCabecera = movimientoCabeceraDAO.findVentasMovimientoCabecera(id);
                 if (movimientoCabecera != null) {
-                    movimientoCabecera.setActiMovi((short) 0); // Desactivar
+                    movimientoCabecera.setActiMovi(false); // Desactivar
                     movimientoCabeceraDAO.edit(movimientoCabecera);
                 }
 

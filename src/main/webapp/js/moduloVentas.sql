@@ -127,7 +127,7 @@ CREATE TABLE ventas_cliente (
     direClie TEXT NOT NULL,
     actiClie BOOLEAN NOT NULL
 );
-
+ 
 CREATE TABLE ventas_tipo_movimiento (
     codiTipoMovi INT(11) PRIMARY KEY AUTO_INCREMENT,
     nombTipoMovi VARCHAR(100) NOT NULL,
@@ -149,4 +149,15 @@ CREATE TABLE ventas_movimiento_cabecera (
     fechUsuaCrea DATETIME NOT NULL,
     codiModiCrea INT(11) NOT NULL,
     fechModiCrea DATETIME NOT NULL
+);
+
+CREATE TABLE ventas_movimiento_detalle (
+    codiMoviDeta INT(11) PRIMARY KEY AUTO_INCREMENT,
+    codiMoviCabe INT(11) NOT NULL,
+    codiProdu VARCHAR(20) NOT NULL,
+    cantEnte INT(11) NOT NULL,
+    cantFrac INT(11) NOT NULL,
+    costoEnte DECIMAL(10,0) NOT NULL,
+    costoFrac DECIMAL(10,0) NOT NULL,
+    actiMoviDeta BOOLEAN NOT NULL
 );
