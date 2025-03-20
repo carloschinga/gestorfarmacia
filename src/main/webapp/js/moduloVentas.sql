@@ -161,3 +161,16 @@ CREATE TABLE ventas_movimiento_detalle (
     costoFrac DECIMAL(10,0) NOT NULL,
     actiMoviDeta BOOLEAN NOT NULL
 );
+
+CREATE TABLE ventas_stock_lote (
+    codiStocLote INT(11) PRIMARY KEY AUTO_INCREMENT,
+    codiProd VARCHAR(15) NOT NULL,
+    codiAlmc INT(11) NOT NULL,
+    lote VARCHAR(50) NOT NULL,
+    fechVent DATE NOT NULL,
+    cantEnte INT(11) NOT NULL,
+    cantFrac INT(11) NOT NULL,
+    costoEnte INT(11) NOT NULL,
+    costoFrac INT(11) NOT NULL,
+    actiStocLote BOOLEAN NOT NULL
+);
