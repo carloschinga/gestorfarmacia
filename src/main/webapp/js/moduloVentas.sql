@@ -174,3 +174,18 @@ CREATE TABLE ventas_stock_lote (
     costoFrac INT(11) NOT NULL,
     actiStocLote BOOLEAN NOT NULL
 );
+
+CREATE TABLE ventas_ubicacion_almacen (
+    codiUbicAlmc INT(11) PRIMARY KEY AUTO_INCREMENT,
+    codiAlmc INT(11) NOT NULL,
+    descUbicAlmc VARCHAR(50) NOT NULL,
+    actiUbicAlmc BOOLEAN NOT NULL
+);
+
+CREATE TABLE ventas_ubicacion_lote (
+    codiUbicLote INT(11) PRIMARY KEY AUTO_INCREMENT,
+    codiStocLote INT(11) NOT NULL,
+    cantEnte INT(11) NOT NULL,
+    cantFrac INT(11) NOT NULL,
+    actiUbicLote BOOLEAN NOT NULL
+);

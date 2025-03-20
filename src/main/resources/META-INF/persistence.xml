@@ -70,6 +70,8 @@
     <class>pe.gestor.ventas.dto.VentasMovimientoCabecera</class>
     <class>pe.gestor.ventas.dto.VentasMovimientoDetalle</class>
     <class>pe.gestor.ventas.dto.VentasStockLote</class>
+    <class>pe.gestor.ventas.dto.VentasUbicacionAlmacen</class>
+    <class>pe.gestor.ventas.dto.VentasUbicacionLote</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!--<property
